@@ -1,0 +1,35 @@
+package edu.it.itba.swing;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+
+import edu.it.itba.utils.ImageUtils;
+
+public class ATImageJPanel extends JPanel {
+
+	private static final long serialVersionUID = 1L;
+
+	private Image image;
+
+	public ATImageJPanel(String imagePath, Dimension dim) {
+		setBorder(BorderFactory.createLineBorder(Color.black));
+		setMaximumSize(dim);
+		setSize(dim);
+
+		image = ImageUtils.loadImage(imagePath);
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
+		// Draw the image on the panel.
+		g.drawImage(image, 0, 0, null);
+	}
+
+}
