@@ -1,7 +1,5 @@
 package edu.it.itba.swing;
 
-import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -33,16 +31,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu edit = new JMenu("Edit");
 		JMenu newImage = new JMenu("New");
 
-		load = addMenuItemToMenu("Load...", file);
-		save = addMenuItemToMenu("Save...", file);
+		load = addMenuItemToMenu("Load...", file, true);
+		save = addMenuItemToMenu("Save...", file, false);
 
-		pixelValue = addMenuItemToMenu("Pixel Value...", view);
+		pixelValue = addMenuItemToMenu("Pixel Value...", view, false);
 
-		modifyPixelValue = addMenuItemToMenu("Pixel Value...", edit);
-		copyImage = addMenuItemToMenu("Copy Image...", edit);
+		modifyPixelValue = addMenuItemToMenu("Pixel Value...", edit, false);
+		copyImage = addMenuItemToMenu("Copy Image...", edit, false);
 
-		blankCircle = addMenuItemToMenu("Blank Circle", newImage);
-		blankSquare = addMenuItemToMenu("Blank Square", newImage);
+		blankCircle = addMenuItemToMenu("Blank Circle", newImage, true);
+		blankSquare = addMenuItemToMenu("Blank Square", newImage, true);
 
 		addToMenu(file);
 		addToMenu(view);
@@ -54,10 +52,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		add(menu);
 	}
 
-	public JMenuItem addMenuItemToMenu(String item, JMenu menu) {
+	public JMenuItem addMenuItemToMenu(String item, JMenu menu, boolean enable) {
 
 		JMenuItem resp = new JMenuItem(item);
 		resp.addActionListener(this);
+		resp.setEnabled(enable);
 
 		menu.add(resp);
 		return resp;
@@ -115,15 +114,23 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private void handleLoad() throws IOException {
 		JFileChooser fc = new JFileChooser();
-		Image newImage;
 		int returnVal = fc.showOpenDialog(this);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
 			// parent.createImagePanels(file, new Dimension(width, height));
 			// BufferedImage imageRaw = ImageUtils.load(file, width, height);
+			changeButons();
 
 		}
+	}
+
+	private void changeButons() {
+		save.setEnabled(!save.isEnabled());
+		pixelValue.setEnabled(!pixelValue.isEnabled());
+		modifyPixelValue.setEnabled(!modifyPixelValue.isEnabled());
+		copyImage.setEnabled(copyImage.isEnabled());
+
 	}
 
 	private void handleSave() {
