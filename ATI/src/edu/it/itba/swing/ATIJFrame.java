@@ -36,22 +36,16 @@ public class ATIJFrame extends JFrame {
 		// createMenuBar();
 		setJMenuBar(new ATIMenu(this));
 
-		// Create image panels.
-		// createImagePanels();
-
 		// Display the window.
 		setVisible(true);
 
 	}
 
 	public void createImagePanels(File file, Dimension dim) throws IOException {
-		String imagePath = "resources/test2.jpeg";
-		File file2 = new File(imagePath);
-		imagePanels[0] = new ATImageJPanel(file2, new Dimension(500, 500));
-		// TODO: Hay que sacar esto y dejar la linea comentada abajo
-		// imagePanels[0] = new ATImageJPanel(file, new Dimension(500, 500));
+		imagePanels[0] = new ATImageJPanel(file, dim);
 
 		mainPanel.add(imagePanels[0], Component.LEFT_ALIGNMENT);
+		this.getContentPane().repaint();
 	}
 
 	public void clear() {

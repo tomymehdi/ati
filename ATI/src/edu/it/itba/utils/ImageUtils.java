@@ -1,5 +1,6 @@
 package edu.it.itba.utils;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
@@ -62,36 +63,37 @@ public class ImageUtils {
 		return bytes;
 	}
 
-	public static BufferedImage load(File file, int width, int height)
+	public static BufferedImage load(File file, Dimension dim)
 			throws IOException {
 
 		BufferedImage ret;
-
-		if (file.getName().endsWith("raw")) {
+		String extension = file.getName()
+				.substring(file.getName().length() - 3).toLowerCase();
+		if (!extension.equals("raw")) {
 			ret = ImageIO.read(file);
 			return ret;
 		}
 
 		byte[] data = getBytesFromFile(file);
-		ret = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
+		ret = new BufferedImage(dim.width, dim.height,
+				BufferedImage.TYPE_BYTE_GRAY);
 		WritableRaster raster = ret.getRaster();
 		int k = 0;
-		for (int j = 0; j < height; j++) {
-			for (int i = 0; i < width; i++) {
+		for (int j = 0; j < dim.height; j++) {
+			for (int i = 0; i < dim.width; i++) {
 				raster.setSample(i, j, 0, data[k]);
 				k = k + 1;
 			}
 		}
-		BufferedImage image = new BufferedImage(width, height,
+		BufferedImage image = new BufferedImage(dim.width, dim.height,
 				BufferedImage.TYPE_INT_RGB);
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
+		for (int i = 0; i < dim.width; i++) {
+			for (int j = 0; j < dim.height; j++) {
 				image.setRGB(i, j, ret.getRGB(i, j));
 			}
 		}
 		return image;
 	}
-
 	/*
 	 * public static Image loadImage(String file) { Image resp = null; try {
 	 * resp = ImageIO.read(new File(file)); } catch (IOException e) { // TODO

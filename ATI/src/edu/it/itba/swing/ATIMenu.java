@@ -113,16 +113,17 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleLoad() throws IOException {
-		JFileChooser fc = new JFileChooser();
-		int returnVal = fc.showOpenDialog(this);
-
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File file = fc.getSelectedFile();
-			// parent.createImagePanels(file, new Dimension(width, height));
-			// BufferedImage imageRaw = ImageUtils.load(file, width, height);
-			changeButons();
-
-		}
+		ATILoadImagePanel panel = new ATILoadImagePanel(parent);
+		/*
+		 * int returnVal = fc.showOpenDialog(this);
+		 * 
+		 * if (returnVal == JFileChooser.APPROVE_OPTION) { File file =
+		 * fc.getSelectedFile(); // parent.createImagePanels(file, new
+		 * Dimension(width, height)); // BufferedImage imageRaw =
+		 * ImageUtils.load(file, width, height); changeButons();
+		 * 
+		 * }
+		 */
 	}
 
 	private void changeButons() {

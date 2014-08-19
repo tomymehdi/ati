@@ -20,10 +20,13 @@ public class ATImageJPanel extends JPanel {
 
 	public ATImageJPanel(File file, Dimension dim) throws IOException {
 		setBorder(BorderFactory.createLineBorder(Color.black));
-		setMaximumSize(dim);
-		setSize(dim);
 
-		image = ImageUtils.load(file, dim.width, dim.height);
+		image = ImageUtils.load(file, dim);
+
+		Dimension imageDimension = new Dimension(image.getWidth(),
+				image.getHeight());
+		setMaximumSize(imageDimension);
+		setSize(imageDimension);
 	}
 
 	@Override
