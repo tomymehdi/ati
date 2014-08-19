@@ -11,7 +11,7 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 public class ImageUtils {
-	
+
 	public static Image scaleImage(Image image, int width, int height) {
 		Image scaledImage;
 
@@ -44,7 +44,7 @@ public class ImageUtils {
 
 		return scaledImage;
 	}
-	
+
 	@SuppressWarnings("resource")
 	private static byte[] getBytesFromFile(File file) throws IOException {
 		InputStream is = new FileInputStream(file);
@@ -61,11 +61,17 @@ public class ImageUtils {
 		is.close();
 		return bytes;
 	}
-	
+
 	public static BufferedImage load(File file, int width, int height)
 			throws IOException {
-		
+
 		BufferedImage ret;
+
+		if (file.getName().endsWith("raw")) {
+			ret = ImageIO.read(file);
+			return ret;
+		}
+
 		byte[] data = getBytesFromFile(file);
 		ret = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
 		WritableRaster raster = ret.getRaster();
@@ -75,8 +81,9 @@ public class ImageUtils {
 				raster.setSample(i, j, 0, data[k]);
 				k = k + 1;
 			}
-		} 
-		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		}
+		BufferedImage image = new BufferedImage(width, height,
+				BufferedImage.TYPE_INT_RGB);
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				image.setRGB(i, j, ret.getRGB(i, j));
@@ -84,17 +91,10 @@ public class ImageUtils {
 		}
 		return image;
 	}
-	
-	public static Image loadImage(String file) {
-		Image resp = null;
-		try {
-			resp =  ImageIO.read(new File(file));
-		} catch (IOException e) {
-			// TODO Show correct error
-			e.printStackTrace();
-		}
-		return resp;
-	}
 
-
+	/*
+	 * public static Image loadImage(String file) { Image resp = null; try {
+	 * resp = ImageIO.read(new File(file)); } catch (IOException e) { // TODO
+	 * Show correct error e.printStackTrace(); } return resp; }
+	 */
 }

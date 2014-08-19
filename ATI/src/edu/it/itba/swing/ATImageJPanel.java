@@ -3,7 +3,9 @@ package edu.it.itba.swing;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -14,14 +16,14 @@ public class ATImageJPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private Image image;
+	private BufferedImage image;
 
-	public ATImageJPanel(String imagePath, Dimension dim) {
+	public ATImageJPanel(File file, Dimension dim) throws IOException {
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		setMaximumSize(dim);
 		setSize(dim);
 
-		image = ImageUtils.loadImage(imagePath);
+		image = ImageUtils.load(file, dim.width, dim.height);
 	}
 
 	@Override

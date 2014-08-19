@@ -3,26 +3,20 @@ package edu.it.itba.swing;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.KeyStroke;
 
 public class ATIJFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
 	private JPanel mainPanel;
+
+	ATImageJPanel imagePanels[] = new ATImageJPanel[2];
 
 	public ATIJFrame() {
 		super();
@@ -43,24 +37,27 @@ public class ATIJFrame extends JFrame {
 		setJMenuBar(new ATIMenu(this));
 
 		// Create image panels.
-		createImagePanels();
+		// createImagePanels();
 
 		// Display the window.
 		setVisible(true);
 
 	}
 
-	private void createImagePanels() {
+	public void createImagePanels(File file, Dimension dim) throws IOException {
 		String imagePath = "resources/test2.jpeg";
-		ATImageJPanel panelLeft = new ATImageJPanel(imagePath, new Dimension(
-				500, 500));
-		ATImageJPanel panelRight = new ATImageJPanel(imagePath, new Dimension(
-				200, 200));
+		File file2 = new File(imagePath);
+		imagePanels[0] = new ATImageJPanel(file2, new Dimension(500, 500));
+		// TODO: Hay que sacar esto y dejar la linea comentada abajo
+		// imagePanels[0] = new ATImageJPanel(file, new Dimension(500, 500));
 
-		mainPanel.add(panelLeft, Component.LEFT_ALIGNMENT);
-		mainPanel.add(panelRight, Component.RIGHT_ALIGNMENT);
+		mainPanel.add(imagePanels[0], Component.LEFT_ALIGNMENT);
 	}
 
+	public void clear() {
+		imagePanels[0] = null;
+		imagePanels[1] = null;
+	}
 	/*
 	 * private void createMenuBar() { JMenuBar menuBar; JMenu menu, submenu;
 	 * JMenuItem menuItem; JRadioButtonMenuItem rbMenuItem; JCheckBoxMenuItem

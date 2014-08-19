@@ -1,17 +1,18 @@
 package edu.it.itba.swing;
 
+import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+@SuppressWarnings("serial")
 public class ATIMenu extends JMenuBar implements ActionListener {
 
 	ATIJFrame parent;
@@ -72,34 +73,57 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleSave();
 			else if (source == load)
 				handleLoad();
+			else if (source == pixelValue)
+				handleShowPixelValue();
+			else if (source == modifyPixelValue)
+				handleModifyPixelValue();
+			else if (source == copyImage)
+				handleCopyImage();
+			else if (source == blankCircle)
+				handleBlankCircle();
+			else if (source == blankSquare)
+				handleBlankSquare();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
+	private void handleBlankSquare() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void handleBlankCircle() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void handleCopyImage() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void handleModifyPixelValue() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void handleShowPixelValue() {
+		// TODO Auto-generated method stub
+
+	}
+
 	private void handleLoad() throws IOException {
 		JFileChooser fc = new JFileChooser();
-
+		Image newImage;
 		int returnVal = fc.showOpenDialog(this);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
-			if (file.getName().endsWith(".raw"))
-				loadRAW(file);
-			else
-				loadImage(file);
+			// parent.createImagePanels(file, new Dimension(width, height));
+			// BufferedImage imageRaw = ImageUtils.load(file, width, height);
 
 		}
-	}
-
-	private void loadImage(File file) throws IOException {
-		BufferedImage image = ImageIO.read(file);
-
-	}
-
-	private void loadRAW(File file) {
-		// TODO Auto-generated method stub
-
 	}
 
 	private void handleSave() {
