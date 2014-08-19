@@ -97,4 +97,24 @@ public class ImageUtils {
 	 * resp = ImageIO.read(new File(file)); } catch (IOException e) { // TODO
 	 * Show correct error e.printStackTrace(); } return resp; }
 	 */
+	
+	public static BufferedImage grayScale() {
+		BufferedImage ret = new BufferedImage(512, 512, BufferedImage.TYPE_BYTE_GRAY);
+		
+		WritableRaster raster = ret.getRaster();
+		for (int row = 0; row < 512; row++) {
+			for (int col = 0; col < 512; col++) {
+				raster.setSample(col, row, 0, col/2);
+			}
+		}
+		
+		BufferedImage image = new BufferedImage(512, 512,
+				BufferedImage.TYPE_INT_RGB);
+		for (int i = 0; i < 512; i++) {
+			for (int j = 0; j < 512; j++) {
+				image.setRGB(i, j, ret.getRGB(i, j));
+			}
+		}
+		return image;
+	}
 }
