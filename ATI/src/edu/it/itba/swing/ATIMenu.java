@@ -92,6 +92,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleGreyScale() {
 
 		parent.createGreyScaleImage();
+		changeButons();
 	}
 
 	private void handleBlankSquare() {
@@ -115,12 +116,13 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleShowPixelValue() {
-		// TODO Auto-generated method stub
 
+		new ATIPixelValueJPanel(parent);
 	}
 
 	private void handleLoad() throws IOException {
 		ATILoadImagePanel panel = new ATILoadImagePanel(parent);
+		changeButons();
 		/*
 		 * int returnVal = fc.showOpenDialog(this);
 		 * 

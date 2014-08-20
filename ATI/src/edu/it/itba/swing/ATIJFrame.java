@@ -136,4 +136,9 @@ public class ATIJFrame extends JFrame {
 		this.getContentPane().repaint();
 
 	}
+
+	public BufferedImage getImage() {
+		return imagePanels[0].getImage();
+
+	}
 }

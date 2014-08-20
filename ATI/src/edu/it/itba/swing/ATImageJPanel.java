@@ -45,4 +45,8 @@ public class ATImageJPanel extends JPanel {
 		g.drawImage(image, 0, 0, null);
 	}
 
+	public BufferedImage getImage() {
+		return image;
+	}
+
 }
