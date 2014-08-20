@@ -3,12 +3,15 @@ package edu.it.itba.swing;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import edu.it.itba.utils.ImageUtils;
 
 public class ATIJFrame extends JFrame {
 
@@ -32,8 +35,6 @@ public class ATIJFrame extends JFrame {
 		mainPanel.setSize(400, 400);
 		add(mainPanel);
 
-		// Create and setup the menu bar.
-		// createMenuBar();
 		setJMenuBar(new ATIMenu(this));
 
 		// Display the window.
@@ -42,6 +43,7 @@ public class ATIJFrame extends JFrame {
 	}
 
 	public void createImagePanels(File file, Dimension dim) throws IOException {
+		clear();
 		imagePanels[0] = new ATImageJPanel(file, dim);
 
 		mainPanel.add(imagePanels[0], Component.LEFT_ALIGNMENT);
@@ -49,9 +51,22 @@ public class ATIJFrame extends JFrame {
 	}
 
 	public void clear() {
+		if (imagePanels[0] != null) {
+			imagePanels[0].setVisible(false);
+			imagePanels[0].invalidate();
+			imagePanels[0].repaint();
+
+		}
+		if (imagePanels[1] != null) {
+			imagePanels[0].setVisible(false);
+			imagePanels[0].invalidate();
+			imagePanels[0].repaint();
+		}
+		mainPanel.repaint();
 		imagePanels[0] = null;
 		imagePanels[1] = null;
 	}
+
 	/*
 	 * private void createMenuBar() { JMenuBar menuBar; JMenu menu, submenu;
 	 * JMenuItem menuItem; JRadioButtonMenuItem rbMenuItem; JCheckBoxMenuItem
@@ -112,4 +127,13 @@ public class ATIJFrame extends JFrame {
 	 * 
 	 * setJMenuBar(menuBar); }
 	 */
+
+	public void createGreyScaleImage() {
+		clear();
+		imagePanels[0] = new ATImageJPanel(ImageUtils.grayScale());
+
+		mainPanel.add(imagePanels[0], Component.LEFT_ALIGNMENT);
+		this.getContentPane().repaint();
+
+	}
 }

@@ -29,6 +29,14 @@ public class ATImageJPanel extends JPanel {
 		setSize(imageDimension);
 	}
 
+	public ATImageJPanel(BufferedImage image) {
+		super();
+		this.image = image;
+		Dimension imgDim = new Dimension(image.getWidth(), image.getHeight());
+		setMaximumSize(imgDim);
+		setSize(imgDim);
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);

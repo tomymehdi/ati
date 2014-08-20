@@ -2,10 +2,8 @@ package edu.it.itba.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -21,6 +19,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	JMenuItem copyImage;
 	JMenuItem blankCircle;
 	JMenuItem blankSquare;
+	JMenuItem greyScale;
 
 	public ATIMenu(ATIJFrame parent) {
 		super();
@@ -41,6 +40,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		blankCircle = addMenuItemToMenu("Blank Circle", newImage, true);
 		blankSquare = addMenuItemToMenu("Blank Square", newImage, true);
+		greyScale = addMenuItemToMenu("Gray Scale", newImage, true);
 
 		addToMenu(file);
 		addToMenu(view);
@@ -82,9 +82,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleBlankCircle();
 			else if (source == blankSquare)
 				handleBlankSquare();
+			else if (source == greyScale)
+				handleGreyScale();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void handleGreyScale() {
+
+		parent.createGreyScaleImage();
 	}
 
 	private void handleBlankSquare() {
