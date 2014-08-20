@@ -90,7 +90,7 @@ public class ATIPixelValueJPanel extends JDialog implements ActionListener {
 		try {
 			image.getRaster().getPixel(Integer.parseInt(x.getText()),
 					Integer.parseInt(y.getText()), resp);
-			System.out.println(resp[0] + " " + resp[1] + " " + resp[2]);
+			// System.out.println(resp[0] + " " + resp[1] + " " + resp[2]);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

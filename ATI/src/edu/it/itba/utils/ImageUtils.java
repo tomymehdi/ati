@@ -121,4 +121,9 @@ public class ImageUtils {
 		}
 		return image;
 	}
+
+	public static BufferedImage getSubImage(BufferedImage image, int x, int y,
+			int widht, int height) {
+		return image.getSubimage(x, y, widht, height);
+	}
 }

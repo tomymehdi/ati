@@ -20,6 +20,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	JMenuItem blankCircle;
 	JMenuItem blankSquare;
 	JMenuItem greyScale;
+	JMenuItem subImage;
 
 	public ATIMenu(ATIJFrame parent) {
 		super();
@@ -41,6 +42,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		blankCircle = addMenuItemToMenu("Blank Circle", newImage, true);
 		blankSquare = addMenuItemToMenu("Blank Square", newImage, true);
 		greyScale = addMenuItemToMenu("Gray Scale", newImage, true);
+		subImage = addMenuItemToMenu("Sub Image...", newImage, false);
 
 		addToMenu(file);
 		addToMenu(view);
@@ -84,9 +86,15 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleBlankSquare();
 			else if (source == greyScale)
 				handleGreyScale();
+			else if (source == subImage)
+				handleSubImage();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void handleSubImage() {
+		new ATISubImageJPanel(parent);
 	}
 
 	private void handleGreyScale() {
@@ -139,8 +147,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		save.setEnabled(!save.isEnabled());
 		pixelValue.setEnabled(!pixelValue.isEnabled());
 		modifyPixelValue.setEnabled(!modifyPixelValue.isEnabled());
-		copyImage.setEnabled(copyImage.isEnabled());
-
+		copyImage.setEnabled(!copyImage.isEnabled());
+		subImage.setEnabled(!subImage.isEnabled());
 	}
 
 	private void handleSave() {

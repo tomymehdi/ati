@@ -58,9 +58,9 @@ public class ATIJFrame extends JFrame {
 
 		}
 		if (imagePanels[1] != null) {
-			imagePanels[0].setVisible(false);
-			imagePanels[0].invalidate();
-			imagePanels[0].repaint();
+			imagePanels[1].setVisible(false);
+			imagePanels[1].invalidate();
+			imagePanels[1].repaint();
 		}
 		mainPanel.repaint();
 		imagePanels[0] = null;
@@ -140,5 +140,13 @@ public class ATIJFrame extends JFrame {
 	public BufferedImage getImage() {
 		return imagePanels[0].getImage();
 
+	}
+
+	public void createImagePanels(BufferedImage subImage) {
+		// clear();
+		imagePanels[1] = new ATImageJPanel(subImage);
+
+		mainPanel.add(imagePanels[1], Component.RIGHT_ALIGNMENT);
+		mainPanel.repaint();
 	}
 }
