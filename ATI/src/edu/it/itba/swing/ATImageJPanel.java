@@ -45,7 +45,9 @@ public class ATImageJPanel extends JPanel {
 	public BufferedImage getImage() {
 		return image;
 	}
-
+	/*
+	 * Draw the image from top to bottom, px by px
+	 */
 	public void draw() {
 		Color color = null;
 		Graphics g = getGraphics();

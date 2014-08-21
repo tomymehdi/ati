@@ -41,7 +41,8 @@ public class ATIJFrame extends JFrame {
 
 	public void createImagePanels(File file, Dimension dim) throws IOException {
 		mainPanel.removeAll();
-		mainPanel.add(new ATImageJPanel(file, dim), BorderLayout.CENTER);
+		ATImageJPanel jp = new ATImageJPanel(file, dim);
+		mainPanel.add(jp, BorderLayout.CENTER);
 	}
 
 	public void createGreyScaleImage() {

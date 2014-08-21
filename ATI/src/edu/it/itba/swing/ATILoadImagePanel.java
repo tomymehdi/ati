@@ -38,8 +38,8 @@ public class ATILoadImagePanel extends JDialog implements ActionListener {
 		mainPanel.setLayout(new BorderLayout());
 
 		JPanel p = new JPanel();
-		p.add(fileChooser);
-		centralPanel.add(p);
+		//p.add(fileChooser);
+		//centralPanel.add(p);
 
 		p = new JPanel();
 		p.add(new JLabel("widht*"));
@@ -63,8 +63,6 @@ public class ATILoadImagePanel extends JDialog implements ActionListener {
 		setPreferredSize(new Dimension(550, 450));
 		setSize(getPreferredSize());
 		setVisible(true);
-
-		// TODO Auto-genearated constructor stub
 	}
 
 	@Override
@@ -75,10 +73,9 @@ public class ATILoadImagePanel extends JDialog implements ActionListener {
 				.toLowerCase();
 		Integer widht = 0;
 		Integer height = 0;
+		System.out.println(e.getActionCommand());
 
-		if (extension.equals("bmp") || extension.equals("pgm")
-				|| extension.equals("ppm")) {
-
+		if (true) {
 			try {
 				owner.createImagePanels(file, null);
 			} catch (IOException e1) {
