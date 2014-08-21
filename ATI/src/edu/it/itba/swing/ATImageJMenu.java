@@ -2,7 +2,9 @@ package edu.it.itba.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
 
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -87,8 +89,17 @@ public class ATImageJMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleSave() {
-		// TODO Auto-generated method stub
 
+		JFileChooser chooser = new JFileChooser();
+		int retrival = chooser.showSaveDialog(null);
+		if (retrival == JFileChooser.APPROVE_OPTION) {
+			try (FileWriter fw = new FileWriter(chooser.getSelectedFile())) {
+				// fw.write(parent.getImage());
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 }

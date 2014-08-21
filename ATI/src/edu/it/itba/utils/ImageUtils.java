@@ -1,50 +1,50 @@
 package edu.it.itba.utils;
 
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
 public class ImageUtils {
 
-	public static Image scaleImage(Image image, int width, int height) {
-		Image scaledImage;
-
-		float iw = image.getWidth(null);
-		float ih = image.getHeight(null);
-		float pw = width;
-		float ph = height;
-
-		if (pw < iw || ph < ih) {
-			if ((pw / ph) > (iw / ih)) {
-				iw = -1;
-				ih = ph;
-			} else {
-				iw = pw;
-				ih = -1;
-			}
-			if (iw == 0) {
-				iw = -1;
-			}
-			if (ih == 0) {
-				ih = -1;
-			}
-
-			scaledImage = image.getScaledInstance(new Float(iw).intValue(),
-					new Float(ih).intValue(), Image.SCALE_DEFAULT);
-
-		} else {
-			scaledImage = image;
-		}
-
-		return scaledImage;
-	}
+	// public static Image scaleImage(Image image, int width, int height) {
+	// Image scaledImage;
+	//
+	// float iw = image.getWidth(null);
+	// float ih = image.getHeight(null);
+	// float pw = width;
+	// float ph = height;
+	//
+	// if (pw < iw || ph < ih) {
+	// if ((pw / ph) > (iw / ih)) {
+	// iw = -1;
+	// ih = ph;
+	// } else {
+	// iw = pw;
+	// ih = -1;
+	// }
+	// if (iw == 0) {
+	// iw = -1;
+	// }
+	// if (ih == 0) {
+	// ih = -1;
+	// }
+	//
+	// scaledImage = image.getScaledInstance(new Float(iw).intValue(),
+	// new Float(ih).intValue(), Image.SCALE_DEFAULT);
+	//
+	// } else {
+	// scaledImage = image;
+	// }
+	//
+	// return scaledImage;
+	// }
 
 	@SuppressWarnings("resource")
 	private static byte[] getBytesFromFile(File file) throws IOException {
@@ -117,5 +117,24 @@ public class ImageUtils {
 	public static BufferedImage getSubImage(BufferedImage image, int x, int y,
 			int widht, int height) {
 		return image.getSubimage(x, y, widht, height);
+	}
+
+	public static void modifyPixel(BufferedImage image, int x, int y, int[] s) {
+		image.getRaster().setPixel(x, y, s);
+	}
+
+	public static BufferedImage colorScale() {
+		BufferedImage image = new BufferedImage(512, 512,
+				BufferedImage.TYPE_INT_RGB);
+		int i = 0;
+		for (int row = 0; row < 512; row++) {
+			for (int col = 0; col < 512; col++) {
+				image.setRGB(row, col, 0x000001 * 1 / 1024 * i + 0x000100 * 1
+						/ 1024 * i + 0x010000 * 1 / 1024 * i);
+
+				i++;
+			}
+		}
+		return image;
 	}
 }

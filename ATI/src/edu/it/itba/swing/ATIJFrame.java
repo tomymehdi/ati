@@ -113,4 +113,8 @@ public class ATIJFrame extends JFrame {
 
 	}
 
+	public void createColorScaleImage() {
+		new ATIImageJFrame(new ATImageJPanel(ImageUtils.colorScale()));
+	}
+
 }

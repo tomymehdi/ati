@@ -17,6 +17,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	JMenuItem blankCircle;
 	JMenuItem blankSquare;
 	JMenuItem greyScale;
+	JMenuItem colorScale;
 
 	public ATIMenu(ATIJFrame parent) {
 		super();
@@ -30,6 +31,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		blankCircle = addMenuItemToMenu("Blank Circle", newImage, true);
 		blankSquare = addMenuItemToMenu("Blank Square", newImage, true);
 		greyScale = addMenuItemToMenu("Gray Scale", newImage, true);
+		colorScale = addMenuItemToMenu("Color Scale", newImage, true);
 
 		addToMenu(file);
 
@@ -64,10 +66,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleBlankSquare();
 			else if (source == greyScale)
 				handleGreyScale();
+			else if (source == colorScale)
+				handleColorScale();
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void handleColorScale() {
+		parent.createColorScaleImage();
 	}
 
 	private void handleGreyScale() {
@@ -86,7 +94,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleLoad() throws IOException {
-		ATILoadImagePanel panel = new ATILoadImagePanel(parent);
+		new ATILoadImagePanel(parent);
 
 	}
 
