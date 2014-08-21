@@ -40,17 +40,17 @@ public class ATImageJPanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		for(int i = 0; i < image.getHeight() ; i++){
-			for(int j = 0 ; j < image.getWidth() ; j++){
-				Color color = new Color(image.getRGB(i, j));
-				g.setColor(color);
-				g.drawLine(i, j, i, j);
-			}
-		}
+		// for (int i = 0; i < image.getHeight(); i++) {
+		// for (int j = 0; j < image.getWidth(); j++) {
+		// Color color = new Color(image.getRGB(i, j));
+		// g.setColor(color);
+		// g.drawLine(i, j, i, j);
+		// }
+		// }
 		// Draw the image on the panel.
 		g.drawImage(image, 0, 0, null);
 	}
-	
+
 	public BufferedImage getImage() {
 		return image;
 	}

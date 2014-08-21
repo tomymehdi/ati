@@ -42,34 +42,41 @@ public class ATIJFrame extends JFrame {
 	}
 
 	public void createImagePanels(File file, Dimension dim) throws IOException {
-		new ATIImageJFrame(new ATImageJPanel(file, dim));
+		mainPanel.removeAll();
+		mainPanel.add(new ATImageJPanel(file, dim), BorderLayout.CENTER);
+		mainPanel.revalidate();
+		mainPanel.repaint();
 	}
 
 	public void createGreyScaleImage() {
 		mainPanel.removeAll();
-		mainPanel.add(new ATImageJPanel(ImageUtils.grayScale()), BorderLayout.CENTER);
+		mainPanel.add(new ATImageJPanel(ImageUtils.grayScale()),
+				BorderLayout.CENTER);
 		mainPanel.revalidate();
 		mainPanel.repaint();
-		
+
 	}
 
 	public void createColorScaleImage() {
 		mainPanel.removeAll();
-		mainPanel.add(new ATImageJPanel(ImageUtils.colorScale()), BorderLayout.CENTER);
+		mainPanel.add(new ATImageJPanel(ImageUtils.colorScale()),
+				BorderLayout.CENTER);
 		mainPanel.revalidate();
 		mainPanel.repaint();
 	}
 
 	public void createBlankSquare() {
 		mainPanel.removeAll();
-		mainPanel.add(new ATImageJPanel(ImageUtils.blankSquare()), BorderLayout.CENTER);
+		mainPanel.add(new ATImageJPanel(ImageUtils.blankSquare()),
+				BorderLayout.CENTER);
 		mainPanel.revalidate();
 		mainPanel.repaint();
 	}
 
 	public void createBlankCircle() {
 		mainPanel.removeAll();
-		mainPanel.add(new ATImageJPanel(ImageUtils.blankCircle()), BorderLayout.CENTER);
+		mainPanel.add(new ATImageJPanel(ImageUtils.blankCircle()),
+				BorderLayout.CENTER);
 		mainPanel.revalidate();
 		mainPanel.repaint();
 	}
