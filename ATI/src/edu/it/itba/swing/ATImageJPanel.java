@@ -20,9 +20,7 @@ public class ATImageJPanel extends JPanel {
 
 	public ATImageJPanel(File file, Dimension dim) throws IOException {
 		setBorder(BorderFactory.createLineBorder(Color.black));
-
 		image = ImageUtils.load(file, dim);
-
 		Dimension imageDimension = new Dimension(image.getWidth(),
 				image.getHeight());
 		setMaximumSize(imageDimension);
@@ -40,19 +38,25 @@ public class ATImageJPanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		// for (int i = 0; i < image.getHeight(); i++) {
-		// for (int j = 0; j < image.getWidth(); j++) {
-		// Color color = new Color(image.getRGB(i, j));
-		// g.setColor(color);
-		// g.drawLine(i, j, i, j);
-		// }
-		// }
 		// Draw the image on the panel.
-		g.drawImage(image, 0, 0, null);
+		// g.drawImage(image, 0, 0, null);
 	}
 
 	public BufferedImage getImage() {
 		return image;
+	}
+
+	public void draw() {
+		Color color = null;
+		Graphics g = getGraphics();
+		for(int i = 0 ; i < image.getHeight() ; i++){
+			for(int j = 0 ; j < image.getWidth() ; j++){
+				color = new Color(image.getRGB(j, i));
+				g.setColor(color);
+				g.drawLine(j, i, j, i);
+			}
+		}
+		
 	}
 
 }
