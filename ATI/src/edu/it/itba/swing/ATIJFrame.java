@@ -1,9 +1,7 @@
 package edu.it.itba.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -47,31 +45,30 @@ public class ATIJFrame extends JFrame {
 
 	public void createGreyScaleImage() {
 		mainPanel.removeAll();
-		mainPanel.add(new ATImageJPanel(ImageUtils.grayScale()), BorderLayout.CENTER);
-		mainPanel.revalidate();
-		mainPanel.repaint();
-		
+		ATImageJPanel jp = new ATImageJPanel(ImageUtils.grayScale());
+		mainPanel.add(jp, BorderLayout.CENTER);
+		jp.draw();
 	}
 
 	public void createColorScaleImage() {
 		mainPanel.removeAll();
-		mainPanel.add(new ATImageJPanel(ImageUtils.colorScale()), BorderLayout.CENTER);
-		mainPanel.revalidate();
-		mainPanel.repaint();
+		ATImageJPanel jp = new ATImageJPanel(ImageUtils.colorScale());
+		mainPanel.add(jp, BorderLayout.CENTER);
+		jp.draw();
 	}
 
 	public void createBlankSquare() {
 		mainPanel.removeAll();
-		mainPanel.add(new ATImageJPanel(ImageUtils.blankSquare()), BorderLayout.CENTER);
-		mainPanel.revalidate();
-		mainPanel.repaint();
+		ATImageJPanel jp = new ATImageJPanel(ImageUtils.blankSquare());
+		mainPanel.add(jp, BorderLayout.CENTER);
+		jp.draw();
 	}
 
 	public void createBlankCircle() {
 		mainPanel.removeAll();
-		mainPanel.add(new ATImageJPanel(ImageUtils.blankCircle()), BorderLayout.CENTER);
-		mainPanel.revalidate();
-		mainPanel.repaint();
+		ATImageJPanel jp = new ATImageJPanel(ImageUtils.blankCircle());
+		mainPanel.add(jp, BorderLayout.CENTER);
+		jp.draw();
 	}
 
 }
