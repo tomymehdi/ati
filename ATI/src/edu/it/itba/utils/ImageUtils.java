@@ -113,7 +113,7 @@ public class ImageUtils {
 		}
 
 		BufferedImage image = new BufferedImage(512, 512,
-				BufferedImage.TYPE_INT_RGB);
+				BufferedImage.TYPE_BYTE_GRAY);
 		for (int i = 0; i < 512; i++) {
 			for (int j = 0; j < 512; j++) {
 				image.setRGB(i, j, ret.getRGB(i, j));
