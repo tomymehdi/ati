@@ -43,11 +43,14 @@ public class ATIJFrame extends JFrame {
 	}
 
 	public void createImagePanels(File file, Dimension dim) throws IOException {
-		clear();
-		imagePanels[0] = new ATImageJPanel(file, dim);
 
-		mainPanel.add(imagePanels[0], Component.LEFT_ALIGNMENT);
-		this.getContentPane().repaint();
+		new ATIImageJFrame(new ATImageJPanel(file, dim));
+
+		// clear();
+		// imagePanels[0] = new ATImageJPanel(file, dim);
+		//
+		// mainPanel.add(imagePanels[0], Component.LEFT_ALIGNMENT);
+		// this.getContentPane().repaint();
 	}
 
 	public void clear() {
@@ -129,11 +132,14 @@ public class ATIJFrame extends JFrame {
 	 */
 
 	public void createGreyScaleImage() {
-		clear();
-		imagePanels[0] = new ATImageJPanel(ImageUtils.grayScale());
 
-		mainPanel.add(imagePanels[0], Component.LEFT_ALIGNMENT);
-		this.getContentPane().repaint();
+		new ATIImageJFrame(new ATImageJPanel(ImageUtils.grayScale()));
+
+		// clear();
+		// imagePanels[0] = new ATImageJPanel(ImageUtils.grayScale());
+		//
+		// mainPanel.add(imagePanels[0], Component.LEFT_ALIGNMENT);
+		// this.getContentPane().repaint();
 
 	}
 

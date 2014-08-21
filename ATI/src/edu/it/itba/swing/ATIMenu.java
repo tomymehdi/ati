@@ -13,40 +13,26 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	ATIJFrame parent;
 	JMenuItem load;
-	JMenuItem save;
-	JMenuItem pixelValue;
-	JMenuItem modifyPixelValue;
-	JMenuItem copyImage;
+
 	JMenuItem blankCircle;
 	JMenuItem blankSquare;
 	JMenuItem greyScale;
-	JMenuItem subImage;
 
 	public ATIMenu(ATIJFrame parent) {
 		super();
 		this.parent = parent;
 
 		JMenu file = new JMenu("File");
-		JMenu view = new JMenu("View");
-		JMenu edit = new JMenu("Edit");
 		JMenu newImage = new JMenu("New");
 
 		load = addMenuItemToMenu("Load...", file, true);
-		save = addMenuItemToMenu("Save...", file, false);
-
-		pixelValue = addMenuItemToMenu("Pixel Value...", view, false);
-
-		modifyPixelValue = addMenuItemToMenu("Pixel Value...", edit, false);
-		copyImage = addMenuItemToMenu("Copy Image...", edit, false);
 
 		blankCircle = addMenuItemToMenu("Blank Circle", newImage, true);
 		blankSquare = addMenuItemToMenu("Blank Square", newImage, true);
 		greyScale = addMenuItemToMenu("Gray Scale", newImage, true);
-		subImage = addMenuItemToMenu("Sub Image...", newImage, false);
 
 		addToMenu(file);
-		addToMenu(view);
-		addToMenu(edit);
+
 		addToMenu(newImage);
 	}
 
@@ -70,37 +56,23 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		try {
 			Object source = e.getSource();
 
-			if (source == save)
-				handleSave();
-			else if (source == load)
+			if (source == load)
 				handleLoad();
-			else if (source == pixelValue)
-				handleShowPixelValue();
-			else if (source == modifyPixelValue)
-				handleModifyPixelValue();
-			else if (source == copyImage)
-				handleCopyImage();
 			else if (source == blankCircle)
 				handleBlankCircle();
 			else if (source == blankSquare)
 				handleBlankSquare();
 			else if (source == greyScale)
 				handleGreyScale();
-			else if (source == subImage)
-				handleSubImage();
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
-	private void handleSubImage() {
-		new ATISubImageJPanel(parent);
-	}
-
 	private void handleGreyScale() {
 
 		parent.createGreyScaleImage();
-		changeButons();
 	}
 
 	private void handleBlankSquare() {
@@ -113,46 +85,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	}
 
-	private void handleCopyImage() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void handleModifyPixelValue() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void handleShowPixelValue() {
-
-		new ATIPixelValueJPanel(parent);
-	}
-
 	private void handleLoad() throws IOException {
 		ATILoadImagePanel panel = new ATILoadImagePanel(parent);
-		changeButons();
-		/*
-		 * int returnVal = fc.showOpenDialog(this);
-		 * 
-		 * if (returnVal == JFileChooser.APPROVE_OPTION) { File file =
-		 * fc.getSelectedFile(); // parent.createImagePanels(file, new
-		 * Dimension(width, height)); // BufferedImage imageRaw =
-		 * ImageUtils.load(file, width, height); changeButons();
-		 * 
-		 * }
-		 */
-	}
-
-	private void changeButons() {
-		save.setEnabled(!save.isEnabled());
-		pixelValue.setEnabled(!pixelValue.isEnabled());
-		modifyPixelValue.setEnabled(!modifyPixelValue.isEnabled());
-		copyImage.setEnabled(!copyImage.isEnabled());
-		subImage.setEnabled(!subImage.isEnabled());
-	}
-
-	private void handleSave() {
-		// TODO Auto-generated method stub
 
 	}
+
 }

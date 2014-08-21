@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 
 public class ATIPixelValueJPanel extends JDialog implements ActionListener {
 
-	private ATIJFrame owner;
+	private ATIImageJFrame owner;
 	private JTextField x;
 	private JTextField y;
 	private JLabel answer;
@@ -23,7 +23,7 @@ public class ATIPixelValueJPanel extends JDialog implements ActionListener {
 	private JPanel answerPanel;
 	private int resp[] = new int[3];
 
-	public ATIPixelValueJPanel(ATIJFrame owner) {
+	public ATIPixelValueJPanel(ATIImageJFrame owner) {
 
 		super(owner, "Get Pixel Value", true);
 		this.owner = owner;
