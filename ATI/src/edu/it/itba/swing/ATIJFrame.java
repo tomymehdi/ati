@@ -19,8 +19,6 @@ public class ATIJFrame extends JFrame {
 
 	private JPanel mainPanel;
 
-	ATImageJPanel imagePanels[] = new ATImageJPanel[2];
-
 	public ATIJFrame() {
 		super();
 
@@ -46,28 +44,6 @@ public class ATIJFrame extends JFrame {
 
 		new ATIImageJFrame(new ATImageJPanel(file, dim));
 
-		// clear();
-		// imagePanels[0] = new ATImageJPanel(file, dim);
-		//
-		// mainPanel.add(imagePanels[0], Component.LEFT_ALIGNMENT);
-		// this.getContentPane().repaint();
-	}
-
-	public void clear() {
-		if (imagePanels[0] != null) {
-			imagePanels[0].setVisible(false);
-			imagePanels[0].invalidate();
-			imagePanels[0].repaint();
-
-		}
-		if (imagePanels[1] != null) {
-			imagePanels[1].setVisible(false);
-			imagePanels[1].invalidate();
-			imagePanels[1].repaint();
-		}
-		mainPanel.repaint();
-		imagePanels[0] = null;
-		imagePanels[1] = null;
 	}
 
 	/*
@@ -135,24 +111,6 @@ public class ATIJFrame extends JFrame {
 
 		new ATIImageJFrame(new ATImageJPanel(ImageUtils.grayScale()));
 
-		// clear();
-		// imagePanels[0] = new ATImageJPanel(ImageUtils.grayScale());
-		//
-		// mainPanel.add(imagePanels[0], Component.LEFT_ALIGNMENT);
-		// this.getContentPane().repaint();
-
 	}
 
-	public BufferedImage getImage() {
-		return imagePanels[0].getImage();
-
-	}
-
-	public void createImagePanels(BufferedImage subImage) {
-		// clear();
-		imagePanels[1] = new ATImageJPanel(subImage);
-
-		mainPanel.add(imagePanels[1], Component.RIGHT_ALIGNMENT);
-		mainPanel.repaint();
-	}
 }
