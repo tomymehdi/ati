@@ -93,9 +93,8 @@ public class ATImageJMenu extends JMenuBar implements ActionListener {
 		JFileChooser chooser = new JFileChooser();
 		int retrival = chooser.showSaveDialog(null);
 		if (retrival == JFileChooser.APPROVE_OPTION) {
-			try (FileWriter fw = new FileWriter(chooser.getSelectedFile())) {
-				// fw.write(parent.getImage());
-
+			try {
+				FileWriter fw = new FileWriter(chooser.getSelectedFile());
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
