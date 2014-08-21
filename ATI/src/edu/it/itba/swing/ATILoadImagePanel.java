@@ -38,6 +38,7 @@ public class ATILoadImagePanel extends JDialog implements ActionListener {
 		mainPanel.setLayout(new BorderLayout());
 
 		JPanel p = new JPanel();
+		fileChooser.showOpenDialog(this);
 		//p.add(fileChooser);
 		//centralPanel.add(p);
 
@@ -60,7 +61,7 @@ public class ATILoadImagePanel extends JDialog implements ActionListener {
 
 		this.add(mainPanel);
 
-		setPreferredSize(new Dimension(550, 450));
+		setPreferredSize(new Dimension(650, 650));
 		setSize(getPreferredSize());
 		setVisible(true);
 	}
