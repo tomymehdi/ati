@@ -79,23 +79,19 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleGreyScale() {
-
 		parent.createGreyScaleImage();
 	}
 
 	private void handleBlankSquare() {
-		// TODO Auto-generated method stub
-
+		parent.createBlankSquare();
 	}
 
 	private void handleBlankCircle() {
-		// TODO Auto-generated method stub
-
+		parent.createBlankCircle();
 	}
 
 	private void handleLoad() throws IOException {
 		new ATILoadImagePanel(parent);
-
 	}
 
 }
