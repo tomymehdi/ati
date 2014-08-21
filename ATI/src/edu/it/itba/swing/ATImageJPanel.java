@@ -61,4 +61,17 @@ public class ATImageJPanel extends JPanel {
 		
 	}
 
+	public void draw() {
+		Color color = null;
+		Graphics g = getGraphics();
+		for(int i = 0 ; i < image.getHeight() ; i++){
+			for(int j = 0 ; j < image.getWidth() ; j++){
+				color = new Color(image.getRGB(j, i));
+				g.setColor(color);
+				g.drawLine(j, i, j, i);
+			}
+		}
+		
+	}
+
 }
