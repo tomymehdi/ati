@@ -2,6 +2,7 @@ package edu.it.itba.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -16,6 +17,8 @@ public class ATIJFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel mainPanel;
+	private ATImageJPanel image;
+	private ATImageJPanel modImage;
 
 	public ATIJFrame() {
 		super();
@@ -27,7 +30,7 @@ public class ATIJFrame extends JFrame {
 
 		// Create the main panel
 		mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+		mainPanel.setLayout(new BorderLayout());
 		mainPanel.setSize(400, 400);
 		add(mainPanel);
 
@@ -41,36 +44,45 @@ public class ATIJFrame extends JFrame {
 
 	public void createImagePanels(File file, Dimension dim) throws IOException {
 		mainPanel.removeAll();
-		ATImageJPanel jp = new ATImageJPanel(file, dim);
-		mainPanel.add(jp, BorderLayout.CENTER);
+		image = new ATImageJPanel(file, dim);
+		mainPanel.add(image, BorderLayout.WEST);
 	}
 
 	public void createGreyScaleImage() {
 		mainPanel.removeAll();
-		ATImageJPanel jp = new ATImageJPanel(ImageUtils.grayScale());
-		mainPanel.add(jp, BorderLayout.CENTER);
-		jp.draw();
+		image = new ATImageJPanel(ImageUtils.grayScale());
+		mainPanel.add(image, BorderLayout.WEST);
+		image.draw();
 	}
 
 	public void createColorScaleImage() {
 		mainPanel.removeAll();
-		ATImageJPanel jp = new ATImageJPanel(ImageUtils.colorScale());
-		mainPanel.add(jp, BorderLayout.CENTER);
-		jp.draw();
+		image = new ATImageJPanel(ImageUtils.colorScale());
+		mainPanel.add(image, BorderLayout.WEST);
+		image.draw();
 	}
 
 	public void createBlankSquare() {
 		mainPanel.removeAll();
-		ATImageJPanel jp = new ATImageJPanel(ImageUtils.blankSquare());
-		mainPanel.add(jp, BorderLayout.CENTER);
-		jp.draw();
+		image = new ATImageJPanel(ImageUtils.blankSquare());
+		mainPanel.add(image, BorderLayout.WEST);
+		image.draw();
 	}
 
 	public void createBlankCircle() {
 		mainPanel.removeAll();
-		ATImageJPanel jp = new ATImageJPanel(ImageUtils.blankCircle());
-		mainPanel.add(jp, BorderLayout.CENTER);
-		jp.draw();
+		image = new ATImageJPanel(ImageUtils.blankCircle());
+		mainPanel.add(image, BorderLayout.WEST);
+		image.draw();
 	}
 
+	public BufferedImage getImage() {
+		return image.getImage();
+	}
+
+	public void createSubImage(BufferedImage subImage) {
+		modImage = new ATImageJPanel(subImage);
+		mainPanel.add(modImage, BorderLayout.EAST);
+		modImage.draw();
+	}
 }

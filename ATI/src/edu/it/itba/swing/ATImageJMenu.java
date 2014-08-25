@@ -74,7 +74,7 @@ public class ATImageJMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleSubImage() {
-		new ATISubImageJPanel(parent);
+		// new ATISubImageJPanel(parent);
 	}
 
 	private void handleModifyPixelValue() {
@@ -84,7 +84,7 @@ public class ATImageJMenu extends JMenuBar implements ActionListener {
 
 	private void handleShowPixelValue() {
 
-		new ATIPixelValueJPanel(parent);
+		// new ATIPixelValueJPanel(parent);
 
 	}
 

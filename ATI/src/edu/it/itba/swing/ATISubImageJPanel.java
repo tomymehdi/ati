@@ -16,14 +16,14 @@ import edu.it.itba.utils.ImageUtils;
 
 public class ATISubImageJPanel extends JDialog implements ActionListener {
 
-	private ATIImageJFrame owner;
+	private ATIJFrame owner;
 	private JTextField x;
 	private JTextField y;
 	private JTextField widht;
 	private JTextField height;
 	private JButton getSubImage;
 
-	public ATISubImageJPanel(ATIImageJFrame owner) {
+	public ATISubImageJPanel(ATIJFrame owner) {
 
 		super(owner, "Get Sub Image", true);
 		this.owner = owner;
@@ -84,7 +84,7 @@ public class ATISubImageJPanel extends JDialog implements ActionListener {
 
 		BufferedImage subImage = ImageUtils.getSubImage(owner.getImage(), x, y,
 				widht, height);
-		owner.createImageJFrame(subImage);
+		owner.createSubImage(subImage);
 		setVisible(false);
 		dispose();
 		return;
