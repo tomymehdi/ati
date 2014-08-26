@@ -74,6 +74,18 @@ public class ATIJFrame extends JFrame {
 		mainPanel.add(image, BorderLayout.WEST);
 		image.draw();
 	}
+	
+	public void loadImage(File file, Dimension dim) {
+		try {
+			mainPanel.removeAll();
+			ATImageJPanel jp;
+				jp = new ATImageJPanel(ImageUtils.load(file, dim));
+			mainPanel.add(jp, BorderLayout.CENTER);
+			jp.draw();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public BufferedImage getImage() {
 		return image.getImage();
