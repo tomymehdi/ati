@@ -28,7 +28,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	public ATIMenu(ATIJFrame parent) {
 		super();
 		this.parent = parent;
-
+		
 		JMenu file = new JMenu("File");
 		JMenu view = new JMenu("View");
 		JMenu edit = new JMenu("Edit");
@@ -59,7 +59,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	public JMenuItem addMenuItemToMenu(String item, JMenu menu, boolean enable) {
-
 		JMenuItem resp = new JMenuItem(item);
 		resp.addActionListener(this);
 		resp.setEnabled(enable);
