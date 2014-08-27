@@ -14,6 +14,8 @@ import javax.imageio.ImageIO;
 
 public class ImageUtils {
 
+	private static final int MAX_COLOR = 255;
+
 	@SuppressWarnings("resource")
 	private static byte[] getBytesFromFile(File file) throws IOException {
 		InputStream is = new FileInputStream(file);
@@ -300,6 +302,31 @@ public class ImageUtils {
 				imageRaster.getPixel(i, j, imagePixel);
 				for (int k = 0; k < imagePixel.length; k++) {
 					returnImagePixel[k] = imagePixel[k] * scalar;
+				}
+				raster.setPixel(i, j, returnImagePixel);
+
+			}
+
+		}
+		return returnImage;
+	}
+
+	public static BufferedImage negative(BufferedImage image) {
+
+		BufferedImage returnImage = new BufferedImage(image.getWidth(),
+				image.getHeight(), image.getType());
+
+		Raster imageRaster = image.getData();
+
+		WritableRaster raster = returnImage.getRaster();
+
+		for (int i = 0; i < returnImage.getWidth(); i++) {
+			for (int j = 0; j < returnImage.getHeight(); i++) {
+				int[] imagePixel = new int[3];
+				int[] returnImagePixel = new int[3];
+				imageRaster.getPixel(i, j, imagePixel);
+				for (int k = 0; k < imagePixel.length; k++) {
+					returnImagePixel[k] = MAX_COLOR - imagePixel[k];
 				}
 				raster.setPixel(i, j, returnImagePixel);
 
