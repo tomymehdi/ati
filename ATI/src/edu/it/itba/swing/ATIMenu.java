@@ -24,11 +24,12 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	JMenuItem blankSquare;
 	JMenuItem greyScale;
 	JMenuItem colorScale;
+	JMenuItem sumImages;
 
 	public ATIMenu(ATIJFrame parent) {
 		super();
 		this.parent = parent;
-		
+
 		JMenu file = new JMenu("File");
 		JMenu view = new JMenu("View");
 		JMenu edit = new JMenu("Edit");
@@ -47,6 +48,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		blankSquare = addMenuItemToMenu("Blank Square", newImage, true);
 		greyScale = addMenuItemToMenu("Gray Scale", newImage, true);
 		colorScale = addMenuItemToMenu("Color Scale", newImage, true);
+		sumImages = addMenuItemToMenu("Sum Images", newImage, false);
 
 		addToMenu(file);
 		addToMenu(view);
@@ -154,6 +156,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		pixelValue.setEnabled(true);
 		modifyPixelValue.setEnabled(true);
 		subImage.setEnabled(true);
+		sumImages.setEnabled(true);
 
 	}
 }
