@@ -1,11 +1,11 @@
 package edu.it.itba.swing;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -23,14 +23,14 @@ public class ATIJFrame extends JFrame {
 		super();
 
 		// Create and set up the window.
+		setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1200, 600);
-		setLayout(new BorderLayout());
 
 		// Create the main panel
 		mainPanel = new JPanel();
-		mainPanel.setLayout(new BorderLayout());
 		mainPanel.setSize(400, 400);
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		add(mainPanel);
 
 		// Create and add menu bar
@@ -41,47 +41,45 @@ public class ATIJFrame extends JFrame {
 
 	}
 
-	public void createImagePanels(File file, Dimension dim) throws IOException {
-		mainPanel.removeAll();
-		image = new ATImageJPanel(file, dim);
-		mainPanel.add(image, BorderLayout.WEST);
-	}
-
 	public void createGreyScaleImage() {
 		mainPanel.removeAll();
 		image = new ATImageJPanel(ImageUtils.grayScale());
-		mainPanel.add(image, BorderLayout.WEST);
-		image.draw();
+		mainPanel.add(image);
+		image.revalidate();
+		image.repaint();
 	}
 
 	public void createColorScaleImage() {
 		mainPanel.removeAll();
 		image = new ATImageJPanel(ImageUtils.colorScale());
-		mainPanel.add(image, BorderLayout.WEST);
-		image.draw();
+		mainPanel.add(image);
+		image.revalidate();
+		image.repaint();
 	}
 
 	public void createBlankSquare() {
 		mainPanel.removeAll();
 		image = new ATImageJPanel(ImageUtils.blankSquare());
-		mainPanel.add(image, BorderLayout.WEST);
-		image.draw();
+		mainPanel.add(image);
+		image.revalidate();
+		image.repaint();
 	}
 
 	public void createBlankCircle() {
 		mainPanel.removeAll();
 		image = new ATImageJPanel(ImageUtils.blankCircle());
-		mainPanel.add(image, BorderLayout.WEST);
-		image.draw();
+		mainPanel.add(image);
+		image.revalidate();
+		image.repaint();
 	}
 
 	public void loadImage(File file, Dimension dim) {
 		try {
 			mainPanel.removeAll();
-
 			image = new ATImageJPanel(ImageUtils.load(file, dim));
-			mainPanel.add(image, BorderLayout.CENTER);
-			image.draw();
+			mainPanel.add(image);
+			image.revalidate();
+			image.repaint();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -93,8 +91,13 @@ public class ATIJFrame extends JFrame {
 
 	public void createSubImage(BufferedImage subImage) {
 		modImage = new ATImageJPanel(subImage);
-		mainPanel.add(modImage, BorderLayout.EAST);
-		modImage.draw();
+		mainPanel.add(modImage);
+		image.revalidate();
+		image.repaint();
+	}
+
+	public ATImageJPanel getImagePanel() {
+		return image;
 	}
 
 }

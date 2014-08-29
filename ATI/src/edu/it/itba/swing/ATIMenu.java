@@ -14,17 +14,23 @@ import javax.swing.JMenuItem;
 public class ATIMenu extends JMenuBar implements ActionListener {
 
 	ATIJFrame parent;
+	
 	JMenuItem load;
 	JMenuItem save;
-	JMenuItem pixelValue;
-	JMenuItem modifyPixelValue;
 	JMenuItem subImage;
+
+	JMenuItem pixelValue;
+
+	JMenuItem modifyPixelValue;
 
 	JMenuItem blankCircle;
 	JMenuItem blankSquare;
 	JMenuItem greyScale;
 	JMenuItem colorScale;
+
 	JMenuItem sumImages;
+	JMenuItem substractImages;
+	JMenuItem negImage;
 
 	public ATIMenu(ATIJFrame parent) {
 		super();
@@ -34,26 +40,35 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu view = new JMenu("View");
 		JMenu edit = new JMenu("Edit");
 		JMenu newImage = new JMenu("New");
+		JMenu operation = new JMenu("Operation");
 
+		// File
 		load = addMenuItemToMenu("Load...", file, true);
-		save = addMenuItemToMenu("Save...", file, false);
+		save = addMenuItemToMenu("Save...", file, true);
+		
+		// View
+		pixelValue = addMenuItemToMenu("Pixel Value...", view, true);
+		
+		// Edit
+		modifyPixelValue = addMenuItemToMenu("Pixel Value...", edit, true);
 
-		pixelValue = addMenuItemToMenu("Pixel Value...", view, false);
-
-		modifyPixelValue = addMenuItemToMenu("Pixel Value...", edit, false);
-
-		subImage = addMenuItemToMenu("Sub Image...", newImage, false);
-
+		// New
 		blankCircle = addMenuItemToMenu("Blank Circle", newImage, true);
 		blankSquare = addMenuItemToMenu("Blank Square", newImage, true);
 		greyScale = addMenuItemToMenu("Gray Scale", newImage, true);
 		colorScale = addMenuItemToMenu("Color Scale", newImage, true);
-		sumImages = addMenuItemToMenu("Sum Images", newImage, false);
+		
+		// Operation
+		subImage = addMenuItemToMenu("Sub Image...", operation, true);
+		sumImages = addMenuItemToMenu("Sum Images", operation, true);
+		substractImages = addMenuItemToMenu("Substract Images", operation, true);
+		negImage = addMenuItemToMenu("Negative Image", operation, true);
 
 		addToMenu(file);
 		addToMenu(view);
 		addToMenu(edit);
 		addToMenu(newImage);
+		addToMenu(operation);
 	}
 
 	public void addToMenu(JMenu menu) {
@@ -90,52 +105,63 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 			else if (source == pixelValue)
 				handleShowPixelValue();
 			else if (source == modifyPixelValue)
-				handleModifyPixelValue();
+				handleEditPixelValue();
 			else if (source == subImage)
 				handleSubImage();
+			else if (source == substractImages)
+				handleSubstractImages();
+			else if (source == negImage)
+				handleNegImage();
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-
-	private void handleColorScale() {
-		parent.createColorScaleImage();
-		activateMenuOptions();
-	}
-
-	private void handleGreyScale() {
-		parent.createGreyScaleImage();
-		activateMenuOptions();
-	}
-
-	private void handleBlankSquare() {
-		parent.createBlankSquare();
-		activateMenuOptions();
-	}
-
-	private void handleBlankCircle() {
-		parent.createBlankCircle();
-		activateMenuOptions();
-	}
-
-	private void handleLoad() throws IOException {
-		new ATILoadImagePanel(parent);
-		activateMenuOptions();
-	}
-
+	
+	// Operation
 	private void handleSubImage() {
 		new ATISubImageJPanel(parent);
 	}
 
-	private void handleModifyPixelValue() {
+	private void handleNegImage() {
 		// TODO Auto-generated method stub
-
 	}
 
+	private void handleSubstractImages() {
+		// TODO Auto-generated method stub
+	}
+
+	// Edit
+	private void handleEditPixelValue() {
+		new ATIPixelValueEditJPanel(parent);
+	}
+	
+	// View
 	private void handleShowPixelValue() {
-
 		new ATIPixelValueJPanel(parent);
+	}
+	
+	// New
+	private void handleColorScale() {
+		parent.createColorScaleImage();
+	}
 
+	private void handleGreyScale() {
+		parent.createGreyScaleImage();
+	}
+
+	private void handleBlankSquare() {
+		parent.createBlankSquare();
+	}
+
+	private void handleBlankCircle() {
+		parent.createBlankCircle();
+	}
+	
+	
+	// File
+	private void handleLoad() throws IOException {
+		new ATILoadImagePanel(parent);
 	}
 
 	private void handleSave() {
@@ -144,19 +170,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		int retrival = chooser.showSaveDialog(null);
 		if (retrival == JFileChooser.APPROVE_OPTION) {
 			try {
-				FileWriter fw = new FileWriter(chooser.getSelectedFile());
+				new FileWriter(chooser.getSelectedFile());
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
 	}
 
-	private void activateMenuOptions() {
-		save.setEnabled(true);
-		pixelValue.setEnabled(true);
-		modifyPixelValue.setEnabled(true);
-		subImage.setEnabled(true);
-		sumImages.setEnabled(true);
-
-	}
 }
