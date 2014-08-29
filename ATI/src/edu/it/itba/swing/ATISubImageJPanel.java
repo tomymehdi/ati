@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 
 import edu.it.itba.utils.ImageUtils;
 
+@SuppressWarnings("serial")
 public class ATISubImageJPanel extends JDialog implements ActionListener {
 
 	private ATIJFrame owner;
@@ -87,6 +88,5 @@ public class ATISubImageJPanel extends JDialog implements ActionListener {
 		owner.createSubImage(subImage);
 		setVisible(false);
 		dispose();
-		return;
 	}
 }

@@ -39,26 +39,11 @@ public class ATImageJPanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// Draw the image on the panel.
-		// g.drawImage(image, 0, 0, null);
+		g.drawImage(image, 0, 0, null);
 	}
 
 	public BufferedImage getImage() {
 		return image;
 	}
-	/*
-	 * Draw the image from top to bottom, px by px
-	 */
-	public void draw() {
-		Color color = null;
-		Graphics g = getGraphics();
-		for(int i = 0 ; i < image.getHeight() ; i++){
-			for(int j = 0 ; j < image.getWidth() ; j++){
-				color = new Color(image.getRGB(j, i));
-				g.setColor(color);
-				g.drawLine(j, i, j, i);
-			}
-		}
-		
-	}
-
+	
 }
