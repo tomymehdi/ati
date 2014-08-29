@@ -17,6 +17,7 @@ public class ATIJFrame extends JFrame {
 
 	private JPanel mainPanel;
 	private ATImageJPanel image;
+	private ATImageJPanel image2;
 	private ATImageJPanel modImage;
 
 	public ATIJFrame() {

@@ -2,6 +2,7 @@ package edu.it.itba.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -9,6 +10,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
 public class ATIMenu extends JMenuBar implements ActionListener {
@@ -108,6 +111,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleEditPixelValue();
 			else if (source == subImage)
 				handleSubImage();
+			else if (source == sumImages)
+				handleSumImages();
 			else if (source == substractImages)
 				handleSubstractImages();
 			else if (source == negImage)
@@ -118,19 +123,25 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		}
 	}
 	
+
 	// Operation
 	private void handleSubImage() {
 		new ATISubImageJPanel(parent);
 	}
 
 	private void handleNegImage() {
-		// TODO Auto-generated method stub
+		BufferedImage img = ImageUtils.negative(img);
+		
+	}
+
+	private void handleSumImages() {
+		BufferedImage img = ImageUtils.optImages(im1, im2, 2);
 	}
 
 	private void handleSubstractImages() {
-		// TODO Auto-generated method stub
+		BufferedImage img = ImageUtils.optImages(im1, im2, 2);
 	}
-
+	
 	// Edit
 	private void handleEditPixelValue() {
 		new ATIPixelValueEditJPanel(parent);
