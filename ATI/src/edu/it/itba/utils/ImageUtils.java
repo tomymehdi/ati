@@ -336,4 +336,32 @@ public class ImageUtils {
 		return returnImage;
 	}
 
+	private static double gauss(double mu, double sigma) {
+
+		double seed = Math.random();
+
+		double gaussRandom = (1 / (sigma * Math.sqrt(2 * Math.PI)))
+				* Math.pow(Math.E,
+						Math.pow(-seed - mu, 2) / (2 * Math.pow(sigma, 2)));
+
+		return gaussRandom;
+	}
+
+	private static double rayleigh(double eta) {
+
+		double seed = Math.random();
+
+		double rayleightRandom = (seed / Math.pow(eta, 2))
+				* Math.pow(Math.E, -Math.pow(seed, 2) / (2 * Math.pow(eta, 2)));
+		return rayleightRandom;
+	}
+
+	private static double exponential(double lambda) {
+
+		double seed = Math.random();
+
+		double exponentialRandom = lambda * Math.pow(Math.E, -lambda * seed);
+
+		return exponentialRandom;
+	}
 }
