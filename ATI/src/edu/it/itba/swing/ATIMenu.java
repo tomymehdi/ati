@@ -2,6 +2,7 @@ package edu.it.itba.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -9,6 +10,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
 public class ATIMenu extends JMenuBar implements ActionListener {
@@ -31,6 +34,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	JMenuItem sumImages;
 	JMenuItem substractImages;
 	JMenuItem negImage;
+	
+	JMenuItem clear;
 
 	public ATIMenu(ATIJFrame parent) {
 		super();
@@ -41,6 +46,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu edit = new JMenu("Edit");
 		JMenu newImage = new JMenu("New");
 		JMenu operation = new JMenu("Operation");
+		JMenu options = new JMenu("Options");
 
 		// File
 		load = addMenuItemToMenu("Load...", file, true);
@@ -63,12 +69,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		sumImages = addMenuItemToMenu("Sum Images", operation, true);
 		substractImages = addMenuItemToMenu("Substract Images", operation, true);
 		negImage = addMenuItemToMenu("Negative Image", operation, true);
+		
+		// Options
+		clear = addMenuItemToMenu("Clear", options, true);
 
 		addToMenu(file);
 		addToMenu(view);
 		addToMenu(edit);
 		addToMenu(newImage);
 		addToMenu(operation);
+		addToMenu(options);
 	}
 
 	public void addToMenu(JMenu menu) {
@@ -108,29 +118,46 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleEditPixelValue();
 			else if (source == subImage)
 				handleSubImage();
+			else if (source == sumImages)
+				handleSumImages();
 			else if (source == substractImages)
 				handleSubstractImages();
 			else if (source == negImage)
 				handleNegImage();
+			else if (source == clear)
+				handleCelar();
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 	
+	// Options
+	private void handleCelar() {
+		parent.clear();
+	}
+
 	// Operation
 	private void handleSubImage() {
 		new ATISubImageJPanel(parent);
 	}
 
 	private void handleNegImage() {
-		// TODO Auto-generated method stub
+		BufferedImage img = ImageUtils.negative(parent.getLeftImagePanel().getImage());
+		parent.addImage(img);
+		
+	}
+
+	private void handleSumImages() {
+		BufferedImage img = ImageUtils.optImages(parent.getLeftImagePanel().getImage(), parent.getRightImagePanel().getImage(), 0);
+		parent.addImage(img);
 	}
 
 	private void handleSubstractImages() {
-		// TODO Auto-generated method stub
+		BufferedImage img = ImageUtils.optImages(parent.getLeftImagePanel().getImage(), parent.getRightImagePanel().getImage(), 2);
+		parent.addImage(img);
 	}
-
+	
 	// Edit
 	private void handleEditPixelValue() {
 		new ATIPixelValueEditJPanel(parent);

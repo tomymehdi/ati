@@ -109,8 +109,10 @@ public class ATIPixelValueEditJPanel extends JDialog implements ActionListener {
 			value[2] = Integer.parseInt(b.getText());
 			image.getRaster().setPixel(Integer.parseInt(x.getText()),
 					Integer.parseInt(y.getText()), value);
-			owner.getImagePanel().revalidate();
-			owner.getImagePanel().repaint();
+			owner.getLeftImagePanel().revalidate();
+			owner.getRightImagePanel().revalidate();
+			owner.getLeftImagePanel().repaint();
+			owner.getRightImagePanel().repaint();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

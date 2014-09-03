@@ -246,7 +246,7 @@ public class ImageUtils {
 	}
 
 	/*
-	 * Si opt es 1 Multiplica las imagenes, si es 0 las suma
+	 * Si opt es 1 Multiplica las imagenes, si es 0 las suma, 2 resta
 	 */
 
 	public static BufferedImage optImages(BufferedImage im1, BufferedImage im2,
