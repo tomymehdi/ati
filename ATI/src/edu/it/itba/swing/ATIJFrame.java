@@ -16,9 +16,8 @@ public class ATIJFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel mainPanel;
-	private ATImageJPanel image;
-	private ATImageJPanel image2;
-	private ATImageJPanel modImage;
+	private ATImageJPanel imageLeft;
+	private ATImageJPanel imageRight;
 
 	public ATIJFrame() {
 		super();
@@ -43,62 +42,66 @@ public class ATIJFrame extends JFrame {
 	}
 
 	public void createGreyScaleImage() {
-		mainPanel.removeAll();
-		image = new ATImageJPanel(ImageUtils.grayScale());
-		mainPanel.add(image);
-		image.revalidate();
-		image.repaint();
+		addImage(ImageUtils.grayScale());
+	}
+
+	public void addImage(BufferedImage img) {
+		if(imageLeft == null) {
+			imageLeft = new ATImageJPanel(img);
+			mainPanel.add(imageLeft);
+			imageLeft.revalidate();
+			imageLeft.repaint();
+		} else if(imageRight == null){
+			imageRight = new ATImageJPanel(img);
+			mainPanel.add(imageRight);
+			imageRight.revalidate();
+			imageRight.repaint();
+		} else {
+			mainPanel.removeAll();
+			imageLeft = null;
+			imageRight = null;
+			addImage(img);
+		}
 	}
 
 	public void createColorScaleImage() {
-		mainPanel.removeAll();
-		image = new ATImageJPanel(ImageUtils.colorScale());
-		mainPanel.add(image);
-		image.revalidate();
-		image.repaint();
+		addImage(ImageUtils.colorScale());
 	}
 
 	public void createBlankSquare() {
-		mainPanel.removeAll();
-		image = new ATImageJPanel(ImageUtils.blankSquare());
-		mainPanel.add(image);
-		image.revalidate();
-		image.repaint();
+		addImage(ImageUtils.blankSquare());
 	}
 
 	public void createBlankCircle() {
-		mainPanel.removeAll();
-		image = new ATImageJPanel(ImageUtils.blankCircle());
-		mainPanel.add(image);
-		image.revalidate();
-		image.repaint();
+		addImage(ImageUtils.blankCircle());
 	}
 
 	public void loadImage(File file, Dimension dim) {
 		try {
-			mainPanel.removeAll();
-			image = new ATImageJPanel(ImageUtils.load(file, dim));
-			mainPanel.add(image);
-			image.revalidate();
-			image.repaint();
+			addImage(ImageUtils.load(file, dim));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public BufferedImage getImage() {
-		return image.getImage();
+		return imageLeft.getImage();
 	}
 
 	public void createSubImage(BufferedImage subImage) {
-		modImage = new ATImageJPanel(subImage);
-		mainPanel.add(modImage);
-		image.revalidate();
-		image.repaint();
+		addImage(subImage);
 	}
 
-	public ATImageJPanel getImagePanel() {
-		return image;
+	public ATImageJPanel getLeftImagePanel() {
+		return imageLeft;
+	}
+	
+	public ATImageJPanel getRightImagePanel() {
+		return imageRight;
+	}
+	
+	public void clear(){
+		mainPanel.removeAll();
 	}
 
 }

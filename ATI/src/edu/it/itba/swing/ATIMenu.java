@@ -34,6 +34,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	JMenuItem sumImages;
 	JMenuItem substractImages;
 	JMenuItem negImage;
+	
+	JMenuItem clear;
 
 	public ATIMenu(ATIJFrame parent) {
 		super();
@@ -44,6 +46,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu edit = new JMenu("Edit");
 		JMenu newImage = new JMenu("New");
 		JMenu operation = new JMenu("Operation");
+		JMenu options = new JMenu("Options");
 
 		// File
 		load = addMenuItemToMenu("Load...", file, true);
@@ -66,12 +69,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		sumImages = addMenuItemToMenu("Sum Images", operation, true);
 		substractImages = addMenuItemToMenu("Substract Images", operation, true);
 		negImage = addMenuItemToMenu("Negative Image", operation, true);
+		
+		// Options
+		clear = addMenuItemToMenu("Clear", options, true);
 
 		addToMenu(file);
 		addToMenu(view);
 		addToMenu(edit);
 		addToMenu(newImage);
 		addToMenu(operation);
+		addToMenu(options);
 	}
 
 	public void addToMenu(JMenu menu) {
@@ -117,12 +124,18 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleSubstractImages();
 			else if (source == negImage)
 				handleNegImage();
+			else if (source == clear)
+				handleCelar();
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 	
+	// Options
+	private void handleCelar() {
+		parent.clear();
+	}
 
 	// Operation
 	private void handleSubImage() {
@@ -130,16 +143,19 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleNegImage() {
-		BufferedImage img = ImageUtils.negative(img);
+		BufferedImage img = ImageUtils.negative(parent.getLeftImagePanel().getImage());
+		parent.addImage(img);
 		
 	}
 
 	private void handleSumImages() {
-		BufferedImage img = ImageUtils.optImages(im1, im2, 2);
+		BufferedImage img = ImageUtils.optImages(parent.getLeftImagePanel().getImage(), parent.getRightImagePanel().getImage(), 0);
+		parent.addImage(img);
 	}
 
 	private void handleSubstractImages() {
-		BufferedImage img = ImageUtils.optImages(im1, im2, 2);
+		BufferedImage img = ImageUtils.optImages(parent.getLeftImagePanel().getImage(), parent.getRightImagePanel().getImage(), 2);
+		parent.addImage(img);
 	}
 	
 	// Edit
