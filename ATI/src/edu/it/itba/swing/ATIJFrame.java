@@ -102,6 +102,8 @@ public class ATIJFrame extends JFrame {
 	
 	public void clear(){
 		mainPanel.removeAll();
+		mainPanel.revalidate();
+		mainPanel.repaint();
 	}
 
 }

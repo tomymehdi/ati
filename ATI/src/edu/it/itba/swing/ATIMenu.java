@@ -3,9 +3,11 @@ package edu.it.itba.swing;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -125,7 +127,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 			else if (source == negImage)
 				handleNegImage();
 			else if (source == clear)
-				handleCelar();
+				handleClear();
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -133,7 +135,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 	
 	// Options
-	private void handleCelar() {
+	private void handleClear() {
 		parent.clear();
 	}
 
@@ -197,7 +199,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		int retrival = chooser.showSaveDialog(null);
 		if (retrival == JFileChooser.APPROVE_OPTION) {
 			try {
-				new FileWriter(chooser.getSelectedFile());
+				File outputfile = chooser.getSelectedFile().getAbsoluteFile();
+			    ImageIO.write(parent.getLeftImagePanel().getImage(), "jpg", outputfile);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}

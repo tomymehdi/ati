@@ -51,15 +51,15 @@ public class ATIPixelValueEditJPanel extends JDialog implements ActionListener {
 		p.add(new JLabel("y"));
 		centralPanel.add(p);
 		p.add(y);
-		
+
 		p.add(new JLabel("r"));
 		centralPanel.add(p);
 		p.add(r);
-		
+
 		p.add(new JLabel("g"));
 		centralPanel.add(p);
 		p.add(g);
-		
+
 		p.add(new JLabel("b"));
 		centralPanel.add(p);
 		p.add(b);
@@ -68,12 +68,12 @@ public class ATIPixelValueEditJPanel extends JDialog implements ActionListener {
 		p.add(setValue);
 		p.add(close);
 		centralPanel.add(p);
-		
+
 		answerPanel = new JPanel();
 		answerPanel.add(new JLabel("Pixel edited."));
 		answerPanel.setVisible(false);
 		centralPanel.add(answerPanel);
-		
+
 		mainPanel.add(centralPanel);
 
 		this.add(mainPanel);
@@ -110,9 +110,9 @@ public class ATIPixelValueEditJPanel extends JDialog implements ActionListener {
 			image.getRaster().setPixel(Integer.parseInt(x.getText()),
 					Integer.parseInt(y.getText()), value);
 			owner.getLeftImagePanel().revalidate();
-			owner.getRightImagePanel().revalidate();
+			// owner.getRightImagePanel().revalidate();
 			owner.getLeftImagePanel().repaint();
-			owner.getRightImagePanel().repaint();
+			// owner.getRightImagePanel().repaint();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
