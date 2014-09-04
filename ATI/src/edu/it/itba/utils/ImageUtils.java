@@ -9,8 +9,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
+
+import models.Histogram;
 
 public class ImageUtils {
 
@@ -363,5 +367,33 @@ public class ImageUtils {
 		double exponentialRandom = lambda * Math.pow(Math.E, -lambda * seed);
 
 		return exponentialRandom;
+	}
+
+	public static Histogram histogram(BufferedImage image) {
+
+		if (image == null)
+			return null;
+		Map<Integer, Integer> mapHistory = new HashMap<Integer, Integer>();
+
+		Raster imageRaster = image.getData();
+
+		for (int i = 0; i < image.getHeight(); i++) {
+			for (int j = 0; j < image.getWidth(); j++) {
+
+				int value[] = new int[3];
+
+				imageRaster.getPixel(j, i, value);
+				int amount = 0;
+				if (mapHistory.containsKey(value[0])) {
+					amount = mapHistory.get(value[0]);
+					amount++;
+				} else {
+					amount = 1;
+				}
+				mapHistory.put(value[0], amount);
+			}
+		}
+
+		return new Histogram(mapHistory);
 	}
 }
