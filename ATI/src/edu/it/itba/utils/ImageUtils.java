@@ -264,7 +264,7 @@ public class ImageUtils {
 
 		WritableRaster raster = returnImage.getRaster();
 		for (int i = 0; i < returnImage.getWidth(); i++) {
-			for (int j = 0; j < returnImage.getHeight(); i++) {
+			for (int j = 0; j < returnImage.getHeight(); j++) {
 				int[] im1Pixel = new int[3];
 				int[] im2Pixel = new int[3];
 				int[] returnImagePixel = new int[3];
@@ -296,7 +296,7 @@ public class ImageUtils {
 		WritableRaster raster = returnImage.getRaster();
 
 		for (int i = 0; i < returnImage.getWidth(); i++) {
-			for (int j = 0; j < returnImage.getHeight(); i++) {
+			for (int j = 0; j < returnImage.getHeight(); j++) {
 				int[] imagePixel = new int[3];
 				int[] returnImagePixel = new int[3];
 				imageRaster.getPixel(i, j, imagePixel);
@@ -321,7 +321,7 @@ public class ImageUtils {
 		WritableRaster raster = returnImage.getRaster();
 
 		for (int i = 0; i < returnImage.getWidth(); i++) {
-			for (int j = 0; j < returnImage.getHeight(); i++) {
+			for (int j = 0; j < returnImage.getHeight(); j++) {
 				int[] imagePixel = new int[3];
 				int[] returnImagePixel = new int[3];
 				imageRaster.getPixel(i, j, imagePixel);
