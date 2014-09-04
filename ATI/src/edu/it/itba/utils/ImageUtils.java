@@ -369,73 +369,72 @@ public class ImageUtils {
 	}
 
 	public static BufferedImage additiveGaussinianNoise(BufferedImage image,
-			double mu, double sigma) {
+			double mu, double sigma, float d) {
 
-		BufferedImage noiseImage = gaussNoiseImage(mu, sigma, image.getWidth(),
-				image.getHeight());
+		float density = d / 100;
+		BufferedImage retImage = new BufferedImage(image.getWidth(),
+				image.getHeight(), image.getType());
 
-		return optImages(image, noiseImage, ADD);
+		Raster imageData = image.getData();
+		WritableRaster raster = retImage.getRaster();
+		for (int row = 0; row < image.getHeight(); row++) {
+			for (int col = 0; col < image.getWidth(); col++) {
+				if (Math.random() < density) {
+					int oldPixelValue = imageData.getSample(col, row, 0);
+					double noise = gauss(mu, sigma);
+					int newPixelValue = ((int) noise + oldPixelValue) / 2;
+					raster.setSample(col, row, 0, newPixelValue);
+				}
+			}
+		}
+
+		return retImage;
 	}
 
 	public static BufferedImage multiplicativeRayleighNoise(
-			BufferedImage image, double eta) {
+			BufferedImage image, double eta, float d) {
 
-		BufferedImage noiseImage = rayleighNoiseImage(eta, image.getWidth(),
-				image.getHeight());
+		float density = d / 100;
+		BufferedImage retImage = new BufferedImage(image.getWidth(),
+				image.getHeight(), image.getType());
 
-		return optImages(image, noiseImage, MULTIPLY);
+		Raster imageData = image.getData();
+		WritableRaster raster = retImage.getRaster();
+		for (int row = 0; row < image.getHeight(); row++) {
+			for (int col = 0; col < image.getWidth(); col++) {
+				if (Math.random() < density) {
+					int oldPixelValue = imageData.getSample(col, row, 0);
+					double noise = rayleigh(eta);
+					int newPixelValue = ((int) noise * oldPixelValue) / 255;
+					raster.setSample(col, row, 0, newPixelValue);
+				}
+			}
+		}
 
+		return retImage;
 	}
 
 	public static BufferedImage multiplicativeExponentialNoise(
-			BufferedImage image, double lambda) {
+			BufferedImage image, double lambda, float d) {
 
-		BufferedImage noiseImage = exponentialNoiseImage(lambda,
-				image.getWidth(), image.getHeight());
+		float density = d / 100;
+		BufferedImage retImage = new BufferedImage(image.getWidth(),
+				image.getHeight(), image.getType());
 
-		return optImages(image, noiseImage, MULTIPLY);
-	}
-
-	private static BufferedImage gaussNoiseImage(double mu, double sigma,
-			int widht, int height) {
-		BufferedImage image = new BufferedImage(widht, height,
-				BufferedImage.TYPE_BYTE_GRAY);
-
-		WritableRaster raster = image.getRaster();
-		for (int row = 0; row < height; row++) {
-			for (int col = 0; col < widht; col++) {
-				raster.setSample(col, row, 0, gauss(mu, sigma));
+		Raster imageData = image.getData();
+		WritableRaster raster = retImage.getRaster();
+		for (int row = 0; row < image.getHeight(); row++) {
+			for (int col = 0; col < image.getWidth(); col++) {
+				if (Math.random() < density) {
+					int oldPixelValue = imageData.getSample(col, row, 0);
+					double noise = exponential(lambda);
+					int newPixelValue = ((int) noise * oldPixelValue) / 255;
+					raster.setSample(col, row, 0, newPixelValue);
+				}
 			}
 		}
-		return image;
-	}
 
-	private static BufferedImage rayleighNoiseImage(double eta, int widht,
-			int height) {
-		BufferedImage image = new BufferedImage(widht, height,
-				BufferedImage.TYPE_BYTE_GRAY);
-
-		WritableRaster raster = image.getRaster();
-		for (int row = 0; row < height; row++) {
-			for (int col = 0; col < widht; col++) {
-				raster.setSample(col, row, 0, rayleigh(eta));
-			}
-		}
-		return image;
-	}
-
-	private static BufferedImage exponentialNoiseImage(double lambda,
-			int widht, int height) {
-		BufferedImage image = new BufferedImage(widht, height,
-				BufferedImage.TYPE_BYTE_GRAY);
-
-		WritableRaster raster = image.getRaster();
-		for (int row = 0; row < height; row++) {
-			for (int col = 0; col < widht; col++) {
-				raster.setSample(col, row, 0, exponential(lambda));
-			}
-		}
-		return image;
+		return retImage;
 	}
 
 }
