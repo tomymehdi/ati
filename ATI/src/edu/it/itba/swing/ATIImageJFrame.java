@@ -1,7 +1,6 @@
 package edu.it.itba.swing;
 
 import java.awt.BorderLayout;
-import java.awt.image.BufferedImage;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -11,12 +10,10 @@ import javax.swing.JPanel;
 public class ATIImageJFrame extends JFrame {
 
 	private JPanel mainPanel;
-	ATImageJPanel image;
 
-	public ATIImageJFrame(ATImageJPanel image) {
+	public ATIImageJFrame(ATIJPanel image) {
 
 		super();
-		this.image = image;
 		// Create and set up the window.
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(600, 600);
@@ -31,14 +28,6 @@ public class ATIImageJFrame extends JFrame {
 
 		// Display the window.
 		setVisible(true);
-	}
-
-	public void createImageJFrame(BufferedImage subImage) {
-		new ATIImageJFrame(new ATImageJPanel(subImage));
-	}
-
-	public BufferedImage getImage() {
-		return image.getImage();
 	}
 
 }

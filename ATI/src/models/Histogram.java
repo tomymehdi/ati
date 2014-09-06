@@ -7,9 +7,10 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Map;
 
-import javax.swing.JPanel;
+import edu.it.itba.swing.ATIJPanel;
 
-public class Histogram extends JPanel {
+@SuppressWarnings("serial")
+public class Histogram extends ATIJPanel {
 
 	protected static final int MIN_BAR_WIDTH = 4;
 	private Map<Integer, Integer> mapHistory;

@@ -178,11 +178,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 	
 	private void handleHistogramLeft() {
-		new ATIImageJFrame(new ATImageJPanel(ImageUtils.histogram(parent.getLeftImagePanel().getImage())));
+		new ATIImageJFrame(ImageUtils.histogram(parent.getLeftImagePanel().getImage()));
 	}
 	
 	private void handleHistogramRight() {
-		new ATIImageJFrame(new ATImageJPanel(ImageUtils.histogram(parent.getRightImagePanel().getImage())));
+		new ATIImageJFrame(ImageUtils.histogram(parent.getRightImagePanel().getImage()));
 	}
 	
 	// New

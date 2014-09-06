@@ -8,11 +8,10 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
 
 import edu.it.itba.utils.ImageUtils;
 
-public class ATImageJPanel extends JPanel {
+public class ATImageJPanel extends ATIJPanel {
 
 	private static final long serialVersionUID = 1L;
 

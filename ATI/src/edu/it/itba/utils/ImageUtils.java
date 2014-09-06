@@ -340,7 +340,7 @@ public class ImageUtils {
 		return returnImage;
 	}
 
-	private static double gauss(double mu, double sigma) {
+	public static double gauss(double mu, double sigma) {
 
 		double seed = Math.random();
 
@@ -351,7 +351,7 @@ public class ImageUtils {
 		return gaussRandom;
 	}
 
-	private static double rayleigh(double eta) {
+	public static double rayleigh(double eta) {
 
 		double seed = Math.random();
 
@@ -360,7 +360,7 @@ public class ImageUtils {
 		return rayleightRandom;
 	}
 
-	private static double exponential(double lambda) {
+	public static double exponential(double lambda) {
 
 		double seed = Math.random();
 
