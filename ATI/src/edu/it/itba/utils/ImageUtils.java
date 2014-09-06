@@ -9,8 +9,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
+
+import models.Histogram;
 
 public class ImageUtils {
 
@@ -336,7 +340,7 @@ public class ImageUtils {
 		return returnImage;
 	}
 
-	private static double gauss(double mu, double sigma) {
+	public static double gauss(double mu, double sigma) {
 
 		double seed = Math.random();
 
@@ -347,7 +351,7 @@ public class ImageUtils {
 		return gaussRandom;
 	}
 
-	private static double rayleigh(double eta) {
+	public static double rayleigh(double eta) {
 
 		double seed = Math.random();
 
@@ -356,12 +360,40 @@ public class ImageUtils {
 		return rayleightRandom;
 	}
 
-	private static double exponential(double lambda) {
+	public static double exponential(double lambda) {
 
 		double seed = Math.random();
 
 		double exponentialRandom = lambda * Math.pow(Math.E, -lambda * seed);
 
 		return exponentialRandom;
+	}
+
+	public static Histogram histogram(BufferedImage image) {
+
+		if (image == null)
+			return null;
+		Map<Integer, Integer> mapHistory = new HashMap<Integer, Integer>();
+
+		Raster imageRaster = image.getData();
+
+		for (int i = 0; i < image.getHeight(); i++) {
+			for (int j = 0; j < image.getWidth(); j++) {
+
+				int value[] = new int[3];
+
+				imageRaster.getPixel(j, i, value);
+				int amount = 0;
+				if (mapHistory.containsKey(value[0])) {
+					amount = mapHistory.get(value[0]);
+					amount++;
+				} else {
+					amount = 1;
+				}
+				mapHistory.put(value[0], amount);
+			}
+		}
+
+		return new Histogram(mapHistory);
 	}
 }
