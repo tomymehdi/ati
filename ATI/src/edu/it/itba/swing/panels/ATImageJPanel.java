@@ -1,4 +1,4 @@
-package edu.it.itba.swing;
+package edu.it.itba.swing.panels;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javax.swing.BorderFactory;
 
+import edu.it.itba.swing.interfaces.ATIJPanel;
 import edu.it.itba.utils.ImageUtils;
 
 public class ATImageJPanel extends ATIJPanel {

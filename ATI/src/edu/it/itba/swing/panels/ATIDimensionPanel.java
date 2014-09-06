@@ -1,4 +1,4 @@
-package edu.it.itba.swing;
+package edu.it.itba.swing.panels;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -38,8 +38,8 @@ public class ATIDimensionPanel extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Dimension dim = new Dimension(textWValue(), textHValue());
-				edu.it.itba.swing.ATIDimensionPanel.this.parent.loadRaw(dim);
-				edu.it.itba.swing.ATIDimensionPanel.this.dispose();
+				edu.it.itba.swing.panels.ATIDimensionPanel.this.parent.loadRaw(dim);
+				edu.it.itba.swing.panels.ATIDimensionPanel.this.dispose();
 			}
 		});
 		p.add(load);

@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Map;
 
-import edu.it.itba.swing.ATIJPanel;
+import edu.it.itba.swing.interfaces.ATIJPanel;
 
 @SuppressWarnings("serial")
 public class Histogram extends ATIJPanel {

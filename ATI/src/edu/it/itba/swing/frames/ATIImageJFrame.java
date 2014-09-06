@@ -1,10 +1,12 @@
-package edu.it.itba.swing;
+package edu.it.itba.swing.frames;
 
 import java.awt.BorderLayout;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import edu.it.itba.swing.interfaces.ATIJPanel;
 
 @SuppressWarnings("serial")
 public class ATIImageJFrame extends JFrame {

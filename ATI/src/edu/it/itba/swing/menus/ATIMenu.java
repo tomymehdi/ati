@@ -1,4 +1,4 @@
-package edu.it.itba.swing;
+package edu.it.itba.swing.menus;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +12,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import edu.it.itba.swing.frames.ATIImageJFrame;
+import edu.it.itba.swing.frames.ATIJFrame;
+import edu.it.itba.swing.panels.ATILoadImagePanel;
+import edu.it.itba.swing.panels.ATIPixelValueEditJPanel;
+import edu.it.itba.swing.panels.ATIPixelValueJPanel;
+import edu.it.itba.swing.panels.ATISubImageJPanel;
 import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
