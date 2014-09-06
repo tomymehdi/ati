@@ -1,4 +1,4 @@
-package models;
+package edu.it.itba.models;
 
 import java.awt.Color;
 import java.awt.Graphics;

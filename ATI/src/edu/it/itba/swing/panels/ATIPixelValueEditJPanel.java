@@ -12,8 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.it.itba.enums.Side;
 import edu.it.itba.swing.interfaces.ATIJFrame;
-import enums.Side;
 
 
 @SuppressWarnings("serial")

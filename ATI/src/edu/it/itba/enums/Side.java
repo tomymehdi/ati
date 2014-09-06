@@ -1,4 +1,4 @@
-package enums;
+package edu.it.itba.enums;
 
 public enum Side {
 	LEFT(0), RIGHT(1);
