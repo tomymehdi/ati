@@ -1,4 +1,4 @@
-package edu.it.itba.swing;
+package edu.it.itba.swing.interfaces;
 
 import javax.swing.JPanel;
 

@@ -1,4 +1,4 @@
-package edu.it.itba.swing;
+package edu.it.itba.swing.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.it.itba.swing.frames.ATIJFrame;
 import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")

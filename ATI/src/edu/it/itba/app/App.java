@@ -1,6 +1,6 @@
 package edu.it.itba.app;
 
-import edu.it.itba.swing.ATIJFrame;
+import edu.it.itba.swing.frames.ATIJFrame;
 
 public class App {
 

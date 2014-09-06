@@ -1,10 +1,12 @@
-package edu.it.itba.swing;
+package edu.it.itba.swing.panels;
 
 import java.awt.Dimension;
 import java.io.File;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+
+import edu.it.itba.swing.frames.ATIJFrame;
 
 @SuppressWarnings("serial")
 public class ATILoadImagePanel extends JDialog {

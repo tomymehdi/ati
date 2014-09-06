@@ -1,4 +1,4 @@
-package edu.it.itba.swing;
+package edu.it.itba.swing.frames;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -9,6 +9,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import edu.it.itba.swing.menus.ATIMenu;
+import edu.it.itba.swing.panels.ATImageJPanel;
 import edu.it.itba.utils.ImageUtils;
 
 public class ATIJFrame extends JFrame {
