@@ -1,6 +1,6 @@
 package edu.it.itba.app;
 
-import edu.it.itba.swing.frames.ATIJFrame;
+import edu.it.itba.swing.frames.ATIJFrameImpl;
 
 public class App {
 
@@ -9,7 +9,7 @@ public class App {
 		// creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new ATIJFrame();
+				new ATIJFrameImpl();
 			}
 		});
 	}

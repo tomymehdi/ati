@@ -7,44 +7,46 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import edu.it.itba.swing.frames.ATIImageJFrame;
-import edu.it.itba.swing.frames.ATIJFrame;
+import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.panels.ATILoadImagePanel;
 import edu.it.itba.swing.panels.ATIPixelValueEditJPanel;
 import edu.it.itba.swing.panels.ATIPixelValueJPanel;
 import edu.it.itba.swing.panels.ATISubImageJPanel;
 import edu.it.itba.utils.ImageUtils;
+import enums.Side;
 
 @SuppressWarnings("serial")
 public class ATIMenu extends JMenuBar implements ActionListener {
 
-	ATIJFrame parent;
+	private ATIJFrame parent;
 	
-	JMenuItem load;
-	JMenuItem save;
-	JMenuItem subImage;
+	private JMenuItem load;
+	private JMenuItem save;
+	private JMenuItem subImage;
 
-	JMenuItem pixelValue;
-	JMenuItem histogramLeft;
-	JMenuItem histogramRight;
+	private JMenuItem pixelValueLeft;
+	private JMenuItem pixelValueRight;
+	private JMenuItem histogramLeft;
+	private JMenuItem histogramRight;
 
-	JMenuItem modifyPixelValue;
+	private JMenuItem modifyPixelValueLeft;
+	private JMenuItem modifyPixelValueRight;
 
-	JMenuItem blankCircle;
-	JMenuItem blankSquare;
-	JMenuItem greyScale;
-	JMenuItem colorScale;
+	private JMenuItem blankCircle;
+	private JMenuItem blankSquare;
+	private JMenuItem greyScale;
+	private JMenuItem colorScale;
 
-	JMenuItem sumImages;
-	JMenuItem substractImages;
-	JMenuItem negImage;
+	private JMenuItem sumImages;
+	private JMenuItem substractImages;
+	private JMenuItem negImage;
 	
-	JMenuItem clear;
+	private JMenuItem clear;
 
 	public ATIMenu(ATIJFrame parent) {
 		super();
@@ -62,12 +64,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		save = addMenuItemToMenu("Save...", file, true);
 		
 		// View
-		pixelValue = addMenuItemToMenu("Pixel Value...", view, true);
+		pixelValueLeft = addMenuItemToMenu("Pixel left...", view, true);
+		pixelValueRight = addMenuItemToMenu("Pixel right...", view, true);
 		histogramLeft = addMenuItemToMenu("Histrogram left image", view, true);
 		histogramRight = addMenuItemToMenu("Histogram right image", view, true);
 		
 		// Edit
-		modifyPixelValue = addMenuItemToMenu("Pixel Value...", edit, true);
+		modifyPixelValueLeft = addMenuItemToMenu("Pixel left...", edit, true);
+		modifyPixelValueRight = addMenuItemToMenu("Pixel right...", edit, true);
 
 		// New
 		blankCircle = addMenuItemToMenu("Blank Circle", newImage, true);
@@ -118,15 +122,19 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 			else if (source == blankSquare)
 				handleBlankSquare();
 			else if (source == greyScale)
-				handleGreyScale();
+				handleGrayScale();
 			else if (source == colorScale)
 				handleColorScale();
 			else if (source == save)
 				handleSave();
-			else if (source == pixelValue)
-				handleShowPixelValue();
-			else if (source == modifyPixelValue)
-				handleEditPixelValue();
+			else if (source == pixelValueLeft)
+				handleShowPixelValueLeft();
+			else if (source == pixelValueRight)
+				handleShowPixelValueRight();
+			else if (source == modifyPixelValueLeft)
+				handleEditPixelValueLeft();
+			else if (source == modifyPixelValueRight)
+				handleEditPixelValueRight();
 			else if (source == subImage)
 				handleSubImage();
 			else if (source == sumImages)
@@ -158,54 +166,67 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleNegImage() {
-		BufferedImage img = ImageUtils.negative(parent.getLeftImagePanel().getImage());
+		BufferedImage img = ImageUtils.negative(parent.getPanels()[0].getImage());
 		parent.addImage(img);
 		
 	}
 
 	private void handleSumImages() {
-		BufferedImage img = ImageUtils.optImages(parent.getLeftImagePanel().getImage(), parent.getRightImagePanel().getImage(), 0);
+		BufferedImage img = ImageUtils.optImages(parent.getPanels()[0].getImage(), parent.getPanels()[1].getImage(), 0);
 		parent.addImage(img);
 	}
 
 	private void handleSubstractImages() {
-		BufferedImage img = ImageUtils.optImages(parent.getLeftImagePanel().getImage(), parent.getRightImagePanel().getImage(), 2);
+		BufferedImage img = ImageUtils.optImages(parent.getPanels()[0].getImage(), parent.getPanels()[1].getImage(), 2);
 		parent.addImage(img);
 	}
 	
 	// Edit
-	private void handleEditPixelValue() {
-		new ATIPixelValueEditJPanel(parent);
+	private void handleEditPixelValueLeft() {
+		new ATIPixelValueEditJPanel(parent, Side.LEFT);
+	}
+	
+	private void handleEditPixelValueRight() {
+		new ATIPixelValueEditJPanel(parent, Side.RIGHT);
 	}
 	
 	// View
-	private void handleShowPixelValue() {
+	private void handleShowPixelValueLeft() {
 		new ATIPixelValueJPanel(parent);
 	}
 	
+	private void handleShowPixelValueRight() {
+		new ATIPixelValueJPanel(parent);
+	}
+	
+	
 	private void handleHistogramLeft() {
-		new ATIImageJFrame(ImageUtils.histogram(parent.getLeftImagePanel().getImage()));
+		new ATIImageJFrame(ImageUtils.histogram(parent.getPanels()[0].getImage()));
 	}
 	
 	private void handleHistogramRight() {
-		new ATIImageJFrame(ImageUtils.histogram(parent.getRightImagePanel().getImage()));
+		new ATIImageJFrame(ImageUtils.histogram(parent.getPanels()[1].getImage()));
 	}
 	
 	// New
 	private void handleColorScale() {
-		parent.createColorScaleImage();
+		BufferedImage img = ImageUtils.colorScale();
+		parent.addImage(img);
 	}
 
-	private void handleGreyScale() {
-		parent.createGreyScaleImage();
+	private void handleGrayScale() {
+		BufferedImage img = ImageUtils.grayScale();
+		parent.addImage(img);
 	}
 
 	private void handleBlankSquare() {
-		parent.createBlankSquare();
+		BufferedImage img = ImageUtils.blankSquare();
+		parent.addImage(img);
 	}
 
 	private void handleBlankCircle() {
-		parent.createBlankCircle();
+		BufferedImage img = ImageUtils.blankCircle();
+		parent.addImage(img);
 	}
 	
 	
@@ -220,8 +241,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 			dir += "/tests/results/";
 			File left = new File(dir + "L.jpg");
 			File right = new File(dir + "R.jpg");
-		    ImageIO.write(parent.getLeftImagePanel().getImage(), "jpg", left);
-		    ImageIO.write(parent.getRightImagePanel().getImage(), "jpg", right);
+		    ImageIO.write(parent.getPanels()[0].getImage(), "jpg", left);
+		    ImageIO.write(parent.getPanels()[1].getImage(), "jpg", right);
 		} catch (Exception ex) {
 			
 		}

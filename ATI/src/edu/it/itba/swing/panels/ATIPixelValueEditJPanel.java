@@ -12,7 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import edu.it.itba.swing.frames.ATIJFrame;
+import edu.it.itba.swing.interfaces.ATIJFrame;
+import enums.Side;
+
 
 @SuppressWarnings("serial")
 public class ATIPixelValueEditJPanel extends JDialog implements ActionListener {
@@ -27,10 +29,12 @@ public class ATIPixelValueEditJPanel extends JDialog implements ActionListener {
 	private JButton close;
 	private JPanel answerPanel;
 	private int[] value = new int[3];
+	private Side side;
 
-	public ATIPixelValueEditJPanel(ATIJFrame owner) {
+	public ATIPixelValueEditJPanel(ATIJFrame owner, Side side) {
 		super(owner, "Set Pixel Value", true);
 		this.owner = owner;
+		this.side = side;
 
 		setValue = new JButton("Set pixel");
 		setValue.addActionListener(this);
@@ -103,7 +107,7 @@ public class ATIPixelValueEditJPanel extends JDialog implements ActionListener {
 
 	private void handleSetValue() {
 
-		BufferedImage image = owner.getImage();
+		BufferedImage image = owner.getPanels()[side.getValue()].getImage();
 
 		try {
 			value[0] = Integer.parseInt(r.getText());
@@ -111,10 +115,8 @@ public class ATIPixelValueEditJPanel extends JDialog implements ActionListener {
 			value[2] = Integer.parseInt(b.getText());
 			image.getRaster().setPixel(Integer.parseInt(x.getText()),
 					Integer.parseInt(y.getText()), value);
-			owner.getLeftImagePanel().revalidate();
-			// owner.getRightImagePanel().revalidate();
-			owner.getLeftImagePanel().repaint();
-			// owner.getRightImagePanel().repaint();
+			owner.getPanels()[side.getValue()].revalidate();
+			owner.getPanels()[side.getValue()].repaint();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
