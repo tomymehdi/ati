@@ -6,7 +6,8 @@ import java.io.File;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
-import edu.it.itba.swing.frames.ATIJFrame;
+import edu.it.itba.swing.interfaces.ATIJFrame;
+
 
 @SuppressWarnings("serial")
 public class ATILoadImagePanel extends JDialog {

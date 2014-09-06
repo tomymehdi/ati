@@ -12,7 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import edu.it.itba.swing.frames.ATIJFrame;
+import edu.it.itba.swing.interfaces.ATIJFrame;
+
 
 @SuppressWarnings("serial")
 public class ATIPixelValueJPanel extends JDialog implements ActionListener {
@@ -89,7 +90,7 @@ public class ATIPixelValueJPanel extends JDialog implements ActionListener {
 
 	private void handleGetValue() {
 
-		BufferedImage image = owner.getImage();
+		BufferedImage image = owner.getPanels()[0].getImage();
 
 		try {
 			image.getRaster().getPixel(Integer.parseInt(x.getText()),

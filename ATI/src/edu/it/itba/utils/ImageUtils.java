@@ -376,29 +376,28 @@ public class ImageUtils {
 			return null;
 		
 		return new Histogram(image);
-		/*
-		Map<Integer, Integer> mapHistory = new HashMap<Integer, Integer>();
-
-		Raster imageRaster = image.getData();
-
-		for (int i = 0; i < image.getHeight(); i++) {
-			for (int j = 0; j < image.getWidth(); j++) {
-
-				int value[] = new int[3];
-
-				imageRaster.getPixel(j, i, value);
-				int amount = 0;
-				if (mapHistory.containsKey(value[0])) {
-					amount = mapHistory.get(value[0]);
-					amount++;
-				} else {
-					amount = 1;
-				}
-				mapHistory.put(value[0], amount);
+	}
+	
+	public static double[] avgEachBand(BufferedImage image){
+		
+		int height = image.getHeight();
+		int width = image.getWidth();
+		double resp[] = {0.0, 0.0, 0.0};
+		double values[] = new double[3];
+		
+		for(int i = 0; i<height ; i++){
+			for(int j = 0 ; j<width ; j++){
+				image.getRaster().getPixel(i, j, values);
+				resp[0] += values[0];
+				resp[1] += values[1];
+				resp[2] += values[2];
 			}
 		}
-
-		return new Histogram(mapHistory);
-		*/
+		
+		resp[0] = resp[0] / (height*width);
+		resp[1] = resp[1] / (height*width);
+		resp[2] = resp[2] / (height*width);
+		
+		return resp;
 	}
 }

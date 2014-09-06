@@ -9,11 +9,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import edu.it.itba.swing.interfaces.ATIJFrame;
+import edu.it.itba.swing.interfaces.ATIJPanel;
 import edu.it.itba.swing.menus.ATIMenu;
 import edu.it.itba.swing.panels.ATImageJPanel;
 import edu.it.itba.utils.ImageUtils;
 
-public class ATIJFrame extends JFrame {
+public class ATIJFrameImpl extends ATIJFrame {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,7 +23,7 @@ public class ATIJFrame extends JFrame {
 	private ATImageJPanel imageLeft;
 	private ATImageJPanel imageRight;
 
-	public ATIJFrame() {
+	public ATIJFrameImpl() {
 		super();
 
 		// Create and set up the window.
@@ -40,13 +42,17 @@ public class ATIJFrame extends JFrame {
 
 		// Display the window.
 		setVisible(true);
-
+	}
+	
+	@Override
+	public ATIJPanel[] getPanels() {
+		ATIJPanel resp[] = new ATIJPanel[2];
+		resp[0] = imageLeft;
+		resp[1] = imageRight;
+		return resp;
 	}
 
-	public void createGreyScaleImage() {
-		addImage(ImageUtils.grayScale());
-	}
-
+	@Override
 	public void addImage(BufferedImage img) {
 		if(imageLeft == null) {
 			imageLeft = new ATImageJPanel(img);
@@ -66,18 +72,6 @@ public class ATIJFrame extends JFrame {
 		}
 	}
 
-	public void createColorScaleImage() {
-		addImage(ImageUtils.colorScale());
-	}
-
-	public void createBlankSquare() {
-		addImage(ImageUtils.blankSquare());
-	}
-
-	public void createBlankCircle() {
-		addImage(ImageUtils.blankCircle());
-	}
-
 	public void loadImage(File file, Dimension dim) {
 		try {
 			addImage(ImageUtils.load(file, dim));
@@ -88,10 +82,6 @@ public class ATIJFrame extends JFrame {
 
 	public BufferedImage getImage() {
 		return imageLeft.getImage();
-	}
-
-	public void createSubImage(BufferedImage subImage) {
-		addImage(subImage);
 	}
 
 	public ATImageJPanel getLeftImagePanel() {

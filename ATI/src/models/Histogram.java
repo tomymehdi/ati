@@ -86,4 +86,9 @@ public class Histogram extends ATIJPanel {
 			g2d.dispose();
 		}
 	}
+
+	@Override
+	public BufferedImage getImage() {
+		return image;
+	}
 }
