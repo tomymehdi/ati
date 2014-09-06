@@ -1,10 +1,12 @@
 package models;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.util.HashMap;
 import java.util.Map;
 
 import edu.it.itba.swing.interfaces.ATIJPanel;
@@ -13,15 +15,34 @@ import edu.it.itba.swing.interfaces.ATIJPanel;
 public class Histogram extends ATIJPanel {
 
 	protected static final int MIN_BAR_WIDTH = 4;
-	private Map<Integer, Integer> mapHistory;
+	private BufferedImage image;
+	private Map<Integer, Integer> mapHistory = new HashMap<Integer, Integer>();
 
-	public Histogram(Map<Integer, Integer> mapHistory) {
-		this.mapHistory = mapHistory;
-		int width = (mapHistory.size() * MIN_BAR_WIDTH) + 11;
-		Dimension minSize = new Dimension(width, 128);
-		Dimension prefSize = new Dimension(width, 256);
-		setMinimumSize(minSize);
-		setPreferredSize(prefSize);
+	public Histogram(BufferedImage image) {
+		this.image = image;
+		calculateHistogram();
+	}
+	
+	private void calculateHistogram() {
+		Raster imageRaster = image.getData();
+
+		for (int i = 0; i < image.getHeight(); i++) {
+			for (int j = 0; j < image.getWidth(); j++) {
+
+				int value[] = new int[3];
+
+				imageRaster.getPixel(j, i, value);
+				int amount = 0;
+				if (mapHistory.containsKey(value[0])) {
+					amount = mapHistory.get(value[0]);
+					amount++;
+				} else {
+					amount = 1;
+				}
+				mapHistory.put(value[0], amount);
+			}
+		}
+
 	}
 
 	@Override

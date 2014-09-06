@@ -369,10 +369,14 @@ public class ImageUtils {
 		return exponentialRandom;
 	}
 
+	// Recives and image and returns an Histogram that extends JPanel so it know how to paint on the frame.
 	public static Histogram histogram(BufferedImage image) {
 
 		if (image == null)
 			return null;
+		
+		return new Histogram(image);
+		/*
 		Map<Integer, Integer> mapHistory = new HashMap<Integer, Integer>();
 
 		Raster imageRaster = image.getData();
@@ -395,5 +399,6 @@ public class ImageUtils {
 		}
 
 		return new Histogram(mapHistory);
+		*/
 	}
 }

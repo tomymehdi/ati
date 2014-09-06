@@ -1,6 +1,7 @@
 package edu.it.itba.swing.frames;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -20,6 +21,7 @@ public class ATIImageJFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(600, 600);
 		setLayout(new BorderLayout());
+		setBackground(new Color(0,0,255));
 
 		// Create the main panel;
 		mainPanel = new JPanel();
