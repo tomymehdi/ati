@@ -11,6 +11,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import edu.it.itba.enums.Side;
 import edu.it.itba.swing.frames.ATIImageJFrame;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.panels.ATILoadImagePanel;
@@ -18,7 +19,6 @@ import edu.it.itba.swing.panels.ATIPixelValueEditJPanel;
 import edu.it.itba.swing.panels.ATIPixelValueJPanel;
 import edu.it.itba.swing.panels.ATISubImageJPanel;
 import edu.it.itba.utils.ImageUtils;
-import enums.Side;
 
 @SuppressWarnings("serial")
 public class ATIMenu extends JMenuBar implements ActionListener {
@@ -27,24 +27,28 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	
 	private JMenuItem load;
 	private JMenuItem save;
-	private JMenuItem subImage;
-
-	private JMenuItem pixelValueLeft;
-	private JMenuItem pixelValueRight;
-	private JMenuItem histogramLeft;
-	private JMenuItem histogramRight;
-
-	private JMenuItem modifyPixelValueLeft;
-	private JMenuItem modifyPixelValueRight;
-
+	
 	private JMenuItem blankCircle;
 	private JMenuItem blankSquare;
 	private JMenuItem greyScale;
 	private JMenuItem colorScale;
 
+	private JMenuItem pixelValueLeft;
+	private JMenuItem pixelValueRight;
+	private JMenuItem histogramLeft;
+	private JMenuItem histogramRight;
+	
+	private JMenuItem modifyPixelValueLeft;
+	private JMenuItem modifyPixelValueRight;
+	
+	private JMenuItem subImage;
 	private JMenuItem sumImages;
 	private JMenuItem substractImages;
 	private JMenuItem negImage;
+	
+	private JMenuItem impulsiveSee;
+	private JMenuItem impulsiveAppLeft;
+	private JMenuItem impulsiveAppRight;
 	
 	private JMenuItem clear;
 
@@ -53,15 +57,26 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		this.parent = parent;
 
 		JMenu file = new JMenu("File");
+		JMenu newImage = new JMenu("New");
 		JMenu view = new JMenu("View");
 		JMenu edit = new JMenu("Edit");
-		JMenu newImage = new JMenu("New");
 		JMenu operation = new JMenu("Operation");
+		
+		JMenu noises = new JMenu("Noises");
+		JMenu impulsive = new JMenu("Impulsive");
+		noises.add(impulsive);
+		
 		JMenu options = new JMenu("Options");
 
 		// File
 		load = addMenuItemToMenu("Load...", file, true);
 		save = addMenuItemToMenu("Save...", file, true);
+		
+		// New
+		blankCircle = addMenuItemToMenu("Blank Circle", newImage, true);
+		blankSquare = addMenuItemToMenu("Blank Square", newImage, true);
+		greyScale = addMenuItemToMenu("Gray Scale", newImage, true);
+		colorScale = addMenuItemToMenu("Color Scale", newImage, true);
 		
 		// View
 		pixelValueLeft = addMenuItemToMenu("Pixel left...", view, true);
@@ -72,12 +87,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		// Edit
 		modifyPixelValueLeft = addMenuItemToMenu("Pixel left...", edit, true);
 		modifyPixelValueRight = addMenuItemToMenu("Pixel right...", edit, true);
-
-		// New
-		blankCircle = addMenuItemToMenu("Blank Circle", newImage, true);
-		blankSquare = addMenuItemToMenu("Blank Square", newImage, true);
-		greyScale = addMenuItemToMenu("Gray Scale", newImage, true);
-		colorScale = addMenuItemToMenu("Color Scale", newImage, true);
 		
 		// Operation
 		subImage = addMenuItemToMenu("Sub Image...", operation, true);
@@ -85,14 +94,21 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		substractImages = addMenuItemToMenu("Substract Images", operation, true);
 		negImage = addMenuItemToMenu("Negative Image", operation, true);
 		
+		// Noises
+		impulsiveSee = addMenuItemToMenu("See", impulsive, true);
+		impulsiveAppLeft = addMenuItemToMenu("Apply left", impulsive, true);
+		impulsiveAppRight = addMenuItemToMenu("Apply right", impulsive, true);
+		
+		
 		// Options
 		clear = addMenuItemToMenu("Clear", options, true);
 
 		addToMenu(file);
+		addToMenu(newImage);
 		addToMenu(view);
 		addToMenu(edit);
-		addToMenu(newImage);
 		addToMenu(operation);
+		addToMenu(noises);
 		addToMenu(options);
 	}
 
@@ -149,10 +165,30 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleHistogramLeft();
 			else if (source == histogramRight)
 				handleHistogramRight();
+			else if (source == impulsiveSee)
+				handleImpulsiveSee();
+			else if (source == impulsiveAppLeft)
+				handleImpulsiveAppLeft();
+			else if (source == impulsiveAppRight)
+				handleImpulsiveAppRight();
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	// Noises
+	private void handleImpulsiveAppRight() {
+		// TODO Auto-generated method stub
+	}
+
+	private void handleImpulsiveAppLeft() {
+		// TODO Auto-generated method stub
+	}
+
+	private void handleImpulsiveSee() {
+		BufferedImage img = ImageUtils.impulsiveNoise();
+		parent.addImage(img);
 	}
 	
 	// Options
@@ -168,7 +204,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleNegImage() {
 		BufferedImage img = ImageUtils.negative(parent.getPanels()[0].getImage());
 		parent.addImage(img);
-		
 	}
 
 	private void handleSumImages() {

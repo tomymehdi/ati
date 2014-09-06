@@ -14,7 +14,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import models.Histogram;
+import edu.it.itba.models.Histogram;
 
 public class ImageUtils {
 
