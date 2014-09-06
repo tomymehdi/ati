@@ -473,4 +473,22 @@ public class ImageUtils {
 		return retImage;
 	}
 
+	public static BufferedImage applyUmbral(BufferedImage image, double umbral) {
+
+		BufferedImage returnImage = new BufferedImage(image.getWidth(),
+				image.getWidth(), BufferedImage.TYPE_BYTE_GRAY);
+
+		Raster imageRaster = image.getData();
+
+		WritableRaster raster = returnImage.getRaster();
+		for (int row = 0; row < image.getHeight(); row++) {
+			for (int col = 0; col < image.getWidth(); col++) {
+				if (imageRaster.getSample(col, row, 0) < umbral)
+					raster.setSample(col, row, 0, 0);
+				else
+					raster.setSample(col, row, 0, 255);
+			}
+		}
+		return returnImage;
+	}
 }
