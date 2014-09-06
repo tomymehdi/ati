@@ -215,16 +215,15 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleSave() {
-
-		JFileChooser chooser = new JFileChooser();
-		int retrival = chooser.showSaveDialog(null);
-		if (retrival == JFileChooser.APPROVE_OPTION) {
-			try {
-				File outputfile = chooser.getSelectedFile().getAbsoluteFile();
-			    ImageIO.write(parent.getLeftImagePanel().getImage(), "jpg", outputfile);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
+		try {
+			String dir = System.getProperty("user.dir");
+			dir += "/tests/results/";
+			File left = new File(dir + "L.jpg");
+			File right = new File(dir + "R.jpg");
+		    ImageIO.write(parent.getLeftImagePanel().getImage(), "jpg", left);
+		    ImageIO.write(parent.getRightImagePanel().getImage(), "jpg", right);
+		} catch (Exception ex) {
+			
 		}
 	}
 
