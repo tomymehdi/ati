@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -25,6 +24,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	JMenuItem subImage;
 
 	JMenuItem pixelValue;
+	JMenuItem histogramLeft;
+	JMenuItem histogramRight;
 
 	JMenuItem modifyPixelValue;
 
@@ -56,6 +57,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		
 		// View
 		pixelValue = addMenuItemToMenu("Pixel Value...", view, true);
+		histogramLeft = addMenuItemToMenu("Histrogram left image", view, true);
+		histogramRight = addMenuItemToMenu("Histogram right image", view, true);
 		
 		// Edit
 		modifyPixelValue = addMenuItemToMenu("Pixel Value...", edit, true);
@@ -128,6 +131,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleNegImage();
 			else if (source == clear)
 				handleClear();
+			else if (source == histogramLeft)
+				handleHistogramLeft();
+			else if (source == histogramRight)
+				handleHistogramRight();
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -168,6 +175,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	// View
 	private void handleShowPixelValue() {
 		new ATIPixelValueJPanel(parent);
+	}
+	
+	private void handleHistogramLeft() {
+		new ATIImageJFrame(new ATImageJPanel(ImageUtils.histogram(parent.getLeftImagePanel().getImage())));
+	}
+	
+	private void handleHistogramRight() {
+		new ATIImageJFrame(new ATImageJPanel(ImageUtils.histogram(parent.getRightImagePanel().getImage())));
 	}
 	
 	// New
