@@ -19,6 +19,9 @@ import edu.it.itba.models.Histogram;
 public class ImageUtils {
 
 	private static final int MAX_COLOR = 255;
+	private static final int ADD = 1;
+	private static final int MULTIPLY = 0;
+	private static final int SUSTRACT = 2;
 
 	@SuppressWarnings("resource")
 	private static byte[] getBytesFromFile(File file) throws IOException {
@@ -275,11 +278,11 @@ public class ImageUtils {
 				im1Raster.getPixel(i, j, im1Pixel);
 				im2Raster.getPixel(i, j, im2Pixel);
 				for (int k = 0; k < im1Pixel.length; k++) {
-					if (opt == 0)
+					if (opt == ADD)
 						returnImagePixel[k] = im1Pixel[k] + im2Pixel[k];
-					else if (opt == 1)
+					else if (opt == MULTIPLY)
 						returnImagePixel[k] = im1Pixel[k] * im2Pixel[k];
-					else if (opt == 2)
+					else if (opt == SUSTRACT)
 						returnImagePixel[k] = im1Pixel[k] - im2Pixel[k];
 					else
 						return null;
@@ -343,10 +346,10 @@ public class ImageUtils {
 	public static double gauss(double mu, double sigma) {
 
 		double seed = Math.random();
+		double seed2 = Math.random();
 
-		double gaussRandom = (1 / (sigma * Math.sqrt(2 * Math.PI)))
-				* Math.pow(Math.E,
-						Math.pow(-seed - mu, 2) / (2 * Math.pow(sigma, 2)));
+		double gaussRandom = Math.sqrt(-2 * Math.log(seed))
+				* Math.cos(2 * Math.PI * seed2);
 
 		return gaussRandom;
 	}
@@ -355,8 +358,8 @@ public class ImageUtils {
 
 		double seed = Math.random();
 
-		double rayleightRandom = (seed / Math.pow(eta, 2))
-				* Math.pow(Math.E, -Math.pow(seed, 2) / (2 * Math.pow(eta, 2)));
+		double rayleightRandom = 1 - Math.pow(Math.E, -Math.pow(seed, 2)
+				/ (2 * Math.pow(eta, 2)));
 		return rayleightRandom;
 	}
 
@@ -364,7 +367,7 @@ public class ImageUtils {
 
 		double seed = Math.random();
 
-		double exponentialRandom = lambda * Math.pow(Math.E, -lambda * seed);
+		double exponentialRandom = -1 / lambda * Math.log(seed);
 
 		return exponentialRandom;
 	}
@@ -400,4 +403,74 @@ public class ImageUtils {
 		
 		return resp;
 	}
+
+	public static BufferedImage additiveGaussinianNoise(BufferedImage image,
+			double mu, double sigma, float d) {
+
+		float density = d / 100;
+		BufferedImage retImage = new BufferedImage(image.getWidth(),
+				image.getHeight(), image.getType());
+
+		Raster imageData = image.getData();
+		WritableRaster raster = retImage.getRaster();
+		for (int row = 0; row < image.getHeight(); row++) {
+			for (int col = 0; col < image.getWidth(); col++) {
+				if (Math.random() < density) {
+					int oldPixelValue = imageData.getSample(col, row, 0);
+					double noise = gauss(mu, sigma);
+					int newPixelValue = ((int) noise + oldPixelValue) / 2;
+					raster.setSample(col, row, 0, newPixelValue);
+				}
+			}
+		}
+
+		return retImage;
+	}
+
+	public static BufferedImage multiplicativeRayleighNoise(
+			BufferedImage image, double eta, float d) {
+
+		float density = d / 100;
+		BufferedImage retImage = new BufferedImage(image.getWidth(),
+				image.getHeight(), image.getType());
+
+		Raster imageData = image.getData();
+		WritableRaster raster = retImage.getRaster();
+		for (int row = 0; row < image.getHeight(); row++) {
+			for (int col = 0; col < image.getWidth(); col++) {
+				if (Math.random() < density) {
+					int oldPixelValue = imageData.getSample(col, row, 0);
+					double noise = rayleigh(eta);
+					int newPixelValue = ((int) noise * oldPixelValue) / 255;
+					raster.setSample(col, row, 0, newPixelValue);
+				}
+			}
+		}
+
+		return retImage;
+	}
+
+	public static BufferedImage multiplicativeExponentialNoise(
+			BufferedImage image, double lambda, float d) {
+
+		float density = d / 100;
+		BufferedImage retImage = new BufferedImage(image.getWidth(),
+				image.getHeight(), image.getType());
+
+		Raster imageData = image.getData();
+		WritableRaster raster = retImage.getRaster();
+		for (int row = 0; row < image.getHeight(); row++) {
+			for (int col = 0; col < image.getWidth(); col++) {
+				if (Math.random() < density) {
+					int oldPixelValue = imageData.getSample(col, row, 0);
+					double noise = exponential(lambda);
+					int newPixelValue = ((int) noise * oldPixelValue) / 255;
+					raster.setSample(col, row, 0, newPixelValue);
+				}
+			}
+		}
+
+		return retImage;
+	}
+
 }
