@@ -50,6 +50,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem impulsiveAppLeft;
 	private JMenuItem impulsiveAppRight;
 	
+	private JMenuItem umbralAppLeft;
+	private JMenuItem umbralAppRight;
+	
 	private JMenuItem clear;
 
 	public ATIMenu(ATIJFrame parent) {
@@ -65,6 +68,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu noises = new JMenu("Noises");
 		JMenu impulsive = new JMenu("Impulsive");
 		noises.add(impulsive);
+		
+		JMenu umbrals = new JMenu("Umbrals");
 		
 		JMenu options = new JMenu("Options");
 
@@ -99,6 +104,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		impulsiveAppLeft = addMenuItemToMenu("Apply left", impulsive, true);
 		impulsiveAppRight = addMenuItemToMenu("Apply right", impulsive, true);
 		
+		// Umbrals
+		umbralAppLeft = addMenuItemToMenu("Apply umbral left", umbrals, true);
+		umbralAppRight = addMenuItemToMenu("Apply umbral left", umbrals, true);
 		
 		// Options
 		clear = addMenuItemToMenu("Clear", options, true);
@@ -109,6 +117,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		addToMenu(edit);
 		addToMenu(operation);
 		addToMenu(noises);
+		addToMenu(umbrals);
 		addToMenu(options);
 	}
 
@@ -171,24 +180,47 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleImpulsiveAppLeft();
 			else if (source == impulsiveAppRight)
 				handleImpulsiveAppRight();
+			else if (source == umbralAppLeft)
+				handleUmbralAppLeft();
+			else if (source == umbralAppRight)
+				handleUmbralAppRight();
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 	
+	// Umbrals
+	private void handleUmbralAppLeft() {
+		double umbral = 123;
+		// TODO valor del umbral
+		BufferedImage img = ImageUtils.applyUmbral(parent.getPanels()[Side.LEFT.getValue()].getImage(), umbral);
+		parent.addImage(img);
+	}
+	
+	private void handleUmbralAppRight() {
+		double umbral = 123;
+		// TODO valor del umbral
+		BufferedImage img = ImageUtils.applyUmbral(parent.getPanels()[Side.RIGHT.getValue()].getImage(), umbral);
+		parent.addImage(img);
+	}
+
 	// Noises
 	private void handleImpulsiveAppRight() {
-		// TODO Auto-generated method stub
+		// TODO
+		//BufferedImage img = ImageUtils.applyImpulsiveNoise(parent.getPanels()[Side.RIGHT.getValue()].getImage());
+		//parent.addImage(img);
 	}
 
 	private void handleImpulsiveAppLeft() {
-		// TODO Auto-generated method stub
+		// TODO
+		//BufferedImage img = ImageUtils.applyImpulsiveNoise(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		//parent.addImage(img);
 	}
 
 	private void handleImpulsiveSee() {
-		BufferedImage img = ImageUtils.impulsiveNoise();
-		parent.addImage(img);
+		//BufferedImage img = ImageUtils.impulsiveNoise();
+		//parent.addImage(img);
 	}
 	
 	// Options
