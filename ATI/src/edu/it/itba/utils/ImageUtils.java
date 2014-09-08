@@ -370,35 +370,36 @@ public class ImageUtils {
 		return exponentialRandom;
 	}
 
-	// Recives and image and returns an Histogram that extends JPanel so it know how to paint on the frame.
+	// Recives and image and returns an Histogram that extends JPanel so it know
+	// how to paint on the frame.
 	public static Histogram histogram(BufferedImage image) {
 
 		if (image == null)
 			return null;
-		
+
 		return new Histogram(image);
 	}
-	
-	public static double[] avgEachBand(BufferedImage image){
-		
+
+	public static double[] avgEachBand(BufferedImage image) {
+
 		int height = image.getHeight();
 		int width = image.getWidth();
-		double resp[] = {0.0, 0.0, 0.0};
+		double resp[] = { 0.0, 0.0, 0.0 };
 		double values[] = new double[3];
-		
-		for(int i = 0; i<height ; i++){
-			for(int j = 0 ; j<width ; j++){
+
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
 				image.getRaster().getPixel(i, j, values);
 				resp[0] += values[0];
 				resp[1] += values[1];
 				resp[2] += values[2];
 			}
 		}
-		
-		resp[0] = resp[0] / (height*width);
-		resp[1] = resp[1] / (height*width);
-		resp[2] = resp[2] / (height*width);
-		
+
+		resp[0] = resp[0] / (height * width);
+		resp[1] = resp[1] / (height * width);
+		resp[2] = resp[2] / (height * width);
+
 		return resp;
 	}
 
@@ -488,5 +489,26 @@ public class ImageUtils {
 			}
 		}
 		return returnImage;
+	}
+
+	private static void adaptValues(BufferedImage image) {
+
+		WritableRaster imageRaster = image.getRaster();
+		int minValue = 255;
+		int maxValue = 0;
+		int currValue;
+
+		for (int i = 0; i < image.getHeight(); i++) {
+			for (int j = 0; j < image.getWidth(); j++) {
+				currValue = imageRaster.getSample(j, i, 0);
+				if (currValue < minValue)
+					minValue = currValue;
+				if (currValue > maxValue)
+					maxValue = currValue;
+			}
+		}
+
+		// TODO preguntar que hacer.
+
 	}
 }
