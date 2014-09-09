@@ -20,6 +20,8 @@ public class ImageUtils {
 	private static final int ADD = 1;
 	private static final int MULTIPLY = 0;
 	private static final int SUSTRACT = 2;
+	private static final int BLACK = 0;
+	private static final int WHITE = 255;
 
 	@SuppressWarnings("resource")
 	private static byte[] getBytesFromFile(File file) throws IOException {
@@ -492,7 +494,6 @@ public class ImageUtils {
 	}
 
 	public static BufferedImage guassImage(double mu, double sigma) {
-
 		BufferedImage retImage = new BufferedImage(100, 100,
 				BufferedImage.TYPE_BYTE_GRAY);
 
@@ -502,10 +503,9 @@ public class ImageUtils {
 				raster.setSample(col, row, 0, gauss(mu, sigma));
 			}
 		}
-
 		return retImage;
 	}
-
+	
 	public static BufferedImage exponentialImage(double lambda) {
 
 		BufferedImage retImage = new BufferedImage(100, 100,
@@ -530,6 +530,28 @@ public class ImageUtils {
 				raster.setSample(col, row, 0, rayleigh(eta));
 			}
 		}
+		return retImage;
+	}
+	
+	public static BufferedImage saltAndPepperNoise(BufferedImage image, float d) {
+		float density = d / 100;
+		BufferedImage retImage = new BufferedImage(image.getWidth(),
+				image.getHeight(), image.getType());
+
+		WritableRaster raster = retImage.getRaster();
+		for (int row = 0; row < image.getHeight(); row++) {
+			for (int col = 0; col < image.getWidth(); col++) {
+				if (Math.random() < density) {
+					int newPixelValue;
+					if (Math.random() < 0.5)
+						newPixelValue = BLACK;
+					else
+						newPixelValue = WHITE;
+					raster.setSample(col, row, 0, newPixelValue);
+				}
+			}
+		}
+
 		return retImage;
 	}
 
