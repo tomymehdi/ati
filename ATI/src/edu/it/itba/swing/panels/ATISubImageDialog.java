@@ -16,7 +16,7 @@ import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
-public class ATISubImageJPanel extends JDialog implements ActionListener {
+public class ATISubImageDialog extends JDialog implements ActionListener {
 
 	private ATIJFrame owner;
 	private JTextField x;
@@ -26,7 +26,7 @@ public class ATISubImageJPanel extends JDialog implements ActionListener {
 	private JButton getSubImage;
 	private JLabel data;
 
-	public ATISubImageJPanel(ATIJFrame owner) {
+	public ATISubImageDialog(ATIJFrame owner) {
 
 		super(owner, "Get Sub Image", true);
 		this.owner = owner;
