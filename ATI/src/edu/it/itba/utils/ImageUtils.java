@@ -417,7 +417,7 @@ public class ImageUtils {
 				if (Math.random() < density) {
 					int oldPixelValue = imageData.getSample(col, row, 0);
 					double noise = gauss(mu, sigma);
-					int newPixelValue = ((int) noise + oldPixelValue) / 2;
+					int newPixelValue = ((int) noise + oldPixelValue);
 					raster.setSample(col, row, 0, newPixelValue);
 				}
 			}
@@ -440,7 +440,7 @@ public class ImageUtils {
 				if (Math.random() < density) {
 					int oldPixelValue = imageData.getSample(col, row, 0);
 					double noise = rayleigh(eta);
-					int newPixelValue = ((int) noise * oldPixelValue) / 255;
+					int newPixelValue = ((int) noise * oldPixelValue);
 					raster.setSample(col, row, 0, newPixelValue);
 				}
 			}
@@ -463,7 +463,7 @@ public class ImageUtils {
 				if (Math.random() < density) {
 					int oldPixelValue = imageData.getSample(col, row, 0);
 					double noise = exponential(lambda);
-					int newPixelValue = ((int) noise * oldPixelValue) / 255;
+					int newPixelValue = ((int) noise * oldPixelValue);
 					raster.setSample(col, row, 0, newPixelValue);
 				}
 			}
