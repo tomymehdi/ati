@@ -533,24 +533,63 @@ public class ImageUtils {
 		return retImage;
 	}
 
-	private static void adaptValues(BufferedImage image) {
+	private static void linearTransform0255(BufferedImage image) {
 
 		WritableRaster imageRaster = image.getRaster();
-		int minValue = 255;
-		int maxValue = 0;
-		int currValue;
+		int minValue = 0;
+		int maxValue = 255;
+		int R,G,B;
 
 		for (int i = 0; i < image.getHeight(); i++) {
 			for (int j = 0; j < image.getWidth(); j++) {
-				currValue = imageRaster.getSample(j, i, 0);
-				if (currValue < minValue)
-					minValue = currValue;
-				if (currValue > maxValue)
-					maxValue = currValue;
+				R = imageRaster.getSample(j, i, 0);
+				G = imageRaster.getSample(j, i, 1);
+				B = imageRaster.getSample(j, i, 2);
+				if (R < minValue)
+					minValue = R;
+				if (R > maxValue)
+					maxValue = R;
+				if (G < minValue)
+					minValue = R;
+				if (G > maxValue)
+					maxValue = R;
+				if (B < minValue)
+					minValue = R;
+				if (B > maxValue)
+					maxValue = R;
 			}
 		}
 
-		// TODO preguntar que hacer.
-
+		for (int i = 0; i < image.getHeight(); i++) {
+			for (int j = 0; j < image.getWidth(); j++) {
+				R = imageRaster.getSample(j, i, 0);
+				G = imageRaster.getSample(j, i, 1);
+				B = imageRaster.getSample(j, i, 2);
+				imageRaster.setSample(j, i, 0, linearTransform0255(R, minValue, maxValue));
+				imageRaster.setSample(j, i, 1, linearTransform0255(G, minValue, maxValue));
+				imageRaster.setSample(j, i, 2, linearTransform0255(B, minValue, maxValue));
+			}
+		}
+	}
+	
+	private static int linearTransform0255(int value, int min, int max){
+		int resp, m;
+		int minRGB = 0;
+		int maxRGB = 255;
+		
+		// f(x) = m*x + c
+		// f(x) = y = m*x + c;
+		// y = m*x +c
+		// y tiene que estar entre 0 y 255 => c = -min+minRGB => ya el menor valor coincide con el menor valor RGB.
+		// Ahora hay que calcular m. Me determina como "achatamos"
+		// Esta pendiente es m va a ser  (minRGB - min)/ (maxRGB - min)
+		// Ejemplo:
+		// min = -100 max = 900
+		// entonces c = 100
+		// y m = (900+100)/(255-0)
+		m = (max-min)/(maxRGB-minRGB);
+		resp = m * value - min;
+		
+		return resp;
 	}
 }
