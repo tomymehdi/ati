@@ -533,4 +533,24 @@ public class ImageUtils {
 		return retImage;
 	}
 
+	private static void adaptValues(BufferedImage image) {
+
+		WritableRaster imageRaster = image.getRaster();
+		int minValue = 255;
+		int maxValue = 0;
+		int currValue;
+
+		for (int i = 0; i < image.getHeight(); i++) {
+			for (int j = 0; j < image.getWidth(); j++) {
+				currValue = imageRaster.getSample(j, i, 0);
+				if (currValue < minValue)
+					minValue = currValue;
+				if (currValue > maxValue)
+					maxValue = currValue;
+			}
+		}
+
+		// TODO preguntar que hacer.
+
+	}
 }
