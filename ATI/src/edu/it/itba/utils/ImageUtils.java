@@ -696,4 +696,42 @@ public class ImageUtils {
 
 		return window[((windowSize * windowSize) / 2) + 1];
 	}
+
+	private static double[] gaussWindow(double sigma, int windowSize) {
+
+		double[] window = new double[windowSize * windowSize];
+
+		for (int i = 0; i < windowSize; i++) {
+			for (int j = 0; j < windowSize; j++) {
+				window[i + j * windowSize] = gaussNumber(i, j, sigma);
+			}
+		}
+		return window;
+	}
+
+	private static double gaussNumber(int i, int j, double sigma) {
+
+		return (1 / (2 * Math.PI * Math.pow(sigma, 2)))
+				* Math.pow(
+						Math.E,
+						-((Math.pow(i, 2) + Math.pow(j, 2)))
+								/ Math.pow(sigma, 2));
+	}
+
+	private static double[] mediumWindow(int windowSize) {
+		return new double[windowSize * windowSize];
+	}
+
+	private static double[] meanWindow(int windowSize) {
+
+		double[] window = new double[windowSize * windowSize];
+		double mean = 1 / windowSize * windowSize;
+		for (int i = 0; i < windowSize; i++) {
+			for (int j = 0; j < windowSize; j++) {
+				window[i + j * windowSize] = mean;
+			}
+		}
+		return window;
+
+	}
 }
