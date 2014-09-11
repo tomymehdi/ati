@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
@@ -23,6 +24,8 @@ public class ImageUtils {
 	private static final int SUSTRACT = 2;
 	private static final int BLACK = 0;
 	private static final int WHITE = 255;
+	private static final int TYPE_MEDIUM = 0;
+	//private static final int TYPE_OTHER = 0;
 
 	@SuppressWarnings("resource")
 	private static byte[] getBytesFromFile(File file) throws IOException {
@@ -616,10 +619,81 @@ public class ImageUtils {
 		return resp;
 	}
 	
-	static BufferedImage clone(BufferedImage bi) {
+	public static BufferedImage clone(BufferedImage bi) {
 		 ColorModel cm = bi.getColorModel();
 		 boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
 		 WritableRaster raster = bi.copyData(null);
 		 return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+	}
+	
+	public static BufferedImage slideWindow(BufferedImage image,
+			double[] window, int type) {
+
+		BufferedImage retImage = new BufferedImage(image.getWidth(),
+				image.getHeight(), image.getType());
+
+		Raster imageRaster = image.getData();
+		WritableRaster retImageRaster = retImage.getRaster();
+		int newPixel;
+		for (int i = 0; i < image.getWidth(); i++) {
+			for (int j = 0; j < image.getHeight(); j++) {
+				newPixel = applyWindow(i, j, imageRaster, window, type);
+				retImageRaster.setSample(i, j, 0, newPixel);
+			}
+		}
+
+		return retImage;
+	}
+
+	private static int applyWindow(int row, int col, Raster imageRaster,
+			double[] window, int type) {
+
+		int windowSize = (int) Math.sqrt(window.length);
+		if (type == TYPE_MEDIUM)
+			return mediumWindow(row, col, imageRaster, windowSize);
+
+		int colStart = col - (windowSize / 2);
+		int colEnd = col + (windowSize / 2);
+		int rowStart = row - (windowSize / 2);
+		int rowEnd = row + (windowSize / 2);
+		double acum = 0;
+		for (int i = colStart, k = 0; i < colEnd; i++, k++) {
+			for (int j = rowStart, z = 0; j < rowEnd; j++, z++) {
+				int currPixel;
+				try {
+					currPixel = imageRaster.getSample(i, j, 0);
+				} catch (ArrayIndexOutOfBoundsException e) {
+					currPixel = 0;
+				}
+				acum += currPixel * window[z * windowSize + k];
+			}
+		}
+
+		return (int) acum;
+
+	}
+
+	private static int mediumWindow(int row, int col, Raster imageRaster,
+			int windowSize) {
+
+		int colStart = col - (windowSize / 2);
+		int colEnd = col + (windowSize / 2);
+		int rowStart = row - (windowSize / 2);
+		int rowEnd = row + (windowSize / 2);
+
+		int[] window = new int[windowSize * windowSize];
+
+		for (int i = colStart, k = 0; i < colEnd; i++) {
+			for (int j = rowStart; j < rowEnd; j++, k++) {
+				try {
+					window[k] = imageRaster.getSample(i, j, 0);
+				} catch (IndexOutOfBoundsException e) {
+					window[k] = 0;
+				}
+			}
+		}
+		Arrays.sort(window);
+
+		return window[((windowSize * windowSize) / 2) + 1];
 	}
 }
