@@ -268,15 +268,18 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Windows
 	private void handleMediumWindow() {
-		// TODO Auto-generated method stub
+		BufferedImage image = ImageUtils.slideMediumWindow(parent.getPanels()[Side.LEFT.getValue()].getImage(), 3);
+		parent.addImage(image);
 	}
 
 	private void handleMeanWindow() {
-		// TODO Auto-generated method stub
+		BufferedImage image = ImageUtils.slideMeanWindow(parent.getPanels()[Side.LEFT.getValue()].getImage(), 3);
+		parent.addImage(image);
 	}
 
 	private void handleGaussWindow() {
-		// TODO Auto-generated method stub
+		BufferedImage image = ImageUtils.slideGuassanianWindow(parent.getPanels()[Side.LEFT.getValue()].getImage(), 3, 128);
+		parent.addImage(image);
 	}
 
 	// Umbrals

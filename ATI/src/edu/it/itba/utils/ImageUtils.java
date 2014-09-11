@@ -295,6 +295,9 @@ public class ImageUtils {
 				raster.setPixel(i, j, returnImagePixel);
 			}
 		}
+		
+		ImageUtils.linearTransform0255(returnImage);
+		
 		return returnImage;
 	}
 

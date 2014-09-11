@@ -27,9 +27,8 @@ public class ATIImageJFrame extends ATIJFrame {
 		this.image = image;
 		// Create and set up the window.
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setSize(600, 600);
+		setSize(1200, 800);
 		setLayout(new BorderLayout());
-		setBackground(new Color(0,0,255));
 		
 		// Create and add menu bar
 		setJMenuBar(new ATIMenu2(this));
