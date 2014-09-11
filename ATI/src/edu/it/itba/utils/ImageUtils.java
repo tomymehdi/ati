@@ -352,6 +352,10 @@ public class ImageUtils {
 		double seed = Math.random();
 		double seed2 = Math.random();
 
+//		double gaussRandom = (1 / (sigma * Math.sqrt(2 * Math.PI)))
+//				* Math.pow(Math.E,
+//						Math.pow(2, (-seed - mu)) / (2 * Math.pow(2, sigma)));
+
 		double gaussRandom = Math.sqrt(-2 * Math.log(seed))
 				* Math.cos(2 * Math.PI * seed2);
 
@@ -594,6 +598,7 @@ public class ImageUtils {
 		WritableRaster raster = retImage.getRaster();
 		for (int row = 0; row < retImage.getHeight(); row++) {
 			for (int col = 0; col < retImage.getWidth(); col++) {
+				System.out.println(gauss(mu, sigma));
 				raster.setSample(col, row, 0, gauss(mu, sigma));
 			}
 		}

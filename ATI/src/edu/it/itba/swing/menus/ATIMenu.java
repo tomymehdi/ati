@@ -14,6 +14,7 @@ import javax.swing.JMenuItem;
 import edu.it.itba.enums.Side;
 import edu.it.itba.swing.dialogs.ATIExpDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
+import edu.it.itba.swing.dialogs.ATIGaussNoiseImageDialog;
 import edu.it.itba.swing.dialogs.ATIImpulsiveNoiseDialog;
 import edu.it.itba.swing.dialogs.ATILoadImageDialog;
 import edu.it.itba.swing.dialogs.ATIPixelValueDialog;
