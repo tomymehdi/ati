@@ -196,42 +196,26 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleUmbralAppLeft() {
 
 		new ATIUmbralDialog(parent, Side.LEFT);
-		// double umbral = 123;
-		// // TODO valor del umbral
-		// BufferedImage img = ImageUtils.applyUmbral(
-		// parent.getPanels()[Side.LEFT.getValue()].getImage(), umbral);
-		// parent.addImage(img);
+		
 	}
 
 	private void handleUmbralAppRight() {
 
 		new ATIUmbralDialog(parent, Side.RIGHT);
-		// double umbral = 123;
-		// // TODO valor del umbral
-		// BufferedImage img = ImageUtils.applyUmbral(
-		// parent.getPanels()[Side.RIGHT.getValue()].getImage(), umbral);
-		// parent.addImage(img);
+	
 	}
 
 	// Noises
 	private void handleImpulsiveAppRight() {
 
 		new ATISaltAndPepperDialog(parent, Side.RIGHT);
-		// int density = 30;
-		// // TODO valor del density
-		// BufferedImage img = ImageUtils.saltAndPepperNoise(
-		// parent.getPanels()[Side.RIGHT.getValue()].getImage(), density);
-		// parent.addImage(img);
+	
 	}
 
 	private void handleImpulsiveAppLeft() {
 
 		new ATISaltAndPepperDialog(parent, Side.LEFT);
-		// int density = 30;
-		// // TODO valor del density
-		// BufferedImage img = ImageUtils.saltAndPepperNoise(
-		// parent.getPanels()[Side.LEFT.getValue()].getImage(), density);
-		// parent.addImage(img);
+		
 	}
 
 	private void handleImpulsiveSee() {
