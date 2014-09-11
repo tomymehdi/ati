@@ -17,7 +17,7 @@ import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.panels.ATILoadImagePanel;
 import edu.it.itba.swing.panels.ATIPixelValueEditJPanel;
 import edu.it.itba.swing.panels.ATIPixelValueJPanel;
-import edu.it.itba.swing.panels.ATISubImageJPanel;
+import edu.it.itba.swing.panels.ATISubImageDialog;
 import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
@@ -207,20 +207,22 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Noises
 	private void handleImpulsiveAppRight() {
-		// TODO
-		//BufferedImage img = ImageUtils.applyImpulsiveNoise(parent.getPanels()[Side.RIGHT.getValue()].getImage());
-		//parent.addImage(img);
+		int density = 5;
+		// TODO valor del density
+		BufferedImage img = ImageUtils.saltAndPepperNoise(parent.getPanels()[Side.RIGHT.getValue()].getImage(), density);
+		parent.addImage(img);
 	}
 
 	private void handleImpulsiveAppLeft() {
-		// TODO
-		//BufferedImage img = ImageUtils.applyImpulsiveNoise(parent.getPanels()[Side.LEFT.getValue()].getImage());
-		//parent.addImage(img);
+		int density = 5;
+		// TODO valor del density
+		BufferedImage img = ImageUtils.saltAndPepperNoise(parent.getPanels()[Side.LEFT.getValue()].getImage(), density);
+		parent.addImage(img);
 	}
 
 	private void handleImpulsiveSee() {
-		BufferedImage img = ImageUtils.saltAndPepperNoise(parent.getPanels()[0].getImage(), 5);
-		parent.addImage(img);
+		//BufferedImage img = ImageUtils.saltAndPepperNoiseImage(5);
+		//parent.addImage(img);
 	}
 	
 	// Options
@@ -230,7 +232,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Operation
 	private void handleSubImage() {
-		new ATISubImageJPanel(parent);
+		new ATISubImageDialog(parent);
 	}
 
 	private void handleNegImage() {

@@ -3,6 +3,7 @@ package edu.it.itba.utils;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.File;
@@ -535,10 +536,10 @@ public class ImageUtils {
 	
 	public static BufferedImage saltAndPepperNoise(BufferedImage image, float d) {
 		float density = d / 100;
-		BufferedImage retImage = new BufferedImage(image.getWidth(),
-				image.getHeight(), image.getType());
-
-		WritableRaster raster = retImage.getRaster();
+		
+		BufferedImage resp = clone(image);
+		
+		WritableRaster raster = resp.getRaster();
 		for (int row = 0; row < image.getHeight(); row++) {
 			for (int col = 0; col < image.getWidth(); col++) {
 				if (Math.random() < density) {
@@ -552,7 +553,7 @@ public class ImageUtils {
 			}
 		}
 
-		return retImage;
+		return resp;
 	}
 
 	private static void linearTransform0255(BufferedImage image) {
@@ -613,5 +614,12 @@ public class ImageUtils {
 		resp = m * value - min;
 		
 		return resp;
+	}
+	
+	static BufferedImage clone(BufferedImage bi) {
+		 ColorModel cm = bi.getColorModel();
+		 boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+		 WritableRaster raster = bi.copyData(null);
+		 return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 }
