@@ -352,6 +352,10 @@ public class ImageUtils {
 		double seed = Math.random();
 		double seed2 = Math.random();
 
+//		double gaussRandom = (1 / (sigma * Math.sqrt(2 * Math.PI)))
+//				* Math.pow(Math.E,
+//						Math.pow(2, (-seed - mu)) / (2 * Math.pow(2, sigma)));
+
 		double gaussRandom = Math.sqrt(-2 * Math.log(seed))
 				* Math.cos(2 * Math.PI * seed2);
 
@@ -362,8 +366,7 @@ public class ImageUtils {
 
 		double seed = Math.random();
 
-		double rayleightRandom = 1 - Math.pow(Math.E, -Math.pow(seed, 2)
-				/ (2 * Math.pow(eta, 2)));
+		double rayleightRandom = eta * Math.sqrt(-2 * Math.log(1 - seed));
 		return rayleightRandom;
 	}
 
@@ -371,7 +374,7 @@ public class ImageUtils {
 
 		double seed = Math.random();
 
-		double exponentialRandom = -1 / lambda * Math.log(seed);
+		double exponentialRandom = (-1 / lambda) * Math.log(seed);
 
 		return exponentialRandom;
 	}
@@ -413,8 +416,7 @@ public class ImageUtils {
 			double mu, double sigma, float d) {
 
 		float density = d / 100;
-		BufferedImage retImage = new BufferedImage(image.getWidth(),
-				image.getHeight(), image.getType());
+		BufferedImage retImage = clone(image);
 
 		Raster imageData = image.getData();
 		WritableRaster raster = retImage.getRaster();
@@ -427,7 +429,6 @@ public class ImageUtils {
 					int[] newPixelValue = new int[3];
 					for (int i = 0; i < 3; i++) {
 						newPixelValue[i] = ((int) noise + oldPixelValue[i]);
-
 						raster.setSample(col, row, i, newPixelValue[i]);
 					}
 				}
@@ -441,22 +442,19 @@ public class ImageUtils {
 			BufferedImage image, double eta, float d) {
 
 		float density = d / 100;
-		BufferedImage retImage = new BufferedImage(image.getWidth(),
-				image.getHeight(), image.getType());
+		BufferedImage retImage = clone(image);
 
 		Raster imageData = image.getData();
 		WritableRaster raster = retImage.getRaster();
 		for (int row = 0; row < image.getHeight(); row++) {
 			for (int col = 0; col < image.getWidth(); col++) {
 				if (Math.random() < density) {
-
 					int[] oldPixelValue = new int[3];
 					imageData.getPixel(col, row, oldPixelValue);
 					double noise = rayleigh(eta);
 					int[] newPixelValue = new int[3];
 					for (int i = 0; i < 3; i++) {
 						newPixelValue[i] = ((int) noise * oldPixelValue[i]);
-
 						raster.setSample(col, row, i, newPixelValue[i]);
 					}
 
@@ -471,22 +469,19 @@ public class ImageUtils {
 			BufferedImage image, double lambda, float d) {
 
 		float density = d / 100;
-		BufferedImage retImage = new BufferedImage(image.getWidth(),
-				image.getHeight(), image.getType());
+		BufferedImage retImage = clone(image);
 
 		Raster imageData = image.getData();
 		WritableRaster raster = retImage.getRaster();
 		for (int row = 0; row < image.getHeight(); row++) {
 			for (int col = 0; col < image.getWidth(); col++) {
 				if (Math.random() < density) {
-
 					int[] oldPixelValue = new int[3];
 					imageData.getPixel(col, row, oldPixelValue);
 					double noise = exponential(lambda);
 					int[] newPixelValue = new int[3];
 					for (int i = 0; i < 3; i++) {
 						newPixelValue[i] = ((int) noise * oldPixelValue[i]);
-
 						raster.setSample(col, row, i, newPixelValue[i]);
 					}
 				}
@@ -604,6 +599,7 @@ public class ImageUtils {
 		WritableRaster raster = retImage.getRaster();
 		for (int row = 0; row < retImage.getHeight(); row++) {
 			for (int col = 0; col < retImage.getWidth(); col++) {
+				System.out.println(gauss(mu, sigma));
 				raster.setSample(col, row, 0, gauss(mu, sigma));
 			}
 		}
