@@ -295,6 +295,9 @@ public class ImageUtils {
 				raster.setPixel(i, j, returnImagePixel);
 			}
 		}
+		
+		ImageUtils.linearTransform0255(returnImage);
+		
 		return returnImage;
 	}
 
@@ -352,9 +355,15 @@ public class ImageUtils {
 		double seed = Math.random();
 		double seed2 = Math.random();
 
+//		double gaussRandom = (1 / (sigma * Math.sqrt(2 * Math.PI)))
+//				* Math.pow(Math.E,
+//						Math.pow(2, (-seed - mu)) / (2 * Math.pow(2, sigma)));
+
 		double gaussRandom = Math.sqrt(-2 * Math.log(seed))
 				* Math.cos(2 * Math.PI * seed2);
-
+		
+		gaussRandom = sigma * gaussRandom + mu;
+		
 		return gaussRandom;
 	}
 
@@ -362,8 +371,7 @@ public class ImageUtils {
 
 		double seed = Math.random();
 
-		double rayleightRandom = 1 - Math.pow(Math.E, -Math.pow(seed, 2)
-				/ (2 * Math.pow(eta, 2)));
+		double rayleightRandom = eta * Math.sqrt(-2 * Math.log(1 - seed));
 		return rayleightRandom;
 	}
 
@@ -371,7 +379,7 @@ public class ImageUtils {
 
 		double seed = Math.random();
 
-		double exponentialRandom = -1 / lambda * Math.log(seed);
+		double exponentialRandom = (-1 / lambda) * Math.log(seed);
 
 		return exponentialRandom;
 	}
@@ -413,8 +421,7 @@ public class ImageUtils {
 			double mu, double sigma, float d) {
 
 		float density = d / 100;
-		BufferedImage retImage = new BufferedImage(image.getWidth(),
-				image.getHeight(), image.getType());
+		BufferedImage retImage = clone(image);
 
 		Raster imageData = image.getData();
 		WritableRaster raster = retImage.getRaster();
@@ -427,13 +434,17 @@ public class ImageUtils {
 					int[] newPixelValue = new int[3];
 					for (int i = 0; i < 3; i++) {
 						newPixelValue[i] = ((int) noise + oldPixelValue[i]);
-
-						raster.setSample(col, row, i, newPixelValue[i]);
+						try{
+							raster.setSample(col, row, i, newPixelValue[i]);
+						} catch(Exception e){
+						}
 					}
 				}
 			}
 		}
-
+		
+		ImageUtils.linearTransform0255(retImage);
+		
 		return retImage;
 	}
 
@@ -441,29 +452,27 @@ public class ImageUtils {
 			BufferedImage image, double eta, float d) {
 
 		float density = d / 100;
-		BufferedImage retImage = new BufferedImage(image.getWidth(),
-				image.getHeight(), image.getType());
+		BufferedImage retImage = clone(image);
 
 		Raster imageData = image.getData();
 		WritableRaster raster = retImage.getRaster();
 		for (int row = 0; row < image.getHeight(); row++) {
 			for (int col = 0; col < image.getWidth(); col++) {
 				if (Math.random() < density) {
-
 					int[] oldPixelValue = new int[3];
 					imageData.getPixel(col, row, oldPixelValue);
 					double noise = rayleigh(eta);
 					int[] newPixelValue = new int[3];
 					for (int i = 0; i < 3; i++) {
 						newPixelValue[i] = ((int) noise * oldPixelValue[i]);
-
 						raster.setSample(col, row, i, newPixelValue[i]);
 					}
 
 				}
 			}
 		}
-
+		ImageUtils.linearTransform0255(retImage);
+		
 		return retImage;
 	}
 
@@ -471,28 +480,26 @@ public class ImageUtils {
 			BufferedImage image, double lambda, float d) {
 
 		float density = d / 100;
-		BufferedImage retImage = new BufferedImage(image.getWidth(),
-				image.getHeight(), image.getType());
+		BufferedImage retImage = clone(image);
 
 		Raster imageData = image.getData();
 		WritableRaster raster = retImage.getRaster();
 		for (int row = 0; row < image.getHeight(); row++) {
 			for (int col = 0; col < image.getWidth(); col++) {
 				if (Math.random() < density) {
-
 					int[] oldPixelValue = new int[3];
 					imageData.getPixel(col, row, oldPixelValue);
 					double noise = exponential(lambda);
 					int[] newPixelValue = new int[3];
 					for (int i = 0; i < 3; i++) {
 						newPixelValue[i] = ((int) noise * oldPixelValue[i]);
-
 						raster.setSample(col, row, i, newPixelValue[i]);
 					}
 				}
 			}
 		}
-
+		
+		ImageUtils.linearTransform0255(retImage);
 		return retImage;
 	}
 
@@ -604,6 +611,7 @@ public class ImageUtils {
 		WritableRaster raster = retImage.getRaster();
 		for (int row = 0; row < retImage.getHeight(); row++) {
 			for (int col = 0; col < retImage.getWidth(); col++) {
+				System.out.println(gauss(mu, sigma));
 				raster.setSample(col, row, 0, gauss(mu, sigma));
 			}
 		}
@@ -675,35 +683,44 @@ public class ImageUtils {
 
 		for (int i = 0; i < image.getHeight(); i++) {
 			for (int j = 0; j < image.getWidth(); j++) {
-				R = imageRaster.getSample(j, i, 0);
-				G = imageRaster.getSample(j, i, 1);
-				B = imageRaster.getSample(j, i, 2);
-				if (R < minValue)
-					minValue = R;
-				if (R > maxValue)
-					maxValue = R;
-				if (G < minValue)
-					minValue = R;
-				if (G > maxValue)
-					maxValue = R;
-				if (B < minValue)
-					minValue = R;
-				if (B > maxValue)
-					maxValue = R;
+					R = imageRaster.getSample(j, i, 0);
+					if (R < minValue)
+						minValue = R;
+					if (R > maxValue)
+						maxValue = R;
+					try {
+					G = imageRaster.getSample(j, i, 1);
+					if (G < minValue)
+						minValue = G;
+					if (G > maxValue)
+						maxValue = G;
+					B = imageRaster.getSample(j, i, 2);
+					if (B < minValue)
+						minValue = B;
+					if (B > maxValue)
+						maxValue = B;
+					} catch (Exception e){
+						
+					}
 			}
 		}
 
 		for (int i = 0; i < image.getHeight(); i++) {
 			for (int j = 0; j < image.getWidth(); j++) {
 				R = imageRaster.getSample(j, i, 0);
-				G = imageRaster.getSample(j, i, 1);
-				B = imageRaster.getSample(j, i, 2);
 				imageRaster.setSample(j, i, 0,
 						linearTransform0255(R, minValue, maxValue));
-				imageRaster.setSample(j, i, 1,
-						linearTransform0255(G, minValue, maxValue));
-				imageRaster.setSample(j, i, 2,
-						linearTransform0255(B, minValue, maxValue));
+				
+				try {
+					G = imageRaster.getSample(j, i, 1);
+					imageRaster.setSample(j, i, 1,
+							linearTransform0255(G, minValue, maxValue));
+					B = imageRaster.getSample(j, i, 2);
+					imageRaster.setSample(j, i, 2,
+							linearTransform0255(B, minValue, maxValue));
+				} catch (Exception e){
+					
+				}
 			}
 		}
 	}

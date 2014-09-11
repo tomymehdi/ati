@@ -1,6 +1,7 @@
 package edu.it.itba.models;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
@@ -21,7 +22,10 @@ public class Histogram extends ATIJPanel {
 	public Histogram(BufferedImage image) {
 		this.image = image;
 		calculateHistogram();
+		setSize(1200,1800);
+		setPreferredSize(new Dimension(1200,1800));
 	}
+
 
 	private void calculateHistogram() {
 		Raster imageRaster = image.getData();
@@ -76,7 +80,7 @@ public class Histogram extends ATIJPanel {
 				int value = mapHistory.get(key);
 				int barHeight = Math.round(((float) value / (float) maxValue)
 						* height);
-				g2d.setColor(new Color(key, key, key));
+				//g2d.setColor(new Color(key, key, key));
 				int yPos = height + yOffset - barHeight;
 				// Rectangle bar = new Rectangle(xPos, yPos, barWidth,
 				// barHeight);

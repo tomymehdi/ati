@@ -12,13 +12,18 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import edu.it.itba.enums.Side;
+import edu.it.itba.swing.dialogs.ATIExpDialog;
+import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
+import edu.it.itba.swing.dialogs.ATIGaussNoiseImageDialog;
+import edu.it.itba.swing.dialogs.ATIImpulsiveNoiseDialog;
+import edu.it.itba.swing.dialogs.ATILoadImageDialog;
+import edu.it.itba.swing.dialogs.ATIPixelValueDialog;
+import edu.it.itba.swing.dialogs.ATIPixelValueEditDialog;
+import edu.it.itba.swing.dialogs.ATIRaylightDialog;
+import edu.it.itba.swing.dialogs.ATISubImageDialog;
 import edu.it.itba.swing.frames.ATIImageJFrame;
 import edu.it.itba.swing.interfaces.ATIJFrame;
-import edu.it.itba.swing.panels.ATILoadImagePanel;
-import edu.it.itba.swing.panels.ATIPixelValueEditJPanel;
-import edu.it.itba.swing.panels.ATIPixelValueJPanel;
 import edu.it.itba.swing.panels.ATISaltAndPepperDialog;
-import edu.it.itba.swing.panels.ATISubImageDialog;
 import edu.it.itba.swing.panels.ATIUmbralDialog;
 import edu.it.itba.utils.ImageUtils;
 
@@ -52,9 +57,25 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem impulsiveAppLeft;
 	private JMenuItem impulsiveAppRight;
 
+	private JMenuItem gaussSee;
+	private JMenuItem gaussAppLeft;
+	private JMenuItem gaussAppRight;
+	
+	private JMenuItem raylightSee;
+	private JMenuItem raylightAppLeft;
+	private JMenuItem raylightAppRight;
+	
+	private JMenuItem expSee;
+	private JMenuItem expAppLeft;
+	private JMenuItem expAppRight;
+	
 	private JMenuItem umbralAppLeft;
 	private JMenuItem umbralAppRight;
-
+	
+	private JMenuItem gaussWindow;
+	private JMenuItem meanWindow;
+	private JMenuItem mediumWindow;
+	
 	private JMenuItem clear;
 
 	public ATIMenu(ATIJFrame parent) {
@@ -70,9 +91,17 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu noises = new JMenu("Noises");
 		JMenu impulsive = new JMenu("Impulsive");
 		noises.add(impulsive);
-
+		JMenu gauss = new JMenu("Gauss");
+		noises.add(gauss);
+		JMenu raylight = new JMenu("Raylight");
+		noises.add(raylight);
+		JMenu exp = new JMenu("Exponential");
+		noises.add(exp);
+		
 		JMenu umbrals = new JMenu("Umbrals");
-
+		
+		JMenu slideWindow = new JMenu("Slide window");
+		
 		JMenu options = new JMenu("Options");
 
 		// File
@@ -105,11 +134,32 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		impulsiveSee = addMenuItemToMenu("See", impulsive, true);
 		impulsiveAppLeft = addMenuItemToMenu("Apply left...", impulsive, true);
 		impulsiveAppRight = addMenuItemToMenu("Apply right...", impulsive, true);
+		
+		gaussSee = addMenuItemToMenu("See", gauss, true);
+		gaussAppLeft = addMenuItemToMenu("Apply left", gauss, true);
+		gaussAppRight = addMenuItemToMenu("Apply right", gauss, true);
+		
+		raylightSee = addMenuItemToMenu("See", raylight, true);
+		raylightAppLeft = addMenuItemToMenu("Apply left", raylight, true);
+		raylightAppRight = addMenuItemToMenu("Apply right", raylight, true);
+		
+		expSee = addMenuItemToMenu("See", exp, true);
+		expAppLeft = addMenuItemToMenu("Apply left", exp, true);
+		expAppRight = addMenuItemToMenu("Apply right", exp, true);
+		
+		impulsiveAppLeft = addMenuItemToMenu("Apply left", impulsive, true);
+		impulsiveAppRight = addMenuItemToMenu("Apply right", impulsive, true);
+
 
 		// Umbrals
 		umbralAppLeft = addMenuItemToMenu("Apply umbral left...", umbrals, true);
 		umbralAppRight = addMenuItemToMenu("Apply umbral right...", umbrals, true);
 
+		// Slide window
+		gaussWindow = addMenuItemToMenu("Slide gauss window", slideWindow, true);
+		meanWindow = addMenuItemToMenu("Slide mean window", slideWindow, true);
+		mediumWindow = addMenuItemToMenu("Slide medium window", slideWindow, true);
+		
 		// Options
 		clear = addMenuItemToMenu("Clear", options, true);
 
@@ -120,6 +170,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		addToMenu(operation);
 		addToMenu(noises);
 		addToMenu(umbrals);
+		addToMenu(slideWindow);
 		addToMenu(options);
 	}
 
@@ -186,15 +237,53 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleUmbralAppLeft();
 			else if (source == umbralAppRight)
 				handleUmbralAppRight();
-
+			else if (source == gaussSee)
+				handleGaussSee();
+			else if (source == gaussAppLeft)
+				handleGaussAppLeft();
+			else if (source == gaussAppRight)
+				handleGaussAppRight();
+			else if (source == raylightSee)
+				handleRaylightSee();
+			else if (source == raylightAppLeft)
+				handleRaylightAppLeft();
+			else if (source == raylightAppRight)
+				handleRaylightAppRight();
+			else if (source == expSee)
+				handleExpSee();
+			else if (source == expAppLeft)
+				handleExpAppLeft();
+			else if (source == expAppRight)
+				handleExpAppRight();
+			else if (source == gaussWindow)
+				handleGaussWindow();
+			else if (source == meanWindow)
+				handleMeanWindow();
+			else if (source == mediumWindow)
+				handleMediumWindow();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
+	// Windows
+	private void handleMediumWindow() {
+		BufferedImage image = ImageUtils.slideMediumWindow(parent.getPanels()[Side.LEFT.getValue()].getImage(), 3);
+		parent.addImage(image);
+	}
+
+	private void handleMeanWindow() {
+		BufferedImage image = ImageUtils.slideMeanWindow(parent.getPanels()[Side.LEFT.getValue()].getImage(), 3);
+		parent.addImage(image);
+	}
+
+	private void handleGaussWindow() {
+		BufferedImage image = ImageUtils.slideGuassanianWindow(parent.getPanels()[Side.LEFT.getValue()].getImage(), 3, 128);
+		parent.addImage(image);
+	}
+
 	// Umbrals
 	private void handleUmbralAppLeft() {
-
 		new ATIUmbralDialog(parent, Side.LEFT);
 		
 	}
@@ -202,26 +291,55 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleUmbralAppRight() {
 
 		new ATIUmbralDialog(parent, Side.RIGHT);
-	
 	}
 
 	// Noises
 	private void handleImpulsiveAppRight() {
-
 		new ATISaltAndPepperDialog(parent, Side.RIGHT);
-	
 	}
 
 	private void handleImpulsiveAppLeft() {
-
-		new ATISaltAndPepperDialog(parent, Side.LEFT);
-		
+		new ATIImpulsiveNoiseDialog(parent, parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
 
 	private void handleImpulsiveSee() {
-		BufferedImage img = ImageUtils.saltAndPepperNoise(
-				parent.getPanels()[0].getImage(), 5);
-		parent.addImage(img);
+		new ATIImpulsiveNoiseDialog(parent, new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB));
+	}
+	
+	private void handleGaussAppRight() {
+		new ATIGaussNoiseDialog(parent, parent.getPanels()[Side.RIGHT.getValue()].getImage());
+	}
+
+	private void handleGaussAppLeft() {
+		new ATIGaussNoiseDialog(parent, parent.getPanels()[Side.LEFT.getValue()].getImage());
+	}
+
+	private void handleGaussSee() {
+		new ATIGaussNoiseImageDialog(parent);
+	}
+	
+	private void handleRaylightAppRight() {
+		new ATIRaylightDialog(parent, parent.getPanels()[Side.RIGHT.getValue()].getImage());
+	}
+
+	private void handleRaylightAppLeft() {
+		new ATIRaylightDialog(parent, parent.getPanels()[Side.LEFT.getValue()].getImage());		
+	}
+
+	private void handleRaylightSee() {
+		new ATIRaylightDialog(parent, new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB));
+	}
+	
+	private void handleExpAppRight() {
+		new ATIExpDialog(parent, parent.getPanels()[Side.RIGHT.getValue()].getImage());
+	}
+
+	private void handleExpAppLeft() {
+		new ATIExpDialog(parent, parent.getPanels()[Side.LEFT.getValue()].getImage());
+	}
+
+	private void handleExpSee() {
+		new ATIExpDialog(parent, new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB));
 	}
 
 	// Options
@@ -256,20 +374,20 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Edit
 	private void handleEditPixelValueLeft() {
-		new ATIPixelValueEditJPanel(parent, Side.LEFT);
+		new ATIPixelValueEditDialog(parent, Side.LEFT);
 	}
 
 	private void handleEditPixelValueRight() {
-		new ATIPixelValueEditJPanel(parent, Side.RIGHT);
+		new ATIPixelValueEditDialog(parent, Side.RIGHT);
 	}
 
 	// View
 	private void handleShowPixelValueLeft() {
-		new ATIPixelValueJPanel(parent);
+		new ATIPixelValueDialog(parent);
 	}
 
 	private void handleShowPixelValueRight() {
-		new ATIPixelValueJPanel(parent);
+		new ATIPixelValueDialog(parent);
 	}
 
 	private void handleHistogramLeft() {
@@ -305,7 +423,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// File
 	private void handleLoad() throws IOException {
-		new ATILoadImagePanel(parent);
+		new ATILoadImageDialog(parent);
 	}
 
 	private void handleSave() {

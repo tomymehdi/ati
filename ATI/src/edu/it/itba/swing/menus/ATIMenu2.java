@@ -62,10 +62,8 @@ public class ATIMenu2 extends JMenuBar implements ActionListener{
 		try {
 			String dir = System.getProperty("user.dir");
 			dir += "/tests/results/";
-			File left = new File(dir + "L.jpg");
-			File right = new File(dir + "R.jpg");
-		    ImageIO.write(parent.getPanels()[0].getImage(), "jpg", left);
-		    ImageIO.write(parent.getPanels()[1].getImage(), "jpg", right);
+			File histogram = new File(dir + "H.jpg");
+		    ImageIO.write(parent.getPanels()[0].getImage(), "jpg", histogram);
 		} catch (Exception ex) {
 			
 		}
