@@ -358,7 +358,9 @@ public class ImageUtils {
 
 		double gaussRandom = Math.sqrt(-2 * Math.log(seed))
 				* Math.cos(2 * Math.PI * seed2);
-
+		
+		gaussRandom = sigma * gaussRandom + mu;
+		
 		return gaussRandom;
 	}
 
