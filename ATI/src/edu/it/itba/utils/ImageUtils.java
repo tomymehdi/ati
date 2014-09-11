@@ -296,7 +296,7 @@ public class ImageUtils {
 			}
 		}
 		
-		ImageUtils.linearTransform0255(returnImage);
+		//ImageUtils.linearTransform0255(returnImage);
 		
 		return returnImage;
 	}
@@ -380,7 +380,8 @@ public class ImageUtils {
 		double seed = Math.random();
 
 		double exponentialRandom = (-1 / lambda) * Math.log(seed);
-
+		System.out.println("seed" + seed);
+		System.out.println(exponentialRandom);
 		return exponentialRandom;
 	}
 
@@ -465,7 +466,12 @@ public class ImageUtils {
 					int[] newPixelValue = new int[3];
 					for (int i = 0; i < 3; i++) {
 						newPixelValue[i] = ((int) noise * oldPixelValue[i]);
-						raster.setSample(col, row, i, newPixelValue[i]);
+						try{
+							raster.setSample(col, row, i, newPixelValue[i]);
+						}
+						catch(Exception e){
+							
+						}
 					}
 
 				}

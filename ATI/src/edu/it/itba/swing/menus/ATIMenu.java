@@ -3,8 +3,10 @@ package edu.it.itba.swing.menus;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.security.acl.Owner;
 
 import javax.imageio.ImageIO;
 import javax.swing.JMenu;
@@ -17,6 +19,8 @@ import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseImageDialog;
 import edu.it.itba.swing.dialogs.ATIImpulsiveNoiseDialog;
 import edu.it.itba.swing.dialogs.ATILoadImageDialog;
+import edu.it.itba.swing.dialogs.ATIMeanWindowDialog;
+import edu.it.itba.swing.dialogs.ATIMediumWindowDialog;
 import edu.it.itba.swing.dialogs.ATIPixelValueDialog;
 import edu.it.itba.swing.dialogs.ATIPixelValueEditDialog;
 import edu.it.itba.swing.dialogs.ATIRaylightDialog;
@@ -268,13 +272,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Windows
 	private void handleMediumWindow() {
-		BufferedImage image = ImageUtils.slideMediumWindow(parent.getPanels()[Side.LEFT.getValue()].getImage(), 3);
-		parent.addImage(image);
+		new ATIMeanWindowDialog(parent, parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
 
 	private void handleMeanWindow() {
-		BufferedImage image = ImageUtils.slideMeanWindow(parent.getPanels()[Side.LEFT.getValue()].getImage(), 3);
-		parent.addImage(image);
+		new ATIMediumWindowDialog(parent, parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
 
 	private void handleGaussWindow() {
@@ -327,7 +329,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleRaylightSee() {
-		new ATIRaylightDialog(parent, new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB));
+		BufferedImage image = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
+		WritableRaster rast = image.getRaster();
+		for(int i = 0 ; i < 100 ; i ++){
+			for(int j = 0 ; j < 100 ; j++){
+				for(int k = 0 ; k<3 ; k++){
+					rast.setSample(i, j, k, 1);
+				}
+			}
+		}
+		new ATIRaylightDialog(parent, image);
 	}
 	
 	private void handleExpAppRight() {
@@ -339,7 +350,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleExpSee() {
-		new ATIExpDialog(parent, new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB));
+		BufferedImage image = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
+		WritableRaster rast = image.getRaster();
+		for(int i = 0 ; i < 100 ; i ++){
+			for(int j = 0 ; j < 100 ; j++){
+				for(int k = 0 ; k<3 ; k++){
+					rast.setSample(i, j, k, 1);
+				}
+			}
+		}
+		new ATIExpDialog(parent, image);
 	}
 
 	// Options
