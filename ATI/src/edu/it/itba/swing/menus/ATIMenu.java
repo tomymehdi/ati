@@ -17,6 +17,8 @@ import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseImageDialog;
 import edu.it.itba.swing.dialogs.ATIImpulsiveNoiseDialog;
 import edu.it.itba.swing.dialogs.ATILoadImageDialog;
+import edu.it.itba.swing.dialogs.ATIMeanWindowDialog;
+import edu.it.itba.swing.dialogs.ATIMediumWindowDialog;
 import edu.it.itba.swing.dialogs.ATIPixelValueDialog;
 import edu.it.itba.swing.dialogs.ATIPixelValueEditDialog;
 import edu.it.itba.swing.dialogs.ATIRaylightDialog;
@@ -268,13 +270,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Windows
 	private void handleMediumWindow() {
-		BufferedImage image = ImageUtils.slideMediumWindow(parent.getPanels()[Side.LEFT.getValue()].getImage(), 3);
-		parent.addImage(image);
+		new ATIMeanWindowDialog(parent, parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
 
 	private void handleMeanWindow() {
-		BufferedImage image = ImageUtils.slideMeanWindow(parent.getPanels()[Side.LEFT.getValue()].getImage(), 3);
-		parent.addImage(image);
+		new ATIMediumWindowDialog(parent, parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
 
 	private void handleGaussWindow() {

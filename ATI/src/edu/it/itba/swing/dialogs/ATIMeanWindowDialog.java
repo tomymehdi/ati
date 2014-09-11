@@ -16,15 +16,15 @@ import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
-public class ATIWindowDialog extends JDialog implements ActionListener{
+public class ATIMeanWindowDialog extends JDialog implements ActionListener{
 	private ATIJFrame owner;
 	private JTextField s;
 	private JButton setValue;
 	private JButton close;
 	private BufferedImage img;
 
-	public ATIWindowDialog(ATIJFrame owner, BufferedImage img) {
-		super(owner, "Generate impulsive noise", true);
+	public ATIMeanWindowDialog(ATIJFrame owner, BufferedImage img) {
+		super(owner, "Window size", true);
 		this.owner = owner;
 		this.img = img;
 		
