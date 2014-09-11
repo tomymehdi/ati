@@ -25,7 +25,7 @@ public class ATIExpDialog extends JDialog implements ActionListener {
 	private BufferedImage img;
 
 	public ATIExpDialog(ATIJFrame owner, BufferedImage img) {
-		super(owner, "Generate impulsive noise", true);
+		super(owner, "Generate exponential noise", true);
 		this.owner = owner;
 		this.img = img;
 		
@@ -44,7 +44,7 @@ public class ATIExpDialog extends JDialog implements ActionListener {
 		p.add(new JLabel("Density"));
 		p.add(d);
 		
-		p.add(new JLabel("Eta"));
+		p.add(new JLabel("lambda"));
 		p.add(l);
 		
 		p.add(setValue);

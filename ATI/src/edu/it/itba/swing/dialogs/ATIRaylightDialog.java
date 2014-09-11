@@ -25,7 +25,7 @@ public class ATIRaylightDialog extends JDialog implements ActionListener {
 	private BufferedImage img;
 
 	public ATIRaylightDialog(ATIJFrame owner, BufferedImage img) {
-		super(owner, "Generate impulsive noise", true);
+		super(owner, "Generate rayleight noise", true);
 		this.owner = owner;
 		this.img = img;
 		

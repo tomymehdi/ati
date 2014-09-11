@@ -26,7 +26,7 @@ public class ATIGaussNoiseDialog extends JDialog implements ActionListener {
 	private BufferedImage img;
 
 	public ATIGaussNoiseDialog(ATIJFrame owner, BufferedImage img) {
-		super(owner, "Generate impulsive noise", true);
+		super(owner, "Generate gaussian noise", true);
 		this.owner = owner;
 		this.img = img;
 		
