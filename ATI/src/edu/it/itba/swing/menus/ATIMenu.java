@@ -192,6 +192,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Umbrals
 	private void handleUmbralAppLeft() {
+		
+		
 		double umbral = 123;
 		// TODO valor del umbral
 		BufferedImage img = ImageUtils.applyUmbral(

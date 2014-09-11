@@ -43,7 +43,7 @@ public class ATIJFrameImpl extends ATIJFrame {
 		// Display the window.
 		setVisible(true);
 	}
-	
+
 	@Override
 	public ATIJPanel[] getPanels() {
 		ATIJPanel resp[] = new ATIJPanel[2];
@@ -54,12 +54,12 @@ public class ATIJFrameImpl extends ATIJFrame {
 
 	@Override
 	public void addImage(BufferedImage img) {
-		if(imageLeft == null) {
+		if (imageLeft == null) {
 			imageLeft = new ATImageJPanel(img);
 			mainPanel.add(imageLeft);
 			imageLeft.revalidate();
 			imageLeft.repaint();
-		} else if(imageRight == null){
+		} else if (imageRight == null) {
 			imageRight = new ATImageJPanel(img);
 			mainPanel.add(imageRight);
 			imageRight.revalidate();
@@ -87,15 +87,17 @@ public class ATIJFrameImpl extends ATIJFrame {
 	public ATImageJPanel getLeftImagePanel() {
 		return imageLeft;
 	}
-	
+
 	public ATImageJPanel getRightImagePanel() {
 		return imageRight;
 	}
-	
-	public void clear(){
+
+	public void clear() {
 		mainPanel.removeAll();
 		mainPanel.revalidate();
 		mainPanel.repaint();
+		imageLeft = null;
+		imageRight = null;
 	}
 
 }
