@@ -1,4 +1,4 @@
-package edu.it.itba.swing.panels;
+package edu.it.itba.swing.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

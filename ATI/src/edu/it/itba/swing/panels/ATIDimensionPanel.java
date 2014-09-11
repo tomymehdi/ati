@@ -10,15 +10,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.it.itba.swing.dialogs.ATILoadImageDialog;
+
 @SuppressWarnings("serial")
 public class ATIDimensionPanel extends JFrame {
 	
-	private ATILoadImagePanel parent;
+	private ATILoadImageDialog parent;
 	private JTextField width;
 	private JTextField height;
 	private JButton load;
 	
-	public ATIDimensionPanel(ATILoadImagePanel parent) {
+	public ATIDimensionPanel(ATILoadImageDialog parent) {
 		this.parent = parent;
 		
 		JPanel p = new JPanel();
