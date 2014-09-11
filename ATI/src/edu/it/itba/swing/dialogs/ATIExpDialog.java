@@ -78,7 +78,7 @@ public class ATIExpDialog extends JDialog implements ActionListener {
 
 	private void handleSetValue() {
 		int value = Integer.valueOf(d.getText());
-		double lambda = Integer.valueOf(l.getText());
+		double lambda = Double.valueOf(l.getText());
 		BufferedImage image = ImageUtils.multiplicativeExponentialNoise(img, lambda, value);
 		owner.addImage(image);
 		handleClose();

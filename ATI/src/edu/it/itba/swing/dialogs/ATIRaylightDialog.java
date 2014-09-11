@@ -78,7 +78,7 @@ public class ATIRaylightDialog extends JDialog implements ActionListener {
 
 	private void handleSetValue() {
 		int value = Integer.valueOf(d.getText());
-		int eta = Integer.valueOf(e.getText());
+		double eta = Double.valueOf(e.getText());
 		BufferedImage image = ImageUtils.multiplicativeRayleighNoise(img, eta, value);
 		owner.addImage(image);
 		handleClose();
