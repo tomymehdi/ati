@@ -1,4 +1,4 @@
-package edu.it.itba.swing.panels;
+package edu.it.itba.swing.dialogs;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -7,15 +7,16 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
 import edu.it.itba.swing.interfaces.ATIJFrame;
+import edu.it.itba.swing.panels.ATIDimensionPanel;
 
 
 @SuppressWarnings("serial")
-public class ATILoadImagePanel extends JDialog {
+public class ATILoadImageDialog extends JDialog {
 
 	private ATIJFrame parent;
 	private File file;
 
-	public ATILoadImagePanel(ATIJFrame parent) {
+	public ATILoadImageDialog(ATIJFrame parent) {
 		super(parent, "Load Image", true);
 		this.parent = parent;
 

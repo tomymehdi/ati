@@ -1,4 +1,4 @@
-package edu.it.itba.swing.panels;
+package edu.it.itba.swing.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -12,39 +12,33 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import edu.it.itba.enums.Side;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 
 
 @SuppressWarnings("serial")
-public class ATIPixelValueEditJPanel extends JDialog implements ActionListener {
+public class ATIPixelValueDialog extends JDialog implements ActionListener {
 
 	private ATIJFrame owner;
 	private JTextField x;
 	private JTextField y;
-	private JTextField r;
-	private JTextField g;
-	private JTextField b;
-	private JButton setValue;
+	private JLabel answer;
+	private JButton getValue;
 	private JButton close;
 	private JPanel answerPanel;
-	private int[] value = new int[3];
-	private Side side;
+	private int resp[] = new int[3];
 
-	public ATIPixelValueEditJPanel(ATIJFrame owner, Side side) {
-		super(owner, "Set Pixel Value", true);
+	public ATIPixelValueDialog(ATIJFrame owner) {
+
+		super(owner, "Get Pixel Value", true);
 		this.owner = owner;
-		this.side = side;
 
-		setValue = new JButton("Set pixel");
-		setValue.addActionListener(this);
+		getValue = new JButton("Get Value");
+		getValue.addActionListener(this);
 		close = new JButton("Close");
 		close.addActionListener(this);
 		x = new JTextField(4);
 		y = new JTextField(4);
-		r = new JTextField(4);
-		g = new JTextField(4);
-		b = new JTextField(4);
+		answer = new JLabel();
 
 		JPanel mainPanel = new JPanel();
 		JPanel centralPanel = new JPanel();
@@ -58,33 +52,22 @@ public class ATIPixelValueEditJPanel extends JDialog implements ActionListener {
 		centralPanel.add(p);
 		p.add(y);
 
-		p.add(new JLabel("r"));
-		centralPanel.add(p);
-		p.add(r);
-
-		p.add(new JLabel("g"));
-		centralPanel.add(p);
-		p.add(g);
-
-		p.add(new JLabel("b"));
-		centralPanel.add(p);
-		p.add(b);
-
 		p = new JPanel();
-		p.add(setValue);
+		p.add(getValue);
 		p.add(close);
 		centralPanel.add(p);
-
+		
 		answerPanel = new JPanel();
-		answerPanel.add(new JLabel("Pixel edited."));
+		answerPanel.add(new JLabel("Pixel value:"));
+		answerPanel.add(answer);
 		answerPanel.setVisible(false);
 		centralPanel.add(answerPanel);
-
+		
 		mainPanel.add(centralPanel);
 
 		this.add(mainPanel);
 
-		setPreferredSize(new Dimension(450, 120));
+		setPreferredSize(new Dimension(300, 250));
 		setSize(getPreferredSize());
 		setVisible(true);
 	}
@@ -93,8 +76,8 @@ public class ATIPixelValueEditJPanel extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		Object source = e.getSource();
-		if (source == setValue)
-			handleSetValue();
+		if (source == getValue)
+			handleGetValue();
 		else if (source == close)
 			handleClose();
 	}
@@ -105,22 +88,18 @@ public class ATIPixelValueEditJPanel extends JDialog implements ActionListener {
 		return;
 	}
 
-	private void handleSetValue() {
+	private void handleGetValue() {
 
-		BufferedImage image = owner.getPanels()[side.getValue()].getImage();
+		BufferedImage image = owner.getPanels()[0].getImage();
 
 		try {
-			value[0] = Integer.parseInt(r.getText());
-			value[1] = Integer.parseInt(g.getText());
-			value[2] = Integer.parseInt(b.getText());
-			image.getRaster().setPixel(Integer.parseInt(x.getText()),
-					Integer.parseInt(y.getText()), value);
-			owner.getPanels()[side.getValue()].revalidate();
-			owner.getPanels()[side.getValue()].repaint();
+			image.getRaster().getPixel(Integer.parseInt(x.getText()),
+					Integer.parseInt(y.getText()), resp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+		answer.setText(String.valueOf(resp[0]) + " " + String.valueOf(resp[1]) + " " + String.valueOf(resp[2]));
 		answerPanel.setVisible(true);
 	}
 }
