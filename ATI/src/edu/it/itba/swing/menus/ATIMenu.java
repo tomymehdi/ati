@@ -214,7 +214,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Noises
 	private void handleImpulsiveAppRight() {
-		int density = 5;
+		int density = 30;
 		// TODO valor del density
 		BufferedImage img = ImageUtils.saltAndPepperNoise(
 				parent.getPanels()[Side.RIGHT.getValue()].getImage(), density);
@@ -222,7 +222,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleImpulsiveAppLeft() {
-		int density = 5;
+		int density = 30;
 		// TODO valor del density
 		BufferedImage img = ImageUtils.saltAndPepperNoise(
 				parent.getPanels()[Side.LEFT.getValue()].getImage(), density);

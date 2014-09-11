@@ -639,6 +639,8 @@ public class ImageUtils {
 					else
 						newPixelValue = WHITE;
 					raster.setSample(col, row, 0, newPixelValue);
+					raster.setSample(col, row, 1, newPixelValue);
+					raster.setSample(col, row, 2, newPixelValue);
 				}
 			}
 		}
