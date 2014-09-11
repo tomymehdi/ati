@@ -421,10 +421,15 @@ public class ImageUtils {
 		for (int row = 0; row < image.getHeight(); row++) {
 			for (int col = 0; col < image.getWidth(); col++) {
 				if (Math.random() < density) {
-					int oldPixelValue = imageData.getSample(col, row, 0);
+					int[] oldPixelValue = new int[3];
+					imageData.getPixel(col, row, oldPixelValue);
 					double noise = gauss(mu, sigma);
-					int newPixelValue = ((int) noise + oldPixelValue);
-					raster.setSample(col, row, 0, newPixelValue);
+					int[] newPixelValue = new int[3];
+					for (int i = 0; i < 3; i++) {
+						newPixelValue[i] = ((int) noise + oldPixelValue[i]);
+
+						raster.setSample(col, row, i, newPixelValue[i]);
+					}
 				}
 			}
 		}
@@ -444,10 +449,17 @@ public class ImageUtils {
 		for (int row = 0; row < image.getHeight(); row++) {
 			for (int col = 0; col < image.getWidth(); col++) {
 				if (Math.random() < density) {
-					int oldPixelValue = imageData.getSample(col, row, 0);
+
+					int[] oldPixelValue = new int[3];
+					imageData.getPixel(col, row, oldPixelValue);
 					double noise = rayleigh(eta);
-					int newPixelValue = ((int) noise * oldPixelValue);
-					raster.setSample(col, row, 0, newPixelValue);
+					int[] newPixelValue = new int[3];
+					for (int i = 0; i < 3; i++) {
+						newPixelValue[i] = ((int) noise * oldPixelValue[i]);
+
+						raster.setSample(col, row, i, newPixelValue[i]);
+					}
+
 				}
 			}
 		}
@@ -467,10 +479,16 @@ public class ImageUtils {
 		for (int row = 0; row < image.getHeight(); row++) {
 			for (int col = 0; col < image.getWidth(); col++) {
 				if (Math.random() < density) {
-					int oldPixelValue = imageData.getSample(col, row, 0);
+
+					int[] oldPixelValue = new int[3];
+					imageData.getPixel(col, row, oldPixelValue);
 					double noise = exponential(lambda);
-					int newPixelValue = ((int) noise * oldPixelValue);
-					raster.setSample(col, row, 0, newPixelValue);
+					int[] newPixelValue = new int[3];
+					for (int i = 0; i < 3; i++) {
+						newPixelValue[i] = ((int) noise * oldPixelValue[i]);
+
+						raster.setSample(col, row, i, newPixelValue[i]);
+					}
 				}
 			}
 		}
