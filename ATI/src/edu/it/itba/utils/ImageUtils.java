@@ -429,12 +429,17 @@ public class ImageUtils {
 					int[] newPixelValue = new int[3];
 					for (int i = 0; i < 3; i++) {
 						newPixelValue[i] = ((int) noise + oldPixelValue[i]);
-						raster.setSample(col, row, i, newPixelValue[i]);
+						try{
+							raster.setSample(col, row, i, newPixelValue[i]);
+						} catch(Exception e){
+						}
 					}
 				}
 			}
 		}
-
+		
+		ImageUtils.linearTransform0255(retImage);
+		
 		return retImage;
 	}
 
@@ -461,7 +466,8 @@ public class ImageUtils {
 				}
 			}
 		}
-
+		ImageUtils.linearTransform0255(retImage);
+		
 		return retImage;
 	}
 
@@ -487,7 +493,8 @@ public class ImageUtils {
 				}
 			}
 		}
-
+		
+		ImageUtils.linearTransform0255(retImage);
 		return retImage;
 	}
 
@@ -671,35 +678,44 @@ public class ImageUtils {
 
 		for (int i = 0; i < image.getHeight(); i++) {
 			for (int j = 0; j < image.getWidth(); j++) {
-				R = imageRaster.getSample(j, i, 0);
-				G = imageRaster.getSample(j, i, 1);
-				B = imageRaster.getSample(j, i, 2);
-				if (R < minValue)
-					minValue = R;
-				if (R > maxValue)
-					maxValue = R;
-				if (G < minValue)
-					minValue = R;
-				if (G > maxValue)
-					maxValue = R;
-				if (B < minValue)
-					minValue = R;
-				if (B > maxValue)
-					maxValue = R;
+					R = imageRaster.getSample(j, i, 0);
+					if (R < minValue)
+						minValue = R;
+					if (R > maxValue)
+						maxValue = R;
+					try {
+					G = imageRaster.getSample(j, i, 1);
+					if (G < minValue)
+						minValue = G;
+					if (G > maxValue)
+						maxValue = G;
+					B = imageRaster.getSample(j, i, 2);
+					if (B < minValue)
+						minValue = B;
+					if (B > maxValue)
+						maxValue = B;
+					} catch (Exception e){
+						
+					}
 			}
 		}
 
 		for (int i = 0; i < image.getHeight(); i++) {
 			for (int j = 0; j < image.getWidth(); j++) {
 				R = imageRaster.getSample(j, i, 0);
-				G = imageRaster.getSample(j, i, 1);
-				B = imageRaster.getSample(j, i, 2);
 				imageRaster.setSample(j, i, 0,
 						linearTransform0255(R, minValue, maxValue));
-				imageRaster.setSample(j, i, 1,
-						linearTransform0255(G, minValue, maxValue));
-				imageRaster.setSample(j, i, 2,
-						linearTransform0255(B, minValue, maxValue));
+				
+				try {
+					G = imageRaster.getSample(j, i, 1);
+					imageRaster.setSample(j, i, 1,
+							linearTransform0255(G, minValue, maxValue));
+					B = imageRaster.getSample(j, i, 2);
+					imageRaster.setSample(j, i, 2,
+							linearTransform0255(B, minValue, maxValue));
+				} catch (Exception e){
+					
+				}
 			}
 		}
 	}
