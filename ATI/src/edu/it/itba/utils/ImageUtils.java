@@ -413,18 +413,21 @@ public class ImageUtils {
 			double mu, double sigma, float d) {
 
 		float density = d / 100;
-		BufferedImage retImage = new BufferedImage(image.getWidth(),
-				image.getHeight(), image.getType());
+		BufferedImage retImage = clone(image);
 
 		Raster imageData = image.getData();
 		WritableRaster raster = retImage.getRaster();
 		for (int row = 0; row < image.getHeight(); row++) {
 			for (int col = 0; col < image.getWidth(); col++) {
 				if (Math.random() < density) {
-					int oldPixelValue = imageData.getSample(col, row, 0);
+					int[] oldPixelValue = new int[3];
+					imageData.getPixel(col, row, oldPixelValue);
 					double noise = gauss(mu, sigma);
-					int newPixelValue = ((int) noise + oldPixelValue);
-					raster.setSample(col, row, 0, newPixelValue);
+					int[] newPixelValue = new int[3];
+					for (int i = 0; i < 3; i++) {
+						newPixelValue[i] = ((int) noise + oldPixelValue[i]);
+						raster.setSample(col, row, i, newPixelValue[i]);
+					}
 				}
 			}
 		}
@@ -436,18 +439,21 @@ public class ImageUtils {
 			BufferedImage image, double eta, float d) {
 
 		float density = d / 100;
-		BufferedImage retImage = new BufferedImage(image.getWidth(),
-				image.getHeight(), image.getType());
+		BufferedImage retImage = clone(image);
 
 		Raster imageData = image.getData();
 		WritableRaster raster = retImage.getRaster();
 		for (int row = 0; row < image.getHeight(); row++) {
 			for (int col = 0; col < image.getWidth(); col++) {
 				if (Math.random() < density) {
-					int oldPixelValue = imageData.getSample(col, row, 0);
+					int[] oldPixelValue = new int[3];
+					imageData.getPixel(col, row, oldPixelValue);
 					double noise = rayleigh(eta);
-					int newPixelValue = ((int) noise * oldPixelValue);
-					raster.setSample(col, row, 0, newPixelValue);
+					int[] newPixelValue = new int[3];
+					for (int i = 0; i < 3; i++) {
+						newPixelValue[i] = ((int) noise * oldPixelValue[i]);
+						raster.setSample(col, row, i, newPixelValue[i]);
+					}
 				}
 			}
 		}
@@ -459,18 +465,21 @@ public class ImageUtils {
 			BufferedImage image, double lambda, float d) {
 
 		float density = d / 100;
-		BufferedImage retImage = new BufferedImage(image.getWidth(),
-				image.getHeight(), image.getType());
+		BufferedImage retImage = clone(image);
 
 		Raster imageData = image.getData();
 		WritableRaster raster = retImage.getRaster();
 		for (int row = 0; row < image.getHeight(); row++) {
 			for (int col = 0; col < image.getWidth(); col++) {
 				if (Math.random() < density) {
-					int oldPixelValue = imageData.getSample(col, row, 0);
+					int[] oldPixelValue = new int[3];
+					imageData.getPixel(col, row, oldPixelValue);
 					double noise = exponential(lambda);
-					int newPixelValue = ((int) noise * oldPixelValue);
-					raster.setSample(col, row, 0, newPixelValue);
+					int[] newPixelValue = new int[3];
+					for (int i = 0; i < 3; i++) {
+						newPixelValue[i] = ((int) noise * oldPixelValue[i]);
+						raster.setSample(col, row, i, newPixelValue[i]);
+					}
 				}
 			}
 		}
@@ -591,6 +600,7 @@ public class ImageUtils {
 		}
 		return retImage;
 	}
+
 	/* Devuelve una imagen de 100 X 100 con ruido Exponencial */
 
 	public static BufferedImage exponentialImage(double lambda) {
@@ -625,9 +635,9 @@ public class ImageUtils {
 	/* Devuelve una imagen con ruido de Salt and Pepper agregado */
 	public static BufferedImage saltAndPepperNoise(BufferedImage image, float d) {
 		float density = d / 100;
-		
+
 		BufferedImage resp = clone(image);
-		
+
 		WritableRaster raster = resp.getRaster();
 		for (int row = 0; row < image.getHeight(); row++) {
 			for (int col = 0; col < image.getWidth(); col++) {
@@ -650,7 +660,7 @@ public class ImageUtils {
 		WritableRaster imageRaster = image.getRaster();
 		int minValue = 0;
 		int maxValue = 255;
-		int R,G,B;
+		int R, G, B;
 
 		for (int i = 0; i < image.getHeight(); i++) {
 			for (int j = 0; j < image.getWidth(); j++) {
@@ -677,39 +687,43 @@ public class ImageUtils {
 				R = imageRaster.getSample(j, i, 0);
 				G = imageRaster.getSample(j, i, 1);
 				B = imageRaster.getSample(j, i, 2);
-				imageRaster.setSample(j, i, 0, linearTransform0255(R, minValue, maxValue));
-				imageRaster.setSample(j, i, 1, linearTransform0255(G, minValue, maxValue));
-				imageRaster.setSample(j, i, 2, linearTransform0255(B, minValue, maxValue));
+				imageRaster.setSample(j, i, 0,
+						linearTransform0255(R, minValue, maxValue));
+				imageRaster.setSample(j, i, 1,
+						linearTransform0255(G, minValue, maxValue));
+				imageRaster.setSample(j, i, 2,
+						linearTransform0255(B, minValue, maxValue));
 			}
 		}
 	}
-	
-	private static int linearTransform0255(int value, int min, int max){
+
+	private static int linearTransform0255(int value, int min, int max) {
 		int resp, m;
 		int minRGB = 0;
 		int maxRGB = 255;
-		
+
 		// f(x) = m*x + c
 		// f(x) = y = m*x + c;
 		// y = m*x +c
-		// y tiene que estar entre 0 y 255 => c = -min+minRGB => ya el menor valor coincide con el menor valor RGB.
+		// y tiene que estar entre 0 y 255 => c = -min+minRGB => ya el menor
+		// valor coincide con el menor valor RGB.
 		// Ahora hay que calcular m. Me determina como "achatamos"
-		// Esta pendiente es m va a ser  (minRGB - min)/ (maxRGB - min)
+		// Esta pendiente es m va a ser (minRGB - min)/ (maxRGB - min)
 		// Ejemplo:
 		// min = -100 max = 900
 		// entonces c = 100
 		// y m = (900+100)/(255-0)
-		m = (max-min)/(maxRGB-minRGB);
+		m = (max - min) / (maxRGB - minRGB);
 		resp = m * value - min;
-		
+
 		return resp;
 	}
-	
+
 	public static BufferedImage clone(BufferedImage bi) {
-		 ColorModel cm = bi.getColorModel();
-		 boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-		 WritableRaster raster = bi.copyData(null);
-		 return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+		ColorModel cm = bi.getColorModel();
+		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+		WritableRaster raster = bi.copyData(null);
+		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 
 	/* Devuelve una ventana Gaussiana */
