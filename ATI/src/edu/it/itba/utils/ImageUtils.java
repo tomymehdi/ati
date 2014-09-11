@@ -13,7 +13,12 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageTypeSpecifier;
 
+import edu.it.itba.enums.ImageType;
+import edu.it.itba.functions.LinearTransform;
+import edu.it.itba.functions.SumImage;
+import edu.it.itba.models.ATImage;
 import edu.it.itba.models.Histogram;
 
 public class ImageUtils {
@@ -299,6 +304,22 @@ public class ImageUtils {
 		//ImageUtils.linearTransform0255(returnImage);
 		
 		return returnImage;
+	}
+	
+	public static ATImage optImages(ATImage im1, ATImage im2,
+			int opt) {
+
+		if (im1.getHeight() != im2.getHeight()
+				|| im1.getWidth() != im2.getWidth())
+			return null;
+
+		ATImage resp = new ATImage(im1.getHeight(), im1.getWidth(), ImageType.RGB);
+		resp.applyFunction(new SumImage(im1), null);
+		resp.applyFunction(new SumImage(im2), null);
+		
+		resp.applyFunction(new LinearTransform(resp), 100);
+		
+		return resp;
 	}
 
 	public static BufferedImage multiplyEscalar(BufferedImage image, int scalar) {

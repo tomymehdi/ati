@@ -80,7 +80,7 @@ public class Histogram extends ATIJPanel {
 				int value = mapHistory.get(key);
 				int barHeight = Math.round(((float) value / (float) maxValue)
 						* height);
-				//g2d.setColor(new Color(key, key, key));
+				g2d.setColor(new Color(key, key, key));
 				int yPos = height + yOffset - barHeight;
 				// Rectangle bar = new Rectangle(xPos, yPos, barWidth,
 				// barHeight);
