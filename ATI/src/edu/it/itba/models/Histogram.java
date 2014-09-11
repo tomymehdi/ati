@@ -22,9 +22,13 @@ public class Histogram extends ATIJPanel {
 		this.image = image;
 		calculateHistogram();
 	}
-	
+
 	private void calculateHistogram() {
 		Raster imageRaster = image.getData();
+
+		for (int i = 0; i < 255; i++) {
+			mapHistory.put(i, 0);
+		}
 
 		for (int i = 0; i < image.getHeight(); i++) {
 			for (int j = 0; j < image.getWidth(); j++) {
