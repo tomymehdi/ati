@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
@@ -23,6 +24,8 @@ public class ImageUtils {
 	private static final int SUSTRACT = 2;
 	private static final int BLACK = 0;
 	private static final int WHITE = 255;
+	private static final int TYPE_MEDIUM = 0;
+	private static final int TYPE_OTHER = 0;
 
 	@SuppressWarnings("resource")
 	private static byte[] getBytesFromFile(File file) throws IOException {
@@ -475,6 +478,11 @@ public class ImageUtils {
 		return retImage;
 	}
 
+	/*
+	 * Aplica un umbral a una imagen, si el color del pixel es mas bajo que el
+	 * umbral, deja en negro, si es mas grande, deja en blanco
+	 */
+
 	public static BufferedImage applyUmbral(BufferedImage image, double umbral) {
 
 		BufferedImage returnImage = new BufferedImage(image.getWidth(),
@@ -494,6 +502,83 @@ public class ImageUtils {
 		return returnImage;
 	}
 
+	/* Desliza una ventana por la imagen */
+
+	private static BufferedImage slideWindow(BufferedImage image,
+			double[] window, int type) {
+
+		BufferedImage retImage = new BufferedImage(image.getWidth(),
+				image.getHeight(), image.getType());
+
+		Raster imageRaster = image.getData();
+		WritableRaster retImageRaster = retImage.getRaster();
+		int newPixel;
+		for (int i = 0; i < image.getWidth(); i++) {
+			for (int j = 0; j < image.getHeight(); j++) {
+				newPixel = applyWindow(i, j, imageRaster, window, type);
+				retImageRaster.setSample(i, j, 0, newPixel);
+			}
+		}
+
+		return retImage;
+	}
+
+	/* Aplica la ventana elegida a un pixel especifico */
+	private static int applyWindow(int col, int row, Raster imageRaster,
+			double[] window, int type) {
+
+		int windowSize = (int) Math.sqrt(window.length);
+		if (type == TYPE_MEDIUM)
+			return mediumWindow(row, col, imageRaster, windowSize);
+
+		int colStart = col - (windowSize / 2);
+		int colEnd = col + (windowSize / 2);
+		int rowStart = row - (windowSize / 2);
+		int rowEnd = row + (windowSize / 2);
+		double acum = 0;
+		for (int i = colStart, k = 0; i < colEnd; i++, k++) {
+			for (int j = rowStart, z = 0; j < rowEnd; j++, z++) {
+				int currPixel;
+				try {
+					currPixel = imageRaster.getSample(i, j, 0);
+				} catch (ArrayIndexOutOfBoundsException e) {
+					currPixel = 0;
+				}
+				acum += currPixel * window[z * windowSize + k];
+			}
+		}
+
+		return (int) acum;
+
+	}
+
+	/* Aplica una ventana de Mediana */
+	private static int mediumWindow(int row, int col, Raster imageRaster,
+			int windowSize) {
+
+		int colStart = col - (windowSize / 2);
+		int colEnd = col + (windowSize / 2);
+		int rowStart = row - (windowSize / 2);
+		int rowEnd = row + (windowSize / 2);
+
+		int[] window = new int[windowSize * windowSize];
+
+		for (int i = colStart, k = 0; i < colEnd; i++) {
+			for (int j = rowStart; j < rowEnd; j++, k++) {
+				try {
+					window[k] = imageRaster.getSample(i, j, 0);
+				} catch (IndexOutOfBoundsException e) {
+					window[k] = 0;
+				}
+			}
+		}
+		Arrays.sort(window);
+
+		return window[((windowSize * windowSize) / 2) + 1];
+	}
+
+	/* Devuelve una imagen de 100 X 100 con ruido gaussiano */
+
 	public static BufferedImage guassImage(double mu, double sigma) {
 		BufferedImage retImage = new BufferedImage(100, 100,
 				BufferedImage.TYPE_BYTE_GRAY);
@@ -506,7 +591,8 @@ public class ImageUtils {
 		}
 		return retImage;
 	}
-	
+	/* Devuelve una imagen de 100 X 100 con ruido Exponencial */
+
 	public static BufferedImage exponentialImage(double lambda) {
 
 		BufferedImage retImage = new BufferedImage(100, 100,
@@ -521,6 +607,8 @@ public class ImageUtils {
 		return retImage;
 	}
 
+	/* Devuelve una imagen de 100 X 100 con ruido rayleigh */
+
 	public static BufferedImage rayleighImage(double eta) {
 		BufferedImage retImage = new BufferedImage(100, 100,
 				BufferedImage.TYPE_BYTE_GRAY);
@@ -533,7 +621,8 @@ public class ImageUtils {
 		}
 		return retImage;
 	}
-	
+
+	/* Devuelve una imagen con ruido de Salt and Pepper agregado */
 	public static BufferedImage saltAndPepperNoise(BufferedImage image, float d) {
 		float density = d / 100;
 		
@@ -616,10 +705,82 @@ public class ImageUtils {
 		return resp;
 	}
 	
-	static BufferedImage clone(BufferedImage bi) {
+	public static BufferedImage clone(BufferedImage bi) {
 		 ColorModel cm = bi.getColorModel();
 		 boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
 		 WritableRaster raster = bi.copyData(null);
 		 return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+	}
+
+	/* Devuelve una ventana Gaussiana */
+	private static double[] gaussWindow(double sigma, int windowSize) {
+
+		double[] window = new double[windowSize * windowSize];
+
+		for (int i = 0; i < windowSize; i++) {
+			for (int j = 0; j < windowSize; j++) {
+				window[i + j * windowSize] = gaussNumber(i, j, sigma);
+			}
+		}
+		return window;
+	}
+
+	/* Calcula un numero gaussiano para cierta posicion de la ventana */
+	private static double gaussNumber(int i, int j, double sigma) {
+
+		return (1 / (2 * Math.PI * Math.pow(sigma, 2)))
+				* Math.pow(
+						Math.E,
+						-((Math.pow(i, 2) + Math.pow(j, 2)))
+								/ Math.pow(sigma, 2));
+	}
+
+	/* Devuelve una ventana de la mediana ( vacia por q depende de la imagen) */
+	private static double[] mediumWindow(int windowSize) {
+		return new double[windowSize * windowSize];
+	}
+
+	private static double[] meanWindow(int windowSize) {
+
+		double[] window = new double[windowSize * windowSize];
+		double mean = 1 / windowSize * windowSize;
+		for (int i = 0; i < windowSize; i++) {
+			for (int j = 0; j < windowSize; j++) {
+				window[i + j * windowSize] = mean;
+			}
+		}
+		return window;
+
+	}
+
+	public static BufferedImage slideGuassanianWindow(BufferedImage image,
+			int windowSize, double sigma) {
+
+		double window[] = gaussWindow(sigma, windowSize);
+
+		BufferedImage retImage = slideWindow(image, window, TYPE_OTHER);
+
+		return retImage;
+
+	}
+
+	public static BufferedImage slideMeanWindow(BufferedImage image,
+			int windowSize) {
+
+		double window[] = meanWindow(windowSize);
+
+		BufferedImage retImage = slideWindow(image, window, TYPE_OTHER);
+
+		return retImage;
+
+	}
+
+	public static BufferedImage slideMediumWindow(BufferedImage image,
+			int windowSize) {
+
+		double window[] = mediumWindow(windowSize);
+		BufferedImage retImage = slideWindow(image, window, TYPE_MEDIUM);
+
+		return retImage;
 	}
 }
