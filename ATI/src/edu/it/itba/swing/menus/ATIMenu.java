@@ -18,6 +18,7 @@ import edu.it.itba.swing.panels.ATILoadImagePanel;
 import edu.it.itba.swing.panels.ATIPixelValueEditJPanel;
 import edu.it.itba.swing.panels.ATIPixelValueJPanel;
 import edu.it.itba.swing.panels.ATISubImageDialog;
+import edu.it.itba.swing.panels.ATIUmbralDialog;
 import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
@@ -106,7 +107,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		// Umbrals
 		umbralAppLeft = addMenuItemToMenu("Apply umbral left", umbrals, true);
-		umbralAppRight = addMenuItemToMenu("Apply umbral left", umbrals, true);
+		umbralAppRight = addMenuItemToMenu("Apply umbral right", umbrals, true);
 
 		// Options
 		clear = addMenuItemToMenu("Clear", options, true);
@@ -192,21 +193,23 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Umbrals
 	private void handleUmbralAppLeft() {
-		
-		
-		double umbral = 123;
-		// TODO valor del umbral
-		BufferedImage img = ImageUtils.applyUmbral(
-				parent.getPanels()[Side.LEFT.getValue()].getImage(), umbral);
-		parent.addImage(img);
+
+		new ATIUmbralDialog(parent, Side.LEFT);
+		// double umbral = 123;
+		// // TODO valor del umbral
+		// BufferedImage img = ImageUtils.applyUmbral(
+		// parent.getPanels()[Side.LEFT.getValue()].getImage(), umbral);
+		// parent.addImage(img);
 	}
 
 	private void handleUmbralAppRight() {
-		double umbral = 123;
-		// TODO valor del umbral
-		BufferedImage img = ImageUtils.applyUmbral(
-				parent.getPanels()[Side.RIGHT.getValue()].getImage(), umbral);
-		parent.addImage(img);
+
+		new ATIUmbralDialog(parent, Side.RIGHT);
+		// double umbral = 123;
+		// // TODO valor del umbral
+		// BufferedImage img = ImageUtils.applyUmbral(
+		// parent.getPanels()[Side.RIGHT.getValue()].getImage(), umbral);
+		// parent.addImage(img);
 	}
 
 	// Noises
