@@ -99,7 +99,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		
 		JMenu umbrals = new JMenu("Umbrals");
 		
-		JMenu windows = new JMenu("Windows");
+		JMenu slideWindow = new JMenu("Slide window");
 		
 		JMenu options = new JMenu("Options");
 
@@ -154,9 +154,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		umbralAppRight = addMenuItemToMenu("Apply umbral left", umbrals, true);
 		
 		// Slide window
-		gaussWindow = addMenuItemToMenu("Slide gauss window", windows, true);
-		meanWindow = addMenuItemToMenu("Slide mean window", windows, true);
-		mediumWindow = addMenuItemToMenu("Slide medium window", windows, true);
+		gaussWindow = addMenuItemToMenu("Slide gauss window", slideWindow, true);
+		meanWindow = addMenuItemToMenu("Slide mean window", slideWindow, true);
+		mediumWindow = addMenuItemToMenu("Slide medium window", slideWindow, true);
 		
 		// Options
 		clear = addMenuItemToMenu("Clear", options, true);
@@ -168,6 +168,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		addToMenu(operation);
 		addToMenu(noises);
 		addToMenu(umbrals);
+		addToMenu(slideWindow);
 		addToMenu(options);
 	}
 
