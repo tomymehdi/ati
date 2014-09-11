@@ -17,6 +17,7 @@ import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.panels.ATILoadImagePanel;
 import edu.it.itba.swing.panels.ATIPixelValueEditJPanel;
 import edu.it.itba.swing.panels.ATIPixelValueJPanel;
+import edu.it.itba.swing.panels.ATISaltAndPepperDialog;
 import edu.it.itba.swing.panels.ATISubImageDialog;
 import edu.it.itba.swing.panels.ATIUmbralDialog;
 import edu.it.itba.utils.ImageUtils;
@@ -102,12 +103,12 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		// Noises
 		impulsiveSee = addMenuItemToMenu("See", impulsive, true);
-		impulsiveAppLeft = addMenuItemToMenu("Apply left", impulsive, true);
-		impulsiveAppRight = addMenuItemToMenu("Apply right", impulsive, true);
+		impulsiveAppLeft = addMenuItemToMenu("Apply left...", impulsive, true);
+		impulsiveAppRight = addMenuItemToMenu("Apply right...", impulsive, true);
 
 		// Umbrals
-		umbralAppLeft = addMenuItemToMenu("Apply umbral left", umbrals, true);
-		umbralAppRight = addMenuItemToMenu("Apply umbral right", umbrals, true);
+		umbralAppLeft = addMenuItemToMenu("Apply umbral left...", umbrals, true);
+		umbralAppRight = addMenuItemToMenu("Apply umbral right...", umbrals, true);
 
 		// Options
 		clear = addMenuItemToMenu("Clear", options, true);
@@ -214,19 +215,23 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Noises
 	private void handleImpulsiveAppRight() {
-		int density = 30;
-		// TODO valor del density
-		BufferedImage img = ImageUtils.saltAndPepperNoise(
-				parent.getPanels()[Side.RIGHT.getValue()].getImage(), density);
-		parent.addImage(img);
+
+		new ATISaltAndPepperDialog(parent, Side.RIGHT);
+		// int density = 30;
+		// // TODO valor del density
+		// BufferedImage img = ImageUtils.saltAndPepperNoise(
+		// parent.getPanels()[Side.RIGHT.getValue()].getImage(), density);
+		// parent.addImage(img);
 	}
 
 	private void handleImpulsiveAppLeft() {
-		int density = 30;
-		// TODO valor del density
-		BufferedImage img = ImageUtils.saltAndPepperNoise(
-				parent.getPanels()[Side.LEFT.getValue()].getImage(), density);
-		parent.addImage(img);
+
+		new ATISaltAndPepperDialog(parent, Side.LEFT);
+		// int density = 30;
+		// // TODO valor del density
+		// BufferedImage img = ImageUtils.saltAndPepperNoise(
+		// parent.getPanels()[Side.LEFT.getValue()].getImage(), density);
+		// parent.addImage(img);
 	}
 
 	private void handleImpulsiveSee() {
