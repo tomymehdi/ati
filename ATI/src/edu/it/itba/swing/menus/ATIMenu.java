@@ -1,19 +1,21 @@
 package edu.it.itba.swing.menus;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
-import java.security.acl.Owner;
 
 import javax.imageio.ImageIO;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
+import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.dialogs.ATIExpDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseImageDialog;
@@ -43,6 +45,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem blankSquare;
 	private JMenuItem greyScale;
 	private JMenuItem colorScale;
+	private JMenuItem lena;
+	private JMenuItem lenax;
+	private JMenuItem girl;
+	private JMenuItem barco;
+	private JMenuItem fractal;
 
 	private JMenuItem pixelValueLeft;
 	private JMenuItem pixelValueRight;
@@ -117,6 +124,12 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		blankSquare = addMenuItemToMenu("Blank Square", newImage, true);
 		greyScale = addMenuItemToMenu("Gray Scale", newImage, true);
 		colorScale = addMenuItemToMenu("Color Scale", newImage, true);
+		lena = addMenuItemToMenu("Lena", newImage, true);
+		lenax = addMenuItemToMenu("LenaX", newImage, true);
+		barco = addMenuItemToMenu("Barco", newImage, true);
+		girl = addMenuItemToMenu("Girl", newImage, true);
+		fractal = addMenuItemToMenu("Fractal", newImage, true);
+		
 
 		// View
 		pixelValueLeft = addMenuItemToMenu("Pixel left...", view, true);
@@ -207,6 +220,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleGrayScale();
 			else if (source == colorScale)
 				handleColorScale();
+			else if (source == lena)
+				handleLena();
+			else if (source == lenax)
+				handleLenax();
+			else if (source == girl)
+				handleGirl();
+			else if (source == barco)
+				handleBarco();
+			else if (source == fractal)
+				handleFractal();
 			else if (source == save)
 				handleSave();
 			else if (source == pixelValueLeft)
@@ -379,9 +402,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleSumImages() {
-		BufferedImage img = ImageUtils.optImages(
-				parent.getPanels()[0].getImage(),
-				parent.getPanels()[1].getImage(), 0);
+		ATImage imageL = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage(), ImageType.RGB);
+		ATImage imageR = new ATImage(parent.getPanels()[Side.RIGHT.getValue()].getImage(), ImageType.RGB);
+		ATImage sum = ImageUtils.optImages(	imageL, imageR, 0);
+		BufferedImage img = sum.getVisual();
 		parent.addImage(img);
 	}
 
@@ -439,6 +463,56 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleBlankCircle() {
 		BufferedImage img = ImageUtils.blankCircle();
 		parent.addImage(img);
+	}
+	
+	private void handleFractal() {
+		String path = System.getProperty("user.dir") + "/resources/images/fractal.raw";
+		try {
+			BufferedImage img = ImageUtils.load(new File(path), new Dimension(256,256));
+			parent.addImage(img);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void handleBarco() {
+		String path = System.getProperty("user.dir") + "/resources/images/barco.raw";
+		try {
+			BufferedImage img = ImageUtils.load(new File(path), new Dimension(256,256));
+			parent.addImage(img);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void handleGirl() {
+		String path = System.getProperty("user.dir") + "/resources/images/girl2.raw";
+		try {
+			BufferedImage img = ImageUtils.load(new File(path), new Dimension(256,256));
+			parent.addImage(img);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void handleLenax() {
+		String path = System.getProperty("user.dir") + "/resources/images/lenax.raw";
+		try {
+			BufferedImage img = ImageUtils.load(new File(path), new Dimension(256,256));
+			parent.addImage(img);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void handleLena() {
+		String path = System.getProperty("user.dir") + "/resources/images/lena.raw";
+		try {
+			BufferedImage img = ImageUtils.load(new File(path), new Dimension(256,256));
+			parent.addImage(img);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// File
