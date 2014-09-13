@@ -1,49 +1,51 @@
 package edu.it.itba.functions;
 
-import edu.it.itba.enums.Bands;
-import edu.it.itba.interfaces.FunctionImage;
 import edu.it.itba.models.ATImage;
 
-public class LinearTransform implements FunctionImage {
-	
-	private ATImage image;
-	private double min = Double.MAX_VALUE, max=Double.MIN_VALUE;
-	
+public class LinearTransform extends Function {
+
+	private double min = Double.MAX_VALUE, max = Double.MIN_VALUE;
+
 	public LinearTransform(ATImage image) {
-		this.image = image;
+		super(image);
 		calculateMinMax();
 	}
-	
-	@Override
-	public double applyImage(double value, int row, int col, Bands band) {
-		return linearTransform0255(value, min, max);
+
+	public void apply() {
+
+		ATImage image = getImage();
+
+		for (int col = 0; col < image.getWidth(); col++) {
+			for (int row = 0; row < image.getHeight(); row++) {
+				for (int band = 0; band < 3; band++) {
+					image.setPixel(row, col, band,
+							linearTransform0255(image.getPixel(row, col, band)));
+				}
+			}
+		}
+
 	}
 
 	private void calculateMinMax() {
-		double r,g,b;
-		for(int row = 0 ; row < image.getHeight() ; row++){
-			for(int col = 0 ; col < image.getWidth() ; col++){
-				r = image.R.getValue(row, col);
-				if (r < min)
-					min = r;
-				if (r > max)
-					max = r;
-				g = image.G.getValue(row, col);
-				if (g < min)
-					min = g;
-				if (g > max)
-					max = g;
-				b = image.B.getValue(row, col);
-				if (b < min)
-					min = b;
-				if (b > max)
-					max = b;
+		ATImage image = getImage();
+
+		double value;
+		for (int row = 0; row < image.getHeight(); row++) {
+			for (int col = 0; col < image.getWidth(); col++) {
+				for (int k = 0; k < 3; k++) {
+					value = image.bands[k].getValue(row, col);
+					if (value < min)
+						min = value;
+					if (value > max)
+						max = value;
+				}
+
 			}
 		}
-		
+
 	}
 
-	private static double linearTransform0255(double value, double min, double max) {
+	private double linearTransform0255(double value) {
 		double resp, m;
 		double minRGB = 0;
 		double maxRGB = 255;
@@ -59,7 +61,7 @@ public class LinearTransform implements FunctionImage {
 		// min = -100 max = 900
 		// entonces c = 100
 		// y m = (900+100)/(255-0)
-		m = (maxRGB - minRGB)/ (max - min);
+		m = (maxRGB - minRGB) / (max - min);
 		resp = m * value - min;
 
 		return resp;

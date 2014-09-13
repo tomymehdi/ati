@@ -1,0 +1,7 @@
+ATI/.project
+ATI/.classpath
+ATI/.settings
+ATI/bin
+.DS_Store
+*/.DS_Store
+ATI/tests
