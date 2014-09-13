@@ -315,25 +315,24 @@ public class ImageUtils {
 			return null;
 
 		ATImage optImage = null;
+		Function func = null;
 
 		switch (opt) {
 		case ADD:
-			Function add = new SumImage(im1, im2);
-			add.apply();
-			optImage = add.getImage();
+			func = new SumImage(im1, im2);
 			break;
 		case SUSTRACT:
-			Function sustract = new SubstractFunction(im1, im2);
-			sustract.apply();
-			optImage = sustract.getImage();
+			func = new SubstractFunction(im1, im2);
+
 			break;
 		case MULTIPLY:
-			Function multiply = new MultiplyImage(im1, im2);
-			multiply.apply();
-			optImage = multiply.getImage();
+			func = new MultiplyImage(im1, im2);
 			break;
 
 		}
+
+		func.apply();
+		optImage = func.getImage();
 
 		ATImage resp;
 		Function linearTransform = new LinearTransform(optImage);
