@@ -24,10 +24,14 @@ public class PassMultWindow implements Function {
 		int rowStart = row - (window.size / 2);
 		int rowEnd = row + (window.size / 2);
 
-		double[] w = new double[window.size * window.size];
+		System.out.println("ROW " + row + " ROWSTART " + rowStart + " ROWEND "
+				+ rowEnd);
+		System.out.println("COL " + col + " COLSTART " + colStart + " COLEND "
+				+ colEnd);
 
-		for (int i = rowStart; i < rowEnd; i++) {
-			for (int j = colStart, k = 0; j < colEnd; j++, k++) {
+		double[] w = new double[window.size * window.size];
+		for (int i = rowStart; i <= rowEnd; i++) {
+			for (int j = colStart, k = 0; j <= colEnd; j++, k++) {
 				try {
 
 					w[k] = image.getBand(band).getValue(i, j);
@@ -38,7 +42,6 @@ public class PassMultWindow implements Function {
 		}
 
 		Arrays.sort(w);
-
 		return w[((window.size * window.size) / 2) + 1];
 	}
 }

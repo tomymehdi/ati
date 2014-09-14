@@ -25,8 +25,8 @@ public class PassAdditiveWindow implements Function {
 		double resp = 0;
 		double currPixel;
 
-		for (int i = rowStart, z = 0; i < rowEnd; i++, z++) {
-			for (int j = colStart, k = 0; j < colEnd; j++, k++) {
+		for (int i = rowStart, z = 0; i <= rowEnd; i++, z++) {
+			for (int j = colStart, k = 0; j <= colEnd; j++, k++) {
 				try {
 					currPixel = image.getBand(band).getValue(i, j);
 				} catch (ArrayIndexOutOfBoundsException e) {
