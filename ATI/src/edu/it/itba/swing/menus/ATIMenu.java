@@ -15,6 +15,7 @@ import javax.swing.JMenuItem;
 
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
+import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
@@ -411,6 +412,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		ATImage imageR = new ATImage(parent.getPanels()[Side.RIGHT.getValue()].getImage(), ImageType.RGB);
 		ATImage sum = new ATImage(imageL);
 		sum.applyFunction(new SumImage(imageR), null);
+		sum.applyFunction(new LinearTransform(sum), null);
 		BufferedImage img = sum.getVisual();
 		parent.addImage(img);
 	}
