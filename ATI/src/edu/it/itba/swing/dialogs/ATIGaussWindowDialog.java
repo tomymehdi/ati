@@ -15,28 +15,28 @@ import javax.swing.JTextField;
 import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.models.ATImage;
-import edu.it.itba.models.MeanWindow;
+import edu.it.itba.models.GaussianWIndow;
 import edu.it.itba.swing.interfaces.ATIJFrame;
-import edu.it.itba.utils.ImageUtils;
 
-@SuppressWarnings("serial")
-public class ATIMeanWindowDialog extends JDialog implements ActionListener {
+public class ATIGaussWindowDialog extends JDialog implements ActionListener {
 	private ATIJFrame owner;
-	private JTextField s;
+	private JTextField size;
+	private JTextField sigma;
 	private JButton setValue;
 	private JButton close;
 	private ATImage img;
 
-	public ATIMeanWindowDialog(ATIJFrame owner, ATImage img) {
-		super(owner, "Window size", true);
+	public ATIGaussWindowDialog(ATIJFrame owner, ATImage img) {
+		super(owner, "Gauss Window", true);
 		this.owner = owner;
 		this.img = img;
 
-		setValue = new JButton("Set size");
+		setValue = new JButton("Apply window");
 		setValue.addActionListener(this);
 		close = new JButton("Close");
 		close.addActionListener(this);
-		s = new JTextField(4);
+		size = new JTextField(4);
+		sigma = new JTextField(4);
 
 		JPanel mainPanel = new JPanel();
 		JPanel centralPanel = new JPanel();
@@ -44,7 +44,10 @@ public class ATIMeanWindowDialog extends JDialog implements ActionListener {
 
 		JPanel p = new JPanel();
 		p.add(new JLabel("Window size"));
-		p.add(s);
+		p.add(size);
+
+		p.add(new JLabel("Sigma"));
+		p.add(sigma);
 
 		p.add(setValue);
 		p.add(close);
@@ -54,7 +57,7 @@ public class ATIMeanWindowDialog extends JDialog implements ActionListener {
 
 		this.add(mainPanel);
 
-		setPreferredSize(new Dimension(450, 120));
+		setPreferredSize(new Dimension(500, 120));
 		setSize(getPreferredSize());
 		setVisible(true);
 	}
@@ -76,15 +79,16 @@ public class ATIMeanWindowDialog extends JDialog implements ActionListener {
 	}
 
 	private void handleSetValue() {
-		int size = Integer.valueOf(s.getText());
+		int windowSize = Integer.valueOf(size.getText());
+		int gaussSigma = Integer.valueOf(sigma.getText());
 
-		img.applyFunction(new PassAdditiveWindow(img, new MeanWindow(size)),
-				null);
+		img.applyFunction(new PassAdditiveWindow(img, new GaussianWIndow(
+				windowSize, gaussSigma)), null);
 		img.applyFunction(new LinearTransform(img), null);
 		BufferedImage windowApplied = img.getVisual();
 		owner.addImage(windowApplied);
 
 		handleClose();
-
 	}
+
 }

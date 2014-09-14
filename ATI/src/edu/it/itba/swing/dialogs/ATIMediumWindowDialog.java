@@ -12,22 +12,28 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.it.itba.functions.LinearTransform;
+import edu.it.itba.functions.PassAdditiveWindow;
+import edu.it.itba.functions.PassMultWindow;
+import edu.it.itba.models.ATImage;
+import edu.it.itba.models.GaussianWIndow;
+import edu.it.itba.models.MediumWindow;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
-public class ATIMediumWindowDialog extends JDialog implements ActionListener{
+public class ATIMediumWindowDialog extends JDialog implements ActionListener {
 	private ATIJFrame owner;
 	private JTextField s;
 	private JButton setValue;
 	private JButton close;
-	private BufferedImage img;
+	private ATImage img;
 
-	public ATIMediumWindowDialog(ATIJFrame owner, BufferedImage img) {
+	public ATIMediumWindowDialog(ATIJFrame owner, ATImage img) {
 		super(owner, "Window size", true);
 		this.owner = owner;
 		this.img = img;
-		
+
 		setValue = new JButton("Set size");
 		setValue.addActionListener(this);
 		close = new JButton("Close");
@@ -41,7 +47,7 @@ public class ATIMediumWindowDialog extends JDialog implements ActionListener{
 		JPanel p = new JPanel();
 		p.add(new JLabel("Window size"));
 		p.add(s);
-		
+
 		p.add(setValue);
 		p.add(close);
 		centralPanel.add(p);
@@ -73,8 +79,13 @@ public class ATIMediumWindowDialog extends JDialog implements ActionListener{
 
 	private void handleSetValue() {
 		int size = Integer.valueOf(s.getText());
-		BufferedImage image = ImageUtils.slideMediumWindow(img, size);
-		owner.addImage(image);
+
+		img.applyFunction(new PassMultWindow(img, new MediumWindow(size)), null);
+		img.applyFunction(new LinearTransform(img), null);
+		BufferedImage windowApplied = img.getVisual();
+		owner.addImage(windowApplied);
+
+		
 		handleClose();
 	}
 }
