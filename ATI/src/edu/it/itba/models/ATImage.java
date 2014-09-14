@@ -4,12 +4,15 @@ import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 
+import edu.it.itba.enums.Bands;
 import edu.it.itba.enums.ImageType;
+import edu.it.itba.interfaces.Function;
 
 public class ATImage {
 
-	public Band[] bands = new Band[3];
-
+	public Band R;
+	public Band G;
+	public Band B;
 	private int rows;
 	private int cols;
 	private ImageType type;
@@ -18,9 +21,9 @@ public class ATImage {
 		this.rows = rows;
 		this.cols = cols;
 		this.type = type;
-		for (int i = 0; i < 3; i++) {
-			bands[i] = new Band(rows, cols);
-		}
+		R = new Band(rows, cols, Bands.R);
+		G = new Band(rows, cols, Bands.G);
+		B = new Band(rows, cols, Bands.B);
 	}
 
 	public ATImage(BufferedImage image, ImageType type) {
@@ -28,21 +31,74 @@ public class ATImage {
 		this.cols = image.getWidth();
 		this.type = type;
 
-		for (int i = 0; i < 3; i++) {
-			bands[i] = new Band(rows, cols);
-		}
+		R = new Band(rows, cols, Bands.R);
+		G = new Band(rows, cols, Bands.G);
+		B = new Band(rows, cols, Bands.B);
 
 		Raster raster = image.getRaster();
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
-				for (int k = 0; k < 3; k++) {
-					try {
-						bands[k].set(row, col, raster.getSample(col, row, 0));
-					} catch (IndexOutOfBoundsException e) {
 
-					}
+				R.set(row, col, raster.getSample(row, col, 0));
+				G.set(row, col, raster.getSample(row, col, 0));
+				B.set(row, col, raster.getSample(row, col, 0));
+			}
+		}
+	}
 
-				}
+	public ATImage(ATImage image) {
+		this.rows = image.getHeight();
+		this.cols = image.getWidth();
+		this.type = image.type;
+
+		R = new Band(rows, cols, Bands.R);
+		G = new Band(rows, cols, Bands.G);
+		B = new Band(rows, cols, Bands.B);
+
+		for (int row = 0; row < rows; row++) {
+			for (int col = 0; col < cols; col++) {
+				R.set(row, col, image.getBand(Bands.R).getValue(row, col));
+				G.set(row, col, image.getBand(Bands.G).getValue(row, col));
+				B.set(row, col, image.getBand(Bands.B).getValue(row, col));
+			}
+		}
+	}
+
+	public void applyFunction(Function function, Integer density) {
+		applyFunctionR(function, density);
+		applyFunctionG(function, density);
+		applyFunctionB(function, density);
+	}
+
+	private void applyFunctionR(Function function, Integer density) {
+		if (density == null) {
+			density = 100;
+		}
+		for (int row = 0; row < rows; row++) {
+			for (int col = 0; col < cols; col++) {
+				R.apply(function, row, col);
+			}
+		}
+	}
+
+	private void applyFunctionG(Function function, Integer density) {
+		if (density == null) {
+			density = 100;
+		}
+		for (int row = 0; row < rows; row++) {
+			for (int col = 0; col < cols; col++) {
+				G.apply(function, row, col);
+			}
+		}
+	}
+
+	private void applyFunctionB(Function function, Integer density) {
+		if (density == null) {
+			density = 100;
+		}
+		for (int row = 0; row < rows; row++) {
+			for (int col = 0; col < cols; col++) {
+				B.apply(function, row, col);
 			}
 		}
 	}
@@ -62,14 +118,10 @@ public class ATImage {
 		WritableRaster raster = resp.getRaster();
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
-				for (int k = 0; k < 3; k++) {
-					try {
-						raster.setSample(col, row, k,
-								bands[k].getValue(row, col));
-					} catch (IndexOutOfBoundsException e) {
 
-					}
-				}
+				raster.setSample(row, col, 0, R.getValue(row, col));
+				raster.setSample(row, col, 1, G.getValue(row, col));
+				raster.setSample(row, col, 2, B.getValue(row, col));
 			}
 		}
 
@@ -84,18 +136,14 @@ public class ATImage {
 		return cols;
 	}
 
-	@Override
-	public ATImage clone() {
-
-		return new ATImage(getVisual(), type);
+	public Band getBand(Bands band) {
+		if (band.equals(Bands.R)) {
+			return R;
+		} else if (band.equals(Bands.G)) {
+			return G;
+		} else if (band.equals(Bands.B)) {
+			return B;
+		}
+		return null;
 	}
-
-	public double getPixel(int row, int col, int band) {
-		return bands[band].getValue(row, col);
-	}
-
-	public void setPixel(int row, int col, int band, double value) {
-		bands[band].set(row, col, value);
-	}
-
 }

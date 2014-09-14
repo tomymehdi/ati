@@ -14,10 +14,7 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import edu.it.itba.functions.Function;
 import edu.it.itba.functions.LinearTransform;
-import edu.it.itba.functions.MultiplyImage;
-import edu.it.itba.functions.SubstractFunction;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.models.Histogram;
@@ -313,30 +310,10 @@ public class ImageUtils {
 				|| im1.getWidth() != im2.getWidth())
 			return null;
 
-		ATImage optImage = null;
-		Function func = null;
+		ATImage resp = new ATImage(im1);
+		resp.applyFunction(new SumImage(im2), null);
 
-		switch (opt) {
-		case ADD:
-			func = new SumImage(im1, im2);
-			break;
-		case SUSTRACT:
-			func = new SubstractFunction(im1, im2);
-
-			break;
-		case MULTIPLY:
-			func = new MultiplyImage(im1, im2);
-			break;
-
-		}
-
-		func.apply();
-		optImage = func.getImage();
-
-		ATImage resp;
-		Function linearTransform = new LinearTransform(optImage);
-		linearTransform.apply();
-		resp = linearTransform.getImage();
+		resp.applyFunction(new LinearTransform(resp), 100);
 
 		return resp;
 	}
@@ -813,7 +790,7 @@ public class ImageUtils {
 	}
 
 	/* Calcula un numero gaussiano para cierta posicion de la ventana */
-	private static double gaussNumber(int i, int j, double sigma) {
+	public static double gaussNumber(int i, int j, double sigma) {
 
 		return (1 / (2 * Math.PI * Math.pow(sigma, 2)))
 				* Math.pow(
