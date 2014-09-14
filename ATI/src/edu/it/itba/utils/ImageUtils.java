@@ -794,7 +794,7 @@ public class ImageUtils {
 	}
 
 	/* Calcula un numero gaussiano para cierta posicion de la ventana */
-	private static double gaussNumber(int i, int j, double sigma) {
+	public static double gaussNumber(int i, int j, double sigma) {
 
 		return (1 / (2 * Math.PI * Math.pow(sigma, 2)))
 				* Math.pow(
