@@ -313,8 +313,7 @@ public class ImageUtils {
 				|| im1.getWidth() != im2.getWidth())
 			return null;
 
-		ATImage resp = new ATImage(im1.getHeight(), im1.getWidth(), ImageType.RGB);
-		resp.applyFunction(new SumImage(im1), null);
+		ATImage resp = new ATImage(im1);
 		resp.applyFunction(new SumImage(im2), null);
 		
 		resp.applyFunction(new LinearTransform(resp), 100);

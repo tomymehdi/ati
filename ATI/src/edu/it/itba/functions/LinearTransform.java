@@ -1,10 +1,10 @@
 package edu.it.itba.functions;
 
 import edu.it.itba.enums.Bands;
-import edu.it.itba.interfaces.FunctionImage;
+import edu.it.itba.interfaces.Function;
 import edu.it.itba.models.ATImage;
 
-public class LinearTransform implements FunctionImage {
+public class LinearTransform implements Function{
 	
 	private ATImage image;
 	private double min = Double.MAX_VALUE, max=Double.MIN_VALUE;
@@ -14,8 +14,7 @@ public class LinearTransform implements FunctionImage {
 		calculateMinMax();
 	}
 	
-	@Override
-	public double applyImage(double value, int row, int col, Bands band) {
+	public double apply(double value, int row, int col, Bands band) {
 		return linearTransform0255(value, min, max);
 	}
 

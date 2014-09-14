@@ -7,7 +7,6 @@ import java.awt.image.WritableRaster;
 import edu.it.itba.enums.Bands;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.interfaces.Function;
-import edu.it.itba.interfaces.FunctionImage;
 
 public class ATImage {
 	
@@ -46,75 +45,30 @@ public class ATImage {
 		}
 	}
 	
+	public ATImage(ATImage image) {
+		this.rows = image.getHeight();
+		this.cols = image.getWidth();
+		this.type = image.type;
+		
+		R = new Band(rows,cols,Bands.R);
+		G = new Band(rows,cols,Bands.G);
+		B = new Band(rows,cols,Bands.B);
+		
+		for (int row = 0; row < rows; row++) {
+			for (int col = 0; col < cols; col++) {
+				R.set(row, col, image.getBand(Bands.R).getValue(row, col));
+				G.set(row, col, image.getBand(Bands.G).getValue(row, col));
+				B.set(row, col, image.getBand(Bands.B).getValue(row, col));
+			}
+		}
+	}
+
 	public void applyFunction(Function function, Integer density){
 		applyFunctionR(function, density);
 		applyFunctionG(function, density);
 		applyFunctionB(function, density);
 	}
 	
-	public void applyFunction(FunctionImage function, Integer density){
-		applyFunctionImageR(function, density);
-		applyFunctionImageG(function, density);
-		applyFunctionImageB(function, density);
-	}
-
-	private void applyFunctionImageB(FunctionImage function, Integer density) {
-		if(density == null){
-			density = 100;
-		}
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
-				B.applyBand(function, row, col);
-			}
-		}
-	}
-
-	private void applyFunctionImageG(FunctionImage function, Integer density) {
-		if(density == null){
-			density = 100;
-		}
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
-				G.applyBand(function, row, col);
-			}
-		}
-		
-	}
-
-	private void applyFunctionImageR(FunctionImage function, Integer density) {
-		if(density == null){
-			density = 100;
-		}
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
-				R.applyBand(function, row, col);
-			}
-		}
-		
-	}
-
-	private void applyFunctionB(Function function, Integer density) {
-		if(density == null){
-			density = 100;
-		}
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
-				B.apply(function, row, col);
-			}
-		}
-	}
-
-	private void applyFunctionG(Function function, Integer density) {
-		if(density == null){
-			density = 100;
-		} 
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
-				G.apply(function, row, col);
-			}
-		}
-	}
-
 	private void applyFunctionR(Function function, Integer density) {
 		if(density == null){
 			density = 100;
@@ -126,6 +80,28 @@ public class ATImage {
 		}
 	}
 	
+	private void applyFunctionG(Function function, Integer density) {
+		if(density == null){
+			density = 100;
+		} 
+		for (int row = 0; row < rows; row++) {
+			for (int col = 0; col < cols; col++) {
+				G.apply(function, row, col);
+			}
+		}
+	}
+	
+	private void applyFunctionB(Function function, Integer density) {
+		if(density == null){
+			density = 100;
+		}
+		for (int row = 0; row < rows; row++) {
+			for (int col = 0; col < cols; col++) {
+				B.apply(function, row, col);
+			}
+		}
+	}
+
 	public BufferedImage getVisual(){
 		int format = BufferedImage.TYPE_INT_RGB;
 		if(type.equals(ImageType.GRAYSCALE)){
