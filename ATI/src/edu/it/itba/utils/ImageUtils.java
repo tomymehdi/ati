@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
+import edu.it.itba.enums.ImageType;
 import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
@@ -625,16 +626,12 @@ public class ImageUtils {
 	}
 
 	/* Devuelve una imagen de 100 X 100 con ruido gaussiano */
+	public static ATImage guassImage(double mu, double sigma) {
+		ATImage retImage = new ATImage(100,100,ImageType.GRAYSCALE);
 
-	public static BufferedImage guassImage(double mu, double sigma) {
-		BufferedImage retImage = new BufferedImage(100, 100,
-				BufferedImage.TYPE_BYTE_GRAY);
-
-		WritableRaster raster = retImage.getRaster();
 		for (int row = 0; row < retImage.getHeight(); row++) {
 			for (int col = 0; col < retImage.getWidth(); col++) {
-				System.out.println(gauss(mu, sigma));
-				raster.setSample(col, row, 0, gauss(mu, sigma));
+				retImage.R.set(row, col, gauss(mu, sigma));
 			}
 		}
 		return retImage;

@@ -120,8 +120,8 @@ public class ATImage {
 			for (int col = 0; col < cols; col++) {
 
 				raster.setSample(row, col, 0, R.getValue(row, col));
-				raster.setSample(row, col, 1, G.getValue(row, col));
-				raster.setSample(row, col, 2, B.getValue(row, col));
+				//raster.setSample(row, col, 1, G.getValue(row, col));
+				//raster.setSample(row, col, 2, B.getValue(row, col));
 			}
 		}
 

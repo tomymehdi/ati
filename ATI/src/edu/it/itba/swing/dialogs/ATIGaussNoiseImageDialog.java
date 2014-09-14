@@ -12,9 +12,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.it.itba.functions.LinearTransform;
+import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.utils.ImageUtils;
 
+@SuppressWarnings("serial")
 public class ATIGaussNoiseImageDialog extends JDialog implements ActionListener{
 	
 	private ATIJFrame owner;
@@ -77,8 +80,10 @@ public class ATIGaussNoiseImageDialog extends JDialog implements ActionListener{
 	private void handleSetValue() {
 		double mu = Double.valueOf(m.getText());
 		double sigma = Double.valueOf(s.getText());
-		BufferedImage image = ImageUtils.guassImage(mu, sigma);
-		owner.addImage(image);
+		ATImage image = ImageUtils.guassImage(mu, sigma);
+		image.applyFunction(new LinearTransform(image), null);
+		BufferedImage resp = image.getVisual();
+		owner.addImage(resp);
 		handleClose();
 	}
 
