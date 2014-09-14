@@ -13,12 +13,10 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageTypeSpecifier;
 
 import edu.it.itba.enums.ImageType;
-import edu.it.itba.functions.Function;
 import edu.it.itba.functions.LinearTransform;
-import edu.it.itba.functions.MultiplyImage;
-import edu.it.itba.functions.SubstractFunction;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.models.Histogram;
@@ -302,43 +300,24 @@ public class ImageUtils {
 				raster.setPixel(i, j, returnImagePixel);
 			}
 		}
-
-		// ImageUtils.linearTransform0255(returnImage);
-
+		
+		//ImageUtils.linearTransform0255(returnImage);
+		
 		return returnImage;
 	}
-
-	public static ATImage optImages(ATImage im1, ATImage im2, int opt) {
+	
+	public static ATImage optImages(ATImage im1, ATImage im2,
+			int opt) {
 
 		if (im1.getHeight() != im2.getHeight()
 				|| im1.getWidth() != im2.getWidth())
 			return null;
 
-		ATImage optImage = null;
-		Function func = null;
-
-		switch (opt) {
-		case ADD:
-			func = new SumImage(im1, im2);
-			break;
-		case SUSTRACT:
-			func = new SubstractFunction(im1, im2);
-
-			break;
-		case MULTIPLY:
-			func = new MultiplyImage(im1, im2);
-			break;
-
-		}
-
-		func.apply();
-		optImage = func.getImage();
-
-		ATImage resp;
-		Function linearTransform = new LinearTransform(optImage);
-		linearTransform.apply();
-		resp = linearTransform.getImage();
-
+		ATImage resp = new ATImage(im1);
+		resp.applyFunction(new SumImage(im2), null);
+		
+		resp.applyFunction(new LinearTransform(resp), 100);
+		
 		return resp;
 	}
 
@@ -396,15 +375,15 @@ public class ImageUtils {
 		double seed = Math.random();
 		double seed2 = Math.random();
 
-		// double gaussRandom = (1 / (sigma * Math.sqrt(2 * Math.PI)))
-		// * Math.pow(Math.E,
-		// Math.pow(2, (-seed - mu)) / (2 * Math.pow(2, sigma)));
+//		double gaussRandom = (1 / (sigma * Math.sqrt(2 * Math.PI)))
+//				* Math.pow(Math.E,
+//						Math.pow(2, (-seed - mu)) / (2 * Math.pow(2, sigma)));
 
 		double gaussRandom = Math.sqrt(-2 * Math.log(seed))
 				* Math.cos(2 * Math.PI * seed2);
-
+		
 		gaussRandom = sigma * gaussRandom + mu;
-
+		
 		return gaussRandom;
 	}
 
@@ -476,17 +455,17 @@ public class ImageUtils {
 					int[] newPixelValue = new int[3];
 					for (int i = 0; i < 3; i++) {
 						newPixelValue[i] = ((int) noise + oldPixelValue[i]);
-						try {
+						try{
 							raster.setSample(col, row, i, newPixelValue[i]);
-						} catch (Exception e) {
+						} catch(Exception e){
 						}
 					}
 				}
 			}
 		}
-
+		
 		ImageUtils.linearTransform0255(retImage);
-
+		
 		return retImage;
 	}
 
@@ -507,10 +486,11 @@ public class ImageUtils {
 					int[] newPixelValue = new int[3];
 					for (int i = 0; i < 3; i++) {
 						newPixelValue[i] = ((int) noise * oldPixelValue[i]);
-						try {
+						try{
 							raster.setSample(col, row, i, newPixelValue[i]);
-						} catch (Exception e) {
-
+						}
+						catch(Exception e){
+							
 						}
 					}
 
@@ -518,7 +498,7 @@ public class ImageUtils {
 			}
 		}
 		ImageUtils.linearTransform0255(retImage);
-
+		
 		return retImage;
 	}
 
@@ -544,7 +524,7 @@ public class ImageUtils {
 				}
 			}
 		}
-
+		
 		ImageUtils.linearTransform0255(retImage);
 		return retImage;
 	}
@@ -729,12 +709,12 @@ public class ImageUtils {
 
 		for (int i = 0; i < image.getHeight(); i++) {
 			for (int j = 0; j < image.getWidth(); j++) {
-				R = imageRaster.getSample(j, i, 0);
-				if (R < minValue)
-					minValue = R;
-				if (R > maxValue)
-					maxValue = R;
-				try {
+					R = imageRaster.getSample(j, i, 0);
+					if (R < minValue)
+						minValue = R;
+					if (R > maxValue)
+						maxValue = R;
+					try {
 					G = imageRaster.getSample(j, i, 1);
 					if (G < minValue)
 						minValue = G;
@@ -745,9 +725,9 @@ public class ImageUtils {
 						minValue = B;
 					if (B > maxValue)
 						maxValue = B;
-				} catch (Exception e) {
-
-				}
+					} catch (Exception e){
+						
+					}
 			}
 		}
 
@@ -756,7 +736,7 @@ public class ImageUtils {
 				R = imageRaster.getSample(j, i, 0);
 				imageRaster.setSample(j, i, 0,
 						linearTransform0255(R, minValue, maxValue));
-
+				
 				try {
 					G = imageRaster.getSample(j, i, 1);
 					imageRaster.setSample(j, i, 1,
@@ -764,8 +744,8 @@ public class ImageUtils {
 					B = imageRaster.getSample(j, i, 2);
 					imageRaster.setSample(j, i, 2,
 							linearTransform0255(B, minValue, maxValue));
-				} catch (Exception e) {
-
+				} catch (Exception e){
+					
 				}
 			}
 		}
@@ -814,7 +794,7 @@ public class ImageUtils {
 	}
 
 	/* Calcula un numero gaussiano para cierta posicion de la ventana */
-	private static double gaussNumber(int i, int j, double sigma) {
+	public static double gaussNumber(int i, int j, double sigma) {
 
 		return (1 / (2 * Math.PI * Math.pow(sigma, 2)))
 				* Math.pow(
