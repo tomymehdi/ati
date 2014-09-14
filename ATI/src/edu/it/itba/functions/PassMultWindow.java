@@ -25,11 +25,12 @@ public class PassMultWindow implements Function {
 
 		double[] w = new double[window.size * window.size];
 
-		for (int i = colStart, k = 0; i < colEnd; i++) {
-			for (int j = rowStart; j < rowEnd; j++, k++) {
+		for (int i = rowStart; i < rowEnd; i++) {
+			for (int j = colStart, k = 0; j < colEnd; j++, k++) {
 				w[k] = image.getBand(band).getValue(i, j);
 			}
 		}
+		
 		Arrays.sort(w);
 
 		return w[((window.size * window.size) / 2) + 1];

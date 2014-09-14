@@ -307,8 +307,12 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleGaussWindow() {
+		//BufferedImage image = ImageUtils.slideGuassanianWindow(parent.getPanels()[Side.LEFT.getValue()].getImage(), 3, 128);
+		//parent.addImage(image);
+		
 		ATImage imageL = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage(), ImageType.RGB);
-		imageL.applyFunction(new PassAdditiveWindow(imageL, new GaussianWIndow(3, 0.1)), null);
+		imageL.applyFunction(new PassAdditiveWindow(imageL, new GaussianWIndow(3, 128)), null);
+		imageL.applyFunction(new LinearTransform(imageL), null);
 		BufferedImage windowApplied = imageL.getVisual();
 		parent.addImage(windowApplied);
 	}

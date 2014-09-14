@@ -7,8 +7,9 @@ public class GaussianWIndow extends Window {
 	private double sigma;
 	
 	public GaussianWIndow(int size, double sigma) {
+		this.size = size;
 		this.sigma = sigma;
-		this.window = new double[size];
+		this.window = new double[this.size*this.size];
 		fillWindowValues();
 	}
 	

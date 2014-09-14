@@ -11,6 +11,7 @@ public class PassAdditiveWindow implements Function {
 	private ATImage image;
 	
 	public PassAdditiveWindow(ATImage image, Window window) {
+		this.image = image;
 		this.window = window;
 	}
 	
@@ -24,8 +25,8 @@ public class PassAdditiveWindow implements Function {
 		double resp = 0;
 		double currPixel;
 		
-		for (int i = colStart, k = 0; i < colEnd; i++, k++) {
-			for (int j = rowStart, z = 0; j < rowEnd; j++, z++) {
+		for (int i = rowStart, z = 0; i < rowEnd; i++, z++) {
+			for (int j = colStart, k = 0; j < colEnd; j++, k++) {
 				currPixel = image.getBand(band).getValue(i, j);
 				resp += currPixel * window.window[z * window.size + k];
 			}
