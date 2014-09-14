@@ -14,7 +14,6 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import edu.it.itba.enums.ImageType;
 import edu.it.itba.functions.Function;
 import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.functions.MultiplyImage;

@@ -11,6 +11,7 @@ public class LinearTransform extends Function {
 		calculateMinMax();
 	}
 
+	@Override
 	public void apply() {
 
 		ATImage image = getImage();

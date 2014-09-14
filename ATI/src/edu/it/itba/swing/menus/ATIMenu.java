@@ -404,7 +404,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleSumImages() {
 		ATImage imageL = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage(), ImageType.RGB);
 		ATImage imageR = new ATImage(parent.getPanels()[Side.RIGHT.getValue()].getImage(), ImageType.RGB);
-		ATImage sum = ImageUtils.optImages(	imageL, imageR, 0);
+		ATImage sum = ImageUtils.optImages(	imageL, imageR, 1);
 		BufferedImage img = sum.getVisual();
 		parent.addImage(img);
 	}

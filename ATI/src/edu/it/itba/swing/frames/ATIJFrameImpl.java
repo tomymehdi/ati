@@ -72,6 +72,7 @@ public class ATIJFrameImpl extends ATIJFrame {
 		}
 	}
 
+	@Override
 	public void loadImage(File file, Dimension dim) {
 		try {
 			addImage(ImageUtils.load(file, dim));
@@ -92,6 +93,7 @@ public class ATIJFrameImpl extends ATIJFrame {
 		return imageRight;
 	}
 
+	@Override
 	public void clear() {
 		mainPanel.removeAll();
 		mainPanel.revalidate();

@@ -12,6 +12,7 @@ public abstract class OptFunction extends Function {
 
 	}
 
+	@Override
 	public void apply() {
 
 		ATImage image = getImage();

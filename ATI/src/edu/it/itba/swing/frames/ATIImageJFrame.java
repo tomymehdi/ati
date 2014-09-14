@@ -1,7 +1,6 @@
 package edu.it.itba.swing.frames;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,6 +8,7 @@ import java.io.File;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.interfaces.ATIJPanel;
@@ -26,7 +26,7 @@ public class ATIImageJFrame extends ATIJFrame {
 		super();
 		this.image = image;
 		// Create and set up the window.
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setSize(1200, 800);
 		setLayout(new BorderLayout());
 		

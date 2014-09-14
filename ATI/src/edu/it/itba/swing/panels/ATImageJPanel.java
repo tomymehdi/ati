@@ -42,6 +42,7 @@ public class ATImageJPanel extends ATIJPanel {
 		g.drawImage(image, 0, 0, null);
 	}
 
+	@Override
 	public BufferedImage getImage() {
 		return image;
 	}

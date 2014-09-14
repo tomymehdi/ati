@@ -4,10 +4,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 
-import edu.it.itba.enums.Bands;
 import edu.it.itba.enums.ImageType;
-import edu.it.itba.interfaces.Function;
-import edu.it.itba.interfaces.FunctionImage;
 
 public class ATImage {
 
@@ -40,7 +37,7 @@ public class ATImage {
 			for (int col = 0; col < cols; col++) {
 				for (int k = 0; k < 3; k++) {
 					try {
-						bands[k].set(row, col, raster.getSample(row, col, k));
+						bands[k].set(row, col, raster.getSample(col, row, 0));
 					} catch (IndexOutOfBoundsException e) {
 
 					}
@@ -61,13 +58,13 @@ public class ATImage {
 		} else if (type.equals(ImageType.HSV)) {
 			// TODO
 		}
-		BufferedImage resp = new BufferedImage(rows, cols, format);
+		BufferedImage resp = new BufferedImage(cols, rows, format);
 		WritableRaster raster = resp.getRaster();
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
 				for (int k = 0; k < 3; k++) {
 					try {
-						raster.setSample(row, col, k,
+						raster.setSample(col, row, k,
 								bands[k].getValue(row, col));
 					} catch (IndexOutOfBoundsException e) {
 
@@ -87,6 +84,7 @@ public class ATImage {
 		return cols;
 	}
 
+	@Override
 	public ATImage clone() {
 
 		return new ATImage(getVisual(), type);
