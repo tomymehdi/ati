@@ -15,7 +15,10 @@ import javax.swing.JMenuItem;
 
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
+import edu.it.itba.functions.PassAdditiveWindow;
+import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
+import edu.it.itba.models.GaussianWIndow;
 import edu.it.itba.swing.dialogs.ATIExpDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseImageDialog;
@@ -303,8 +306,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleGaussWindow() {
-		BufferedImage image = ImageUtils.slideGuassanianWindow(parent.getPanels()[Side.LEFT.getValue()].getImage(), 3, 128);
-		parent.addImage(image);
+		ATImage imageL = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage(), ImageType.RGB);
+		imageL.applyFunction(new PassAdditiveWindow(imageL, new GaussianWIndow(3, 0.1)), null);
+		BufferedImage windowApplied = imageL.getVisual();
+		parent.addImage(windowApplied);
 	}
 
 	// Umbrals
@@ -404,7 +409,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleSumImages() {
 		ATImage imageL = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage(), ImageType.RGB);
 		ATImage imageR = new ATImage(parent.getPanels()[Side.RIGHT.getValue()].getImage(), ImageType.RGB);
-		ATImage sum = ImageUtils.optImages(	imageL, imageR, 0);
+		ATImage sum = new ATImage(imageL);
+		sum.applyFunction(new SumImage(imageR), null);
 		BufferedImage img = sum.getVisual();
 		parent.addImage(img);
 	}
