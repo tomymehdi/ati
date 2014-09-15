@@ -9,6 +9,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import edu.it.itba.enums.ImageType;
+import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.interfaces.ATIJPanel;
 import edu.it.itba.swing.menus.ATIMenu;
@@ -53,7 +55,7 @@ public class ATIJFrameImpl extends ATIJFrame {
 	}
 
 	@Override
-	public void addImage(BufferedImage img) {
+	public void addImage(ATImage img) {
 		if (imageLeft == null) {
 			imageLeft = new ATImageJPanel(img);
 			mainPanel.add(imageLeft);
@@ -75,13 +77,13 @@ public class ATIJFrameImpl extends ATIJFrame {
 	@Override
 	public void loadImage(File file, Dimension dim) {
 		try {
-			addImage(ImageUtils.load(file, dim));
+			addImage(new ATImage(ImageUtils.load(file, dim), ImageType.RGB));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public BufferedImage getImage() {
+	public ATImage getImage() {
 		return imageLeft.getImage();
 	}
 
