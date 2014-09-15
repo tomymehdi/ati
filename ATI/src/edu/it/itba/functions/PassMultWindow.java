@@ -10,11 +10,11 @@ import edu.it.itba.models.Window;
 public class PassMultWindow implements Function {
 
 	private Window window;
-	private ATImage image;
+	private ATImage clone;
 
 	public PassMultWindow(ATImage image, Window window) {
 		this.window = window;
-		this.image = image;
+		this.clone = new ATImage(image);
 	}
 
 	@Override
@@ -23,18 +23,14 @@ public class PassMultWindow implements Function {
 		int colEnd = col + (window.size / 2);
 		int rowStart = row - (window.size / 2);
 		int rowEnd = row + (window.size / 2);
-
-		System.out.println("ROW " + row + " ROWSTART " + rowStart + " ROWEND "
-				+ rowEnd);
-		System.out.println("COL " + col + " COLSTART " + colStart + " COLEND "
-				+ colEnd);
+		int k = 0;
 
 		double[] w = new double[window.size * window.size];
 		for (int i = rowStart; i <= rowEnd; i++) {
-			for (int j = colStart, k = 0; j <= colEnd; j++, k++) {
+			for (int j = colStart; j <= colEnd; j++, k++) {
 				try {
 
-					w[k] = image.getBand(band).getValue(i, j);
+					w[k] = clone.getBand(band).getValue(i, j);
 				} catch (ArrayIndexOutOfBoundsException e) {
 					w[k] = 0;
 				}

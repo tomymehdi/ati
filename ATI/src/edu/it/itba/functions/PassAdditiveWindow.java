@@ -8,11 +8,11 @@ import edu.it.itba.models.Window;
 public class PassAdditiveWindow implements Function {
 
 	private Window window;
-	private ATImage image;
+	private ATImage clone;
 
 	public PassAdditiveWindow(ATImage image, Window window) {
-		this.image = image;
 		this.window = window;
+		this.clone = new ATImage(image);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class PassAdditiveWindow implements Function {
 		for (int i = rowStart, z = 0; i <= rowEnd; i++, z++) {
 			for (int j = colStart, k = 0; j <= colEnd; j++, k++) {
 				try {
-					currPixel = image.getBand(band).getValue(i, j);
+					currPixel = clone.getBand(band).getValue(i, j);
 				} catch (ArrayIndexOutOfBoundsException e) {
 					currPixel = 0;
 
