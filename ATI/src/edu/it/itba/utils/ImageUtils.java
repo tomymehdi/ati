@@ -405,7 +405,7 @@ public class ImageUtils {
 
 	// Recives and image and returns an Histogram that extends JPanel so it know
 	// how to paint on the frame.
-	public static Histogram histogram(BufferedImage image) {
+	public static Histogram histogram(ATImage image) {
 
 		if (image == null)
 			return null;

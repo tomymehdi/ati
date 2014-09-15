@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.utils.ImageUtils;
 
@@ -22,13 +23,13 @@ public class ATIImpulsiveNoiseDialog extends JDialog implements ActionListener {
 	private JTextField d;
 	private JButton setValue;
 	private JButton close;
-	private BufferedImage img;
+	private ATImage img;
 
-	public ATIImpulsiveNoiseDialog(ATIJFrame owner, BufferedImage img) {
+	public ATIImpulsiveNoiseDialog(ATIJFrame owner, ATImage img) {
 		super(owner, "Generate impulsive noise", true);
 		this.owner = owner;
-		this.img = img;
-		
+		this.img = new ATImage(img);
+
 		setValue = new JButton("Set density");
 		setValue.addActionListener(this);
 		close = new JButton("Close");
@@ -42,7 +43,7 @@ public class ATIImpulsiveNoiseDialog extends JDialog implements ActionListener {
 		JPanel p = new JPanel();
 		p.add(new JLabel("Density"));
 		p.add(d);
-		
+
 		p.add(setValue);
 		p.add(close);
 		centralPanel.add(p);
@@ -74,8 +75,10 @@ public class ATIImpulsiveNoiseDialog extends JDialog implements ActionListener {
 
 	private void handleSetValue() {
 		int value = Integer.valueOf(d.getText());
-		BufferedImage image = ImageUtils.saltAndPepperNoise(img, value);
-		owner.addImage(image);
+
+		img.applyFunction(new SaltAndPepperNoise(), value);
+
+		owner.addImage(img);
 		handleClose();
 	}
 

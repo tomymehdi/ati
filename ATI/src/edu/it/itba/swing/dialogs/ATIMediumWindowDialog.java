@@ -82,8 +82,7 @@ public class ATIMediumWindowDialog extends JDialog implements ActionListener {
 
 		img.applyFunction(new PassMultWindow(img, new MediumWindow(size)), null);
 		img.applyFunction(new LinearTransform(img), null);
-		BufferedImage windowApplied = img.getVisual();
-		owner.addImage(windowApplied);
+		owner.addImage(img);
 
 		
 		handleClose();

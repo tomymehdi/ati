@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -12,8 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
-
 
 @SuppressWarnings("serial")
 public class ATIPixelValueDialog extends JDialog implements ActionListener {
@@ -56,13 +55,13 @@ public class ATIPixelValueDialog extends JDialog implements ActionListener {
 		p.add(getValue);
 		p.add(close);
 		centralPanel.add(p);
-		
+
 		answerPanel = new JPanel();
 		answerPanel.add(new JLabel("Pixel value:"));
 		answerPanel.add(answer);
 		answerPanel.setVisible(false);
 		centralPanel.add(answerPanel);
-		
+
 		mainPanel.add(centralPanel);
 
 		this.add(mainPanel);
@@ -90,16 +89,21 @@ public class ATIPixelValueDialog extends JDialog implements ActionListener {
 
 	private void handleGetValue() {
 
-		BufferedImage image = owner.getPanels()[0].getImage();
+		ATImage image = owner.getPanels()[0].getImage();
 
 		try {
-			image.getRaster().getPixel(Integer.parseInt(x.getText()),
-					Integer.parseInt(y.getText()), resp);
+			int xValue = Integer.parseInt(x.getText());
+			int yValue = Integer.parseInt(y.getText());
+			resp[0] = (int) image.R.getValue(xValue, yValue);
+			resp[1] = (int) image.G.getValue(xValue, yValue);
+			resp[2] = (int) image.B.getValue(xValue, yValue);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		answer.setText(String.valueOf(resp[0]) + " " + String.valueOf(resp[1]) + " " + String.valueOf(resp[2]));
+		answer.setText(String.valueOf(resp[0]) + " " + String.valueOf(resp[1])
+				+ " " + String.valueOf(resp[2]));
 		answerPanel.setVisible(true);
 	}
 }

@@ -12,23 +12,25 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
 public class ATIExpDialog extends JDialog implements ActionListener {
+
 	private ATIJFrame owner;
 	private JTextField d;
 	private JTextField l;
 	private JButton setValue;
 	private JButton close;
-	private BufferedImage img;
+	private ATImage img;
 
-	public ATIExpDialog(ATIJFrame owner, BufferedImage img) {
+	public ATIExpDialog(ATIJFrame owner, ATImage img) {
 		super(owner, "Generate exponential noise", true);
 		this.owner = owner;
-		this.img = img;
-		
+		this.img = new ATImage(img);
+
 		setValue = new JButton("Set density");
 		setValue.addActionListener(this);
 		close = new JButton("Close");
@@ -43,10 +45,10 @@ public class ATIExpDialog extends JDialog implements ActionListener {
 		JPanel p = new JPanel();
 		p.add(new JLabel("Density"));
 		p.add(d);
-		
+
 		p.add(new JLabel("lambda"));
 		p.add(l);
-		
+
 		p.add(setValue);
 		p.add(close);
 		centralPanel.add(p);
@@ -79,8 +81,12 @@ public class ATIExpDialog extends JDialog implements ActionListener {
 	private void handleSetValue() {
 		int value = Integer.valueOf(d.getText());
 		double lambda = Double.valueOf(l.getText());
-		BufferedImage image = ImageUtils.multiplicativeExponentialNoise(img, lambda, value);
-		owner.addImage(image);
+
+		img.applyFunction(new ExponentialNoise(lambda), value);
+
+		// BufferedImage image = ImageUtils.multiplicativeExponentialNoise(img,
+		// lambda, value);
+		owner.addImage(img);
 		handleClose();
 	}
 

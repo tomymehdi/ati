@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import edu.it.itba.enums.Side;
+import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.utils.ImageUtils;
 
@@ -71,9 +72,10 @@ public class ATIUmbralDialog extends JDialog implements ActionListener {
 
 		int umbralToApply = Integer.parseInt(umbral.getText());
 
-		BufferedImage img = ImageUtils.applyUmbral(
-				parent.getPanels()[side.getValue()].getImage(), umbralToApply);
-		parent.addImage(img);
-	}
+		ATImage image = new ATImage(
+				parent.getPanels()[side.getValue()].getImage());
 
+		image.applyFunction(new UmbralizeImage(umbralToApply), null);
+		parent.addImage(image);
+	}
 }
