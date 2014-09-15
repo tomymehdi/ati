@@ -60,7 +60,7 @@ public class LinearTransform implements Function {
 		// entonces c = 100
 		// y m = (900+100)/(255-0)
 		m = (maxRGB - minRGB) / (max - min);
-		resp = m * value - min;
+		resp = m * value - min * (m);
 
 		return resp;
 	}
