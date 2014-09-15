@@ -3,16 +3,15 @@ package edu.it.itba.models;
 import edu.it.itba.utils.ImageUtils;
 
 public class GaussianWIndow extends Window {
-	
+
 	private double sigma;
-	
+
 	public GaussianWIndow(int size, double sigma) {
-		this.size = size;
+		super(size);
 		this.sigma = sigma;
-		this.window = new double[this.size*this.size];
 		fillWindowValues();
 	}
-	
+
 	@Override
 	public void fillWindowValues() {
 		for (int i = 0; i < size; i++) {

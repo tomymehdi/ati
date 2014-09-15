@@ -4,18 +4,18 @@ import edu.it.itba.enums.Bands;
 import edu.it.itba.interfaces.Function;
 import edu.it.itba.models.ATImage;
 
-public class LinearTransform implements Function {
+public class LogTransformation implements Function {
 
 	private ATImage image;
 	private double min = Double.MAX_VALUE, max = Double.MIN_VALUE;
 
-	public LinearTransform(ATImage image) {
+	public LogTransformation(ATImage image) {
 		this.image = image;
 		calculateMinMax();
 	}
 
 	public double apply(double value, int row, int col, Bands band) {
-		return linearTransform0255(value, min, max);
+		return logTransform0255(value, min, max);
 	}
 
 	private void calculateMinMax() {
@@ -42,26 +42,17 @@ public class LinearTransform implements Function {
 
 	}
 
-	private static double linearTransform0255(double value, double min,
+	private static double logTransform0255(double value, double min,
 			double max) {
-		double resp, m;
+		double resp;
 		double minRGB = 0;
 		double maxRGB = 255;
+		double c;
 
-		// f(x) = m*x + c
-		// f(x) = y = m*x + c;
-		// y = m*x +c
-		// y tiene que estar entre 0 y 255 => c = -min+minRGB => ya el menor
-		// valor coincide con el menor valor RGB.
-		// Ahora hay que calcular m. Me determina como "achatamos"
-		// Esta pendiente es m va a ser (minRGB - min)/ (maxRGB - min)
-		// Ejemplo:
-		// min = -100 max = 900
-		// entonces c = 100
-		// y m = (900+100)/(255-0)
-		m = (maxRGB - minRGB) / (max - min);
-		resp = m * value - min * (m);
+		c = (minRGB + maxRGB)/Math.log((min+1)*(max+1));
+		resp = c * Math.log(value + 1);
 
 		return resp;
 	}
+
 }
