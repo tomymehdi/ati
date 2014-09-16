@@ -146,4 +146,26 @@ public class ATImage {
 		}
 		return null;
 	}
+
+	public double[] avgEachBand() {
+
+		int height = getHeight();
+		int width = getWidth();
+		double resp[] = { 0.0, 0.0, 0.0 };
+
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				resp[0] += R.getValue(j, i);
+				resp[1] += G.getValue(j, i);
+				resp[2] += B.getValue(j, i);
+			}
+		}
+
+		resp[0] = resp[0] / (height * width);
+		resp[1] = resp[1] / (height * width);
+		resp[2] = resp[2] / (height * width);
+
+		return resp;
+	}
+
 }
