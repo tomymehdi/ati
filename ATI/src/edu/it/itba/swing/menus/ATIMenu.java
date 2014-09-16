@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
@@ -13,11 +12,14 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
 import edu.it.itba.functions.LinearTransform;
+import edu.it.itba.functions.MultiplyBy;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.dialogs.ATIExpDialog;
+import edu.it.itba.swing.dialogs.ATIExpImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussWindowDialog;
@@ -27,8 +29,10 @@ import edu.it.itba.swing.dialogs.ATIMeanWindowDialog;
 import edu.it.itba.swing.dialogs.ATIMediumWindowDialog;
 import edu.it.itba.swing.dialogs.ATIPixelValueDialog;
 import edu.it.itba.swing.dialogs.ATIPixelValueEditDialog;
+import edu.it.itba.swing.dialogs.ATIRayleighImageDialog;
 import edu.it.itba.swing.dialogs.ATIRaylightDialog;
 import edu.it.itba.swing.dialogs.ATISubImageDialog;
+import edu.it.itba.swing.dialogs.SaltAndPepperNoise;
 import edu.it.itba.swing.frames.ATIImageJFrame;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.panels.ATISaltAndPepperDialog;
@@ -337,8 +341,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleImpulsiveSee() {
-		new ATIImpulsiveNoiseDialog(parent, new BufferedImage(100, 100,
-				BufferedImage.TYPE_INT_RGB));
+
+		ATImage img = new ATImage(100, 100, ImageType.RGB);
+
+		img.applyFunction(new SaltAndPepperNoise(), 100);
+		parent.addImage(img);
 	}
 
 	private void handleGaussAppRight() {
@@ -366,17 +373,17 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleRaylightSee() {
-		BufferedImage image = new BufferedImage(100, 100,
-				BufferedImage.TYPE_INT_RGB);
-		WritableRaster rast = image.getRaster();
+
+		ATImage img = new ATImage(100, 100, ImageType.RGB);
+
 		for (int i = 0; i < 100; i++) {
 			for (int j = 0; j < 100; j++) {
-				for (int k = 0; k < 3; k++) {
-					rast.setSample(i, j, k, 1);
-				}
+				img.R.set(i, j, 1);
+				img.G.set(i, j, 1);
+				img.B.set(i, j, 1);
 			}
 		}
-		new ATIRaylightDialog(parent, image);
+		new ATIRayleighImageDialog(parent, img);
 	}
 
 	private void handleExpAppRight() {
@@ -390,17 +397,17 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleExpSee() {
-		BufferedImage image = new BufferedImage(100, 100,
-				BufferedImage.TYPE_INT_RGB);
-		WritableRaster rast = image.getRaster();
+		ATImage img = new ATImage(100, 100, ImageType.RGB);
+
 		for (int i = 0; i < 100; i++) {
 			for (int j = 0; j < 100; j++) {
-				for (int k = 0; k < 3; k++) {
-					rast.setSample(i, j, k, 1);
-				}
+				img.R.set(i, j, 1);
+				img.G.set(i, j, 1);
+				img.B.set(i, j, 1);
 			}
 		}
-		new ATIExpDialog(parent, image);
+
+		new ATIExpImageDialog(parent, img);
 	}
 
 	// Options
@@ -414,8 +421,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleNegImage() {
-
-		// TODO FUNCTION
 
 		ATImage img = new ATImage(parent.getPanels()[0].getImage());
 
@@ -435,12 +440,20 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleSubstractImages() {
-		// TODO RESTA DE IMAGENES
-		//
-		// BufferedImage img = ImageUtils.optImages(
-		// parent.getPanels()[0].getImage(),
-		// parent.getPanels()[1].getImage(), 2);
-		// parent.addImage(img);
+
+		ATImage imgLeft = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+
+		ATImage imgRight = new ATImage(
+				parent.getPanels()[Side.RIGHT.getValue()].getImage());
+
+		imgRight.applyFunction(new MultiplyBy(-1), null);
+
+		imgLeft.applyFunction(new SumImage(imgRight), null);
+		imgLeft.applyFunction(new LinearTransform(imgLeft), null);
+		parent.addImage(imgLeft);
+
+		
 	}
 
 	// Edit
