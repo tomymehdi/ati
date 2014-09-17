@@ -75,7 +75,7 @@ public class ATIUmbralDialog extends JDialog implements ActionListener {
 		ATImage image = new ATImage(
 				parent.getPanels()[side.getValue()].getImage());
 
-		image.applyFunction(new UmbralizeImage(umbralToApply), null);
+		image.applyFunction(new UmbralizeImage(umbralToApply), 100);
 		parent.addImage(image);
 	}
 }

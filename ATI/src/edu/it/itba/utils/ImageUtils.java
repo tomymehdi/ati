@@ -80,7 +80,7 @@ public class ImageUtils {
 		return image;
 	}
 
-	public static BufferedImage grayScale() {
+	public static ATImage grayScale() {
 		BufferedImage image = new BufferedImage(512, 512,
 				BufferedImage.TYPE_BYTE_GRAY);
 
@@ -90,7 +90,7 @@ public class ImageUtils {
 				raster.setSample(col, row, 0, col / 2);
 			}
 		}
-		return image;
+		return new ATImage(image, ImageType.GRAYSCALE);
 	}
 
 	public static BufferedImage getSubImage(BufferedImage image, int x, int y,
@@ -102,7 +102,7 @@ public class ImageUtils {
 		image.getRaster().setPixel(x, y, s);
 	}
 
-	public static BufferedImage colorScale() {
+	public static ATImage colorScale() {
 		BufferedImage image = new BufferedImage(512, 512,
 				BufferedImage.TYPE_INT_RGB);
 		int i = 0;
@@ -113,7 +113,8 @@ public class ImageUtils {
 				i++;
 			}
 		}
-		return image;
+		
+		return new ATImage(image, ImageType.RGB);
 	}
 
 	public static Color hsvToRgb(float hue, float saturation, float value) {
@@ -149,7 +150,7 @@ public class ImageUtils {
 		return new Color(hsv[0], hsv[1], hsv[2]);
 	}
 
-	public static BufferedImage blankSquare() {
+	public static ATImage blankSquare() {
 		BufferedImage image = new BufferedImage(512, 512,
 				BufferedImage.TYPE_BYTE_GRAY);
 
@@ -163,7 +164,7 @@ public class ImageUtils {
 				}
 			}
 		}
-		return image;
+		return new ATImage(image, ImageType.GRAYSCALE);
 	}
 
 	/*
@@ -172,7 +173,7 @@ public class ImageUtils {
 	 * First paint if full black and draw the blank circle and paint the
 	 * interior.
 	 */
-	public static BufferedImage blankCircle() {
+	public static ATImage blankCircle() {
 		BufferedImage image = new BufferedImage(512, 512,
 				BufferedImage.TYPE_BYTE_GRAY);
 
@@ -207,7 +208,7 @@ public class ImageUtils {
 				radiusError += 2 * (y - x + 1);
 			}
 		}
-		return image;
+		return new ATImage(image, ImageType.GRAYSCALE);
 	}
 
 	/*
@@ -312,7 +313,7 @@ public class ImageUtils {
 			return null;
 
 		ATImage resp = new ATImage(im1);
-		resp.applyFunction(new SumImage(im2), null);
+		resp.applyFunction(new SumImage(im2), 100);
 
 		resp.applyFunction(new LinearTransform(resp), 100);
 

@@ -41,10 +41,11 @@ public class ATImage {
 		Raster raster = image.getRaster();
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
-
-				R.set(row, col, raster.getSample(row, col, 0));
-				G.set(row, col, raster.getSample(row, col, 0));
-				B.set(row, col, raster.getSample(row, col, 0));
+				R.set(row, col, raster.getSample(col, row, 0));
+				if(ImageType.RGB == type) {
+					G.set(row, col, raster.getSample(col, row, 1));
+					B.set(row, col, raster.getSample(col, row, 2));
+				}
 			}
 		}
 	}
@@ -71,8 +72,10 @@ public class ATImage {
 		List<Pixel> positions = getPixels(density);
 		
 		applyFunctionR(function, positions);
-		applyFunctionG(function, positions);
-		applyFunctionB(function, positions);
+		if(ImageType.RGB == type) {
+			applyFunctionG(function, positions);
+			applyFunctionB(function, positions);
+		}
 	}
 
 	private List<Pixel> getPixels(double density) {
@@ -133,10 +136,11 @@ public class ATImage {
 		WritableRaster raster = resp.getRaster();
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
-
-				raster.setSample(row, col, 0, R.getValue(row, col));
-				raster.setSample(row, col, 1, G.getValue(row, col));
-				raster.setSample(row, col, 2, B.getValue(row, col));
+				raster.setSample(col, row, 0, R.getValue(row, col));
+				if(ImageType.RGB == type) {
+					raster.setSample(col, row, 1, G.getValue(row, col));
+					raster.setSample(col, row, 2, B.getValue(row, col));
+				}
 			}
 		}
 

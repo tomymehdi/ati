@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.utils.ImageUtils;
@@ -88,7 +89,8 @@ public class ATIGaussNoiseDialog extends JDialog implements ActionListener {
 		double sigma = Double.valueOf(s.getText());
 
 		img.applyFunction(new GaussNoise(mu, sigma), value);
-
+		
+		img.applyFunction(new LinearTransform(img), 100);
 		owner.addImage(img);
 		handleClose();
 	}

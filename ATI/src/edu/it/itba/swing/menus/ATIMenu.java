@@ -374,13 +374,13 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private void handleRaylightSee() {
 
-		ATImage img = new ATImage(100, 100, ImageType.RGB);
+		ATImage img = new ATImage(100, 100, ImageType.GRAYSCALE);
 
 		for (int i = 0; i < 100; i++) {
 			for (int j = 0; j < 100; j++) {
 				img.R.set(i, j, 1);
-				img.G.set(i, j, 1);
-				img.B.set(i, j, 1);
+				//img.G.set(i, j, 1);
+				//img.B.set(i, j, 1);
 			}
 		}
 		new ATIRayleighImageDialog(parent, img);
@@ -397,13 +397,13 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleExpSee() {
-		ATImage img = new ATImage(100, 100, ImageType.RGB);
+		ATImage img = new ATImage(100, 100, ImageType.GRAYSCALE);
 
 		for (int i = 0; i < 100; i++) {
 			for (int j = 0; j < 100; j++) {
 				img.R.set(i, j, 1);
-				img.G.set(i, j, 1);
-				img.B.set(i, j, 1);
+				//img.G.set(i, j, 1);
+				//img.B.set(i, j, 1);
 			}
 		}
 
@@ -424,7 +424,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		ATImage img = new ATImage(parent.getPanels()[0].getImage());
 
-		img.applyFunction(new Negative(), null);
+		img.applyFunction(new Negative(), 100);
 		parent.addImage(img);
 	}
 
@@ -434,8 +434,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		ATImage imageR = new ATImage(
 				parent.getPanels()[Side.RIGHT.getValue()].getImage());
 		ATImage sum = new ATImage(imageL);
-		sum.applyFunction(new SumImage(imageR), null);
-		sum.applyFunction(new LinearTransform(sum), null);
+		sum.applyFunction(new SumImage(imageR), 100);
+		sum.applyFunction(new LinearTransform(sum), 100);
 		parent.addImage(sum);
 	}
 
@@ -447,10 +447,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		ATImage imgRight = new ATImage(
 				parent.getPanels()[Side.RIGHT.getValue()].getImage());
 
-		imgRight.applyFunction(new MultiplyBy(-1), null);
+		imgRight.applyFunction(new MultiplyBy(-1), 100);
 
-		imgLeft.applyFunction(new SumImage(imgRight), null);
-		imgLeft.applyFunction(new LinearTransform(imgLeft), null);
+		imgLeft.applyFunction(new SumImage(imgRight), 100);
+		imgLeft.applyFunction(new LinearTransform(imgLeft), 100);
 		parent.addImage(imgLeft);
 
 		
@@ -486,22 +486,22 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// New
 	private void handleColorScale() {
-		BufferedImage img = ImageUtils.colorScale();
+		ATImage img = ImageUtils.colorScale();
 		parent.addImage(img);
 	}
 
 	private void handleGrayScale() {
-		BufferedImage img = ImageUtils.grayScale();
+		ATImage img = ImageUtils.grayScale();
 		parent.addImage(img);
 	}
 
 	private void handleBlankSquare() {
-		BufferedImage img = ImageUtils.blankSquare();
+		ATImage img = ImageUtils.blankSquare();
 		parent.addImage(img);
 	}
 
 	private void handleBlankCircle() {
-		BufferedImage img = ImageUtils.blankCircle();
+		ATImage img = ImageUtils.blankCircle();
 		parent.addImage(img);
 	}
 
@@ -510,8 +510,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				+ "/resources/images/fractal.raw";
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
-					256, 256));
-			parent.addImage(new ATImage(img));
+					200, 200));
+			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -522,8 +522,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				+ "/resources/images/barco.raw";
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
-					256, 256));
-			parent.addImage(img);
+					290, 207));
+			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -535,7 +535,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
 					256, 256));
-			parent.addImage(img);
+			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -547,7 +547,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
 					256, 256));
-			parent.addImage(img);
+			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -559,7 +559,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
 					256, 256));
-			parent.addImage(img);
+			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
