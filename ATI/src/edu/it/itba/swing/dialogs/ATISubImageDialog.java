@@ -94,7 +94,7 @@ public class ATISubImageDialog extends JDialog implements ActionListener {
 		ATImage img = new ATImage(width, height, ImageType.RGB);
 
 		img.applyFunction(new SubImage(owner.getPanels()[0].getImage(), x, y),
-				null);
+				100);
 
 		double avgs[] = img.avgEachBand();
 

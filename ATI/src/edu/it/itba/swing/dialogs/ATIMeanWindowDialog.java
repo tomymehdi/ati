@@ -79,8 +79,8 @@ public class ATIMeanWindowDialog extends JDialog implements ActionListener {
 		int size = Integer.valueOf(s.getText());
 
 		img.applyFunction(new PassAdditiveWindow(img, new MeanWindow(size)),
-				null);
-		img.applyFunction(new LinearTransform(img), null);
+				100);
+		img.applyFunction(new LinearTransform(img), 100);
 		owner.addImage(img);
 
 		handleClose();

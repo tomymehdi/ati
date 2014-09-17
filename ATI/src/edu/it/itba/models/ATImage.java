@@ -3,6 +3,9 @@ package edu.it.itba.models;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import edu.it.itba.enums.Bands;
 import edu.it.itba.enums.ImageType;
@@ -64,42 +67,54 @@ public class ATImage {
 		}
 	}
 
-	public void applyFunction(Function function, Integer density) {
-		applyFunctionR(function, density);
-		applyFunctionG(function, density);
-		applyFunctionB(function, density);
+	public void applyFunction(Function function, double density) {
+		List<Pixel> positions = getPixels(density);
+		
+		applyFunctionR(function, positions);
+		applyFunctionG(function, positions);
+		applyFunctionB(function, positions);
 	}
 
-	private void applyFunctionR(Function function, Integer density) {
-		if (density == null) {
-			density = 100;
-		}
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
-				R.apply(function, row, col);
+	private List<Pixel> getPixels(double density) {
+		double value = density/100;
+		int amountPixels = (int) (value * rows * cols);
+		
+		List<Pixel> pixels = new ArrayList<Pixel>();
+		List<Pixel> positions = new ArrayList<Pixel>();
+		
+		for(int i = 0 ; i < rows ; i++){
+			for(int j = 0 ; j < cols ; j++) {
+				positions.add(new Pixel(i,j));
 			}
+		}
+		if(density == 100) {
+			return positions;
+		}
+		
+		Collections.shuffle(positions);
+		
+		for(int i = 0 ; i < amountPixels ; i++ ){
+			pixels.add(positions.get(i));
+		}
+		
+		return pixels;
+	}
+
+	private void applyFunctionR(Function function, List<Pixel> positions) {
+		for(Pixel pos: positions){
+			R.apply(function, pos.row, pos.col);
 		}
 	}
 
-	private void applyFunctionG(Function function, Integer density) {
-		if (density == null) {
-			density = 100;
-		}
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
-				G.apply(function, row, col);
-			}
+	private void applyFunctionG(Function function, List<Pixel> positions) {
+		for(Pixel pos: positions){
+			G.apply(function, pos.row, pos.col);
 		}
 	}
 
-	private void applyFunctionB(Function function, Integer density) {
-		if (density == null) {
-			density = 100;
-		}
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
-				B.apply(function, row, col);
-			}
+	private void applyFunctionB(Function function, List<Pixel> positions) {
+		for(Pixel pos: positions){
+			B.apply(function, pos.row, pos.col);
 		}
 	}
 

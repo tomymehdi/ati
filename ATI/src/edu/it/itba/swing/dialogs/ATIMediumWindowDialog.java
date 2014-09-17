@@ -80,8 +80,8 @@ public class ATIMediumWindowDialog extends JDialog implements ActionListener {
 	private void handleSetValue() {
 		int size = Integer.valueOf(s.getText());
 
-		img.applyFunction(new PassMultWindow(img, new MediumWindow(size)), null);
-		img.applyFunction(new LinearTransform(img), null);
+		img.applyFunction(new PassMultWindow(img, new MediumWindow(size)), 100);
+		img.applyFunction(new LinearTransform(img), 100);
 		owner.addImage(img);
 
 		
