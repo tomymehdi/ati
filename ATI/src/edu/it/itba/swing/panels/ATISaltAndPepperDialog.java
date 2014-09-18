@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -13,12 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import edu.it.itba.enums.Side;
+import edu.it.itba.models.ATImage;
+import edu.it.itba.swing.dialogs.SaltAndPepperNoise;
 import edu.it.itba.swing.interfaces.ATIJFrame;
-import edu.it.itba.utils.ImageUtils;
 
-public class ATISaltAndPepperDialog extends JDialog implements ActionListener{
+@SuppressWarnings("serial")
+public class ATISaltAndPepperDialog extends JDialog implements ActionListener {
 
-	
 	ATIJFrame parent;
 	JButton applyNoise;
 	JTextField density;
@@ -72,8 +72,11 @@ public class ATISaltAndPepperDialog extends JDialog implements ActionListener{
 
 		int densityToApply = Integer.parseInt(density.getText());
 
-		BufferedImage img = ImageUtils.saltAndPepperNoise(
-				parent.getPanels()[side.getValue()].getImage(), densityToApply);
+		ATImage img = new ATImage(
+				parent.getPanels()[side.getValue()].getImage());
+
+		img.applyFunction(new SaltAndPepperNoise(), densityToApply);
+
 		parent.addImage(img);
 	}
 }

@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -13,9 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import edu.it.itba.enums.Side;
+import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
-import edu.it.itba.utils.ImageUtils;
 
+@SuppressWarnings("serial")
 public class ATIUmbralDialog extends JDialog implements ActionListener {
 
 	ATIJFrame parent;
@@ -71,9 +71,10 @@ public class ATIUmbralDialog extends JDialog implements ActionListener {
 
 		int umbralToApply = Integer.parseInt(umbral.getText());
 
-		BufferedImage img = ImageUtils.applyUmbral(
-				parent.getPanels()[side.getValue()].getImage(), umbralToApply);
-		parent.addImage(img);
-	}
+		ATImage image = new ATImage(
+				parent.getPanels()[side.getValue()].getImage());
 
+		image.applyFunction(new UmbralizeImage(umbralToApply), 100);
+		parent.addImage(image);
+	}
 }

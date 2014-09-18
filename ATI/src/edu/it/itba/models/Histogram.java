@@ -16,20 +16,19 @@ import edu.it.itba.swing.interfaces.ATIJPanel;
 public class Histogram extends ATIJPanel {
 
 	protected static final int MIN_BAR_WIDTH = 4;
-	private BufferedImage image;
+	private ATImage image;
 	private Map<Integer, Integer> mapHistory = new HashMap<Integer, Integer>();
 
-	public Histogram(BufferedImage image) {
+	public Histogram(ATImage image) {
 		this.image = image;
 		calculateHistogram();
-		setSize(1200,1800);
-		setPreferredSize(new Dimension(1200,1800));
+		setSize(1200, 1800);
+		setPreferredSize(new Dimension(1200, 1800));
 	}
 
-
 	private void calculateHistogram() {
-		Raster imageRaster = image.getData();
 
+		Band band = image.R;
 		for (int i = 0; i < 255; i++) {
 			mapHistory.put(i, 0);
 		}
@@ -37,17 +36,20 @@ public class Histogram extends ATIJPanel {
 		for (int i = 0; i < image.getHeight(); i++) {
 			for (int j = 0; j < image.getWidth(); j++) {
 
-				int value[] = new int[3];
-
-				imageRaster.getPixel(j, i, value);
+				// int value[] = new int[3];
+				int value = 0;
+				value = (int) band.getValue(i, j);
 				int amount = 0;
-				if (mapHistory.containsKey(value[0])) {
-					amount = mapHistory.get(value[0]);
+				if (mapHistory.containsKey(value)) {
+					amount = mapHistory.get(value);
 					amount++;
 				} else {
 					amount = 1;
 				}
-				mapHistory.put(value[0], amount);
+				if(value >255 || value < 0){
+					System.out.println(value);
+				}
+				mapHistory.put(value, amount);
 			}
 		}
 
@@ -80,7 +82,7 @@ public class Histogram extends ATIJPanel {
 				int value = mapHistory.get(key);
 				int barHeight = Math.round(((float) value / (float) maxValue)
 						* height);
-				g2d.setColor(new Color(key, key, key));
+				//g2d.setColor(new Color(key, key, key));
 				int yPos = height + yOffset - barHeight;
 				// Rectangle bar = new Rectangle(xPos, yPos, barWidth,
 				// barHeight);
@@ -96,7 +98,7 @@ public class Histogram extends ATIJPanel {
 	}
 
 	@Override
-	public BufferedImage getImage() {
+	public ATImage getImage() {
 		return image;
 	}
 }

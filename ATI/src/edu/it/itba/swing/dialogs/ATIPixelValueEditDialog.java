@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -13,8 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import edu.it.itba.enums.Side;
+import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
-
 
 @SuppressWarnings("serial")
 public class ATIPixelValueEditDialog extends JDialog implements ActionListener {
@@ -102,14 +101,21 @@ public class ATIPixelValueEditDialog extends JDialog implements ActionListener {
 
 	private void handleSetValue() {
 
-		BufferedImage image = owner.getPanels()[side.getValue()].getImage();
+		ATImage image = owner.getPanels()[side.getValue()].getImage();
 
 		try {
+			int xValue = Integer.parseInt(x.getText()), yValue = Integer
+					.parseInt(y.getText());
 			value[0] = Integer.parseInt(r.getText());
 			value[1] = Integer.parseInt(g.getText());
 			value[2] = Integer.parseInt(b.getText());
-			image.getRaster().setPixel(Integer.parseInt(x.getText()),
-					Integer.parseInt(y.getText()), value);
+
+			image.R.set(xValue, yValue, value[0]);
+
+			image.G.set(xValue, yValue, value[1]);
+
+			image.B.set(xValue, yValue, value[2]);
+
 			owner.getPanels()[side.getValue()].revalidate();
 			owner.getPanels()[side.getValue()].repaint();
 		} catch (Exception e) {

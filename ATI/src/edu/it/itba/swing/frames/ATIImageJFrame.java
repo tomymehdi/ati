@@ -2,14 +2,13 @@ package edu.it.itba.swing.frames;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.swing.BoxLayout;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.interfaces.ATIJPanel;
 import edu.it.itba.swing.menus.ATIMenu2;
@@ -29,7 +28,7 @@ public class ATIImageJFrame extends ATIJFrame {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setSize(1200, 800);
 		setLayout(new BorderLayout());
-		
+
 		// Create and add menu bar
 		setJMenuBar(new ATIMenu2(this));
 
@@ -59,14 +58,14 @@ public class ATIImageJFrame extends ATIJFrame {
 	}
 
 	@Override
-	public void addImage(BufferedImage img) {
+	public void addImage(ATImage img) {
 		mainPanel.removeAll();
 		image = new ATImageJPanel(img);
 		mainPanel.add(image);
 		image.revalidate();
 		image.repaint();
 	}
-	
+
 	@Override
 	public void loadImage(File file, Dimension dim) {
 		// TODO Auto-generated method stub

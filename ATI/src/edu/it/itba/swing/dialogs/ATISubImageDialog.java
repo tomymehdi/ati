@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -12,8 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.it.itba.enums.ImageType;
+import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
-import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
 public class ATISubImageDialog extends JDialog implements ActionListener {
@@ -60,16 +60,15 @@ public class ATISubImageDialog extends JDialog implements ActionListener {
 
 		p = new JPanel();
 		p.add(getSubImage);
-		
+
 		p.add(data);
-		
+
 		centralPanel.add(p);
 
 		mainPanel.add(centralPanel);
 
 		this.add(mainPanel);
 
-		
 		setPreferredSize(new Dimension(500, 120));
 		setSize(getPreferredSize());
 		setVisible(true);
@@ -90,12 +89,15 @@ public class ATISubImageDialog extends JDialog implements ActionListener {
 		int width = Integer.parseInt(this.width.getText());
 		int height = Integer.parseInt(this.height.getText());
 
-		BufferedImage subImage = ImageUtils.getSubImage(owner.getPanels()[0].getImage(), x, y,
-				width, height);
-		
-		double avgs[] = ImageUtils.avgEachBand(subImage);
-		
-		data.setText("Amount of pixels" + (width * height) + "\n" + "Avg per band: " + avgs[0] + " " + avgs[1] + " " + avgs[1]);
-		owner.addImage(subImage);
+		ATImage img = new ATImage(width, height, ImageType.RGB);
+
+		img.applyFunction(new SubImage(owner.getPanels()[0].getImage(), x, y),
+				100);
+
+		double avgs[] = img.avgEachBand();
+
+		data.setText("Amount of pixels" + (width * height) + "\n"
+				+ "Avg per band: " + avgs[0] + " " + avgs[1] + " " + avgs[1]);
+		owner.addImage(img);
 	}
 }

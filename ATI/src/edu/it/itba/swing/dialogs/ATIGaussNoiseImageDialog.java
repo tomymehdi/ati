@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -18,8 +17,8 @@ import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
-public class ATIGaussNoiseImageDialog extends JDialog implements ActionListener{
-	
+public class ATIGaussNoiseImageDialog extends JDialog implements ActionListener {
+
 	private ATIJFrame owner;
 	private JTextField m;
 	private JTextField s;
@@ -29,7 +28,7 @@ public class ATIGaussNoiseImageDialog extends JDialog implements ActionListener{
 	public ATIGaussNoiseImageDialog(ATIJFrame owner) {
 		super(owner, "Generate noise image", true);
 		this.owner = owner;
-		
+
 		seeImage = new JButton("See Image");
 		seeImage.addActionListener(this);
 		close = new JButton("Close");
@@ -44,10 +43,10 @@ public class ATIGaussNoiseImageDialog extends JDialog implements ActionListener{
 		JPanel p = new JPanel();
 		p.add(new JLabel("Mu"));
 		p.add(m);
-		
+
 		p.add(new JLabel("Sigma"));
 		p.add(s);
-		
+
 		p.add(seeImage);
 		p.add(close);
 		centralPanel.add(p);
@@ -81,9 +80,8 @@ public class ATIGaussNoiseImageDialog extends JDialog implements ActionListener{
 		double mu = Double.valueOf(m.getText());
 		double sigma = Double.valueOf(s.getText());
 		ATImage image = ImageUtils.guassImage(mu, sigma);
-		image.applyFunction(new LinearTransform(image), null);
-		BufferedImage resp = image.getVisual();
-		owner.addImage(resp);
+		image.applyFunction(new LinearTransform(image), 100);
+		owner.addImage(image);
 		handleClose();
 	}
 

@@ -63,7 +63,7 @@ public class ATIMenu2 extends JMenuBar implements ActionListener{
 			String dir = System.getProperty("user.dir");
 			dir += "/tests/results/";
 			File histogram = new File(dir + "H.jpg");
-		    ImageIO.write(parent.getPanels()[0].getImage(), "jpg", histogram);
+		    ImageIO.write(parent.getPanels()[0].getImage().getVisual(), "jpg", histogram);
 		} catch (Exception ex) {
 			
 		}

@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
@@ -16,11 +15,12 @@ import javax.swing.JMenuItem;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
 import edu.it.itba.functions.LinearTransform;
-import edu.it.itba.functions.PassAdditiveWindow;
+import edu.it.itba.functions.MultiplyBy;
+import edu.it.itba.functions.Negative;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
-import edu.it.itba.models.GaussianWIndow;
 import edu.it.itba.swing.dialogs.ATIExpDialog;
+import edu.it.itba.swing.dialogs.ATIExpImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussWindowDialog;
@@ -30,8 +30,10 @@ import edu.it.itba.swing.dialogs.ATIMeanWindowDialog;
 import edu.it.itba.swing.dialogs.ATIMediumWindowDialog;
 import edu.it.itba.swing.dialogs.ATIPixelValueDialog;
 import edu.it.itba.swing.dialogs.ATIPixelValueEditDialog;
+import edu.it.itba.swing.dialogs.ATIRayleighImageDialog;
 import edu.it.itba.swing.dialogs.ATIRaylightDialog;
 import edu.it.itba.swing.dialogs.ATISubImageDialog;
+import edu.it.itba.swing.dialogs.SaltAndPepperNoise;
 import edu.it.itba.swing.frames.ATIImageJFrame;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.panels.ATISaltAndPepperDialog;
@@ -153,8 +155,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		// Noises
 		impulsiveSee = addMenuItemToMenu("See", impulsive, true);
-		impulsiveAppLeft = addMenuItemToMenu("Apply left...", impulsive, true);
-		impulsiveAppRight = addMenuItemToMenu("Apply right...", impulsive, true);
+		impulsiveAppLeft = addMenuItemToMenu("Apply left", impulsive, true);
+		impulsiveAppRight = addMenuItemToMenu("Apply right", impulsive, true);
 
 		gaussSee = addMenuItemToMenu("See", gauss, true);
 		gaussAppLeft = addMenuItemToMenu("Apply left", gauss, true);
@@ -167,9 +169,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		expSee = addMenuItemToMenu("See", exp, true);
 		expAppLeft = addMenuItemToMenu("Apply left", exp, true);
 		expAppRight = addMenuItemToMenu("Apply right", exp, true);
-
-		impulsiveAppLeft = addMenuItemToMenu("Apply left", impulsive, true);
-		impulsiveAppRight = addMenuItemToMenu("Apply right", impulsive, true);
 
 		// Umbrals
 		umbralAppLeft = addMenuItemToMenu("Apply umbral left...", umbrals, true);
@@ -302,22 +301,19 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Windows
 	private void handleMediumWindow() {
-		new ATIMediumWindowDialog(parent, new ATImage(
-				parent.getPanels()[Side.LEFT.getValue()].getImage(),
-				ImageType.RGB));
+		new ATIMediumWindowDialog(parent,
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
 
 	private void handleMeanWindow() {
 
-		new ATIMeanWindowDialog(parent, new ATImage(
-				parent.getPanels()[Side.LEFT.getValue()].getImage(),
-				ImageType.RGB));
+		new ATIMeanWindowDialog(parent,
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
 
 	private void handleGaussWindow() {
-		new ATIGaussWindowDialog(parent, new ATImage(
-				parent.getPanels()[Side.LEFT.getValue()].getImage(),
-				ImageType.RGB));
+		new ATIGaussWindowDialog(parent,
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 
 	}
 
@@ -343,8 +339,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleImpulsiveSee() {
-		new ATIImpulsiveNoiseDialog(parent, new BufferedImage(100, 100,
-				BufferedImage.TYPE_INT_RGB));
+
+		ATImage img = new ATImage(100, 100, ImageType.RGB);
+
+		img.applyFunction(new SaltAndPepperNoise(), 100);
+		parent.addImage(img);
 	}
 
 	private void handleGaussAppRight() {
@@ -372,17 +371,17 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleRaylightSee() {
-		BufferedImage image = new BufferedImage(100, 100,
-				BufferedImage.TYPE_INT_RGB);
-		WritableRaster rast = image.getRaster();
+
+		ATImage img = new ATImage(100, 100, ImageType.GRAYSCALE);
+
 		for (int i = 0; i < 100; i++) {
 			for (int j = 0; j < 100; j++) {
-				for (int k = 0; k < 3; k++) {
-					rast.setSample(i, j, k, 1);
-				}
+				img.R.set(i, j, 1);
+				//img.G.set(i, j, 1);
+				//img.B.set(i, j, 1);
 			}
 		}
-		new ATIRaylightDialog(parent, image);
+		new ATIRayleighImageDialog(parent, img);
 	}
 
 	private void handleExpAppRight() {
@@ -396,17 +395,17 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleExpSee() {
-		BufferedImage image = new BufferedImage(100, 100,
-				BufferedImage.TYPE_INT_RGB);
-		WritableRaster rast = image.getRaster();
+		ATImage img = new ATImage(100, 100, ImageType.GRAYSCALE);
+
 		for (int i = 0; i < 100; i++) {
 			for (int j = 0; j < 100; j++) {
-				for (int k = 0; k < 3; k++) {
-					rast.setSample(i, j, k, 1);
-				}
+				img.R.set(i, j, 1);
+				//img.G.set(i, j, 1);
+				//img.B.set(i, j, 1);
 			}
 		}
-		new ATIExpDialog(parent, image);
+
+		new ATIExpImageDialog(parent, img);
 	}
 
 	// Options
@@ -420,30 +419,39 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleNegImage() {
-		BufferedImage img = ImageUtils.negative(parent.getPanels()[0]
-				.getImage());
+
+		ATImage img = new ATImage(parent.getPanels()[0].getImage());
+
+		img.applyFunction(new Negative(), 100);
 		parent.addImage(img);
 	}
 
 	private void handleSumImages() {
 		ATImage imageL = new ATImage(
-				parent.getPanels()[Side.LEFT.getValue()].getImage(),
-				ImageType.RGB);
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 		ATImage imageR = new ATImage(
-				parent.getPanels()[Side.RIGHT.getValue()].getImage(),
-				ImageType.RGB);
+				parent.getPanels()[Side.RIGHT.getValue()].getImage());
 		ATImage sum = new ATImage(imageL);
-		sum.applyFunction(new SumImage(imageR), null);
-		sum.applyFunction(new LinearTransform(sum), null);
-		BufferedImage img = sum.getVisual();
-		parent.addImage(img);
+		sum.applyFunction(new SumImage(imageR), 100);
+		sum.applyFunction(new LinearTransform(sum), 100);
+		parent.addImage(sum);
 	}
 
 	private void handleSubstractImages() {
-		BufferedImage img = ImageUtils.optImages(
-				parent.getPanels()[0].getImage(),
-				parent.getPanels()[1].getImage(), 2);
-		parent.addImage(img);
+
+		ATImage imgLeft = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+
+		ATImage imgRight = new ATImage(
+				parent.getPanels()[Side.RIGHT.getValue()].getImage());
+
+		imgRight.applyFunction(new MultiplyBy(-1), 100);
+
+		imgLeft.applyFunction(new SumImage(imgRight), 100);
+		imgLeft.applyFunction(new LinearTransform(imgLeft), 100);
+		parent.addImage(imgLeft);
+
+		
 	}
 
 	// Edit
@@ -476,22 +484,22 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// New
 	private void handleColorScale() {
-		BufferedImage img = ImageUtils.colorScale();
+		ATImage img = ImageUtils.colorScale();
 		parent.addImage(img);
 	}
 
 	private void handleGrayScale() {
-		BufferedImage img = ImageUtils.grayScale();
+		ATImage img = ImageUtils.grayScale();
 		parent.addImage(img);
 	}
 
 	private void handleBlankSquare() {
-		BufferedImage img = ImageUtils.blankSquare();
+		ATImage img = ImageUtils.blankSquare();
 		parent.addImage(img);
 	}
 
 	private void handleBlankCircle() {
-		BufferedImage img = ImageUtils.blankCircle();
+		ATImage img = ImageUtils.blankCircle();
 		parent.addImage(img);
 	}
 
@@ -500,8 +508,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				+ "/resources/images/fractal.raw";
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
-					256, 256));
-			parent.addImage(img);
+					200, 200));
+			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -512,8 +520,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				+ "/resources/images/barco.raw";
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
-					256, 256));
-			parent.addImage(img);
+					290, 207));
+			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -525,7 +533,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
 					256, 256));
-			parent.addImage(img);
+			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -537,7 +545,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
 					256, 256));
-			parent.addImage(img);
+			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -549,7 +557,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
 					256, 256));
-			parent.addImage(img);
+			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -566,8 +574,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 			dir += "/tests/results/";
 			File left = new File(dir + "L.jpg");
 			File right = new File(dir + "R.jpg");
-			ImageIO.write(parent.getPanels()[0].getImage(), "jpg", left);
-			ImageIO.write(parent.getPanels()[1].getImage(), "jpg", right);
+			ImageIO.write(parent.getPanels()[0].getImage().getVisual(), "jpg",
+					left);
+			ImageIO.write(parent.getPanels()[1].getImage().getVisual(), "jpg",
+					right);
 		} catch (Exception ex) {
 
 		}

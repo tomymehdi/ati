@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -12,8 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.it.itba.functions.LinearTransform;
+import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
-import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
 public class ATIGaussNoiseDialog extends JDialog implements ActionListener {
@@ -23,13 +23,13 @@ public class ATIGaussNoiseDialog extends JDialog implements ActionListener {
 	private JTextField s;
 	private JButton setValue;
 	private JButton close;
-	private BufferedImage img;
+	private ATImage img;
 
-	public ATIGaussNoiseDialog(ATIJFrame owner, BufferedImage img) {
+	public ATIGaussNoiseDialog(ATIJFrame owner, ATImage img) {
 		super(owner, "Generate gaussian noise", true);
 		this.owner = owner;
-		this.img = img;
-		
+		this.img = new ATImage(img);
+
 		setValue = new JButton("Set density");
 		setValue.addActionListener(this);
 		close = new JButton("Close");
@@ -45,13 +45,13 @@ public class ATIGaussNoiseDialog extends JDialog implements ActionListener {
 		JPanel p = new JPanel();
 		p.add(new JLabel("Density"));
 		p.add(d);
-		
+
 		p.add(new JLabel("Mu"));
 		p.add(m);
-		
+
 		p.add(new JLabel("Sigma"));
 		p.add(s);
-		
+
 		p.add(setValue);
 		p.add(close);
 		centralPanel.add(p);
@@ -85,8 +85,11 @@ public class ATIGaussNoiseDialog extends JDialog implements ActionListener {
 		int value = Integer.valueOf(d.getText());
 		double mu = Double.valueOf(m.getText());
 		double sigma = Double.valueOf(s.getText());
-		BufferedImage image = ImageUtils.additiveGaussinianNoise(img, mu, sigma, value);
-		owner.addImage(image);
+
+		img.applyFunction(new GaussNoise(mu, sigma), value);
+		
+		img.applyFunction(new LinearTransform(img), 100);
+		owner.addImage(img);
 		handleClose();
 	}
 }
