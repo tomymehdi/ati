@@ -15,7 +15,6 @@ import javax.swing.JMenuItem;
 import edu.it.itba.enums.Compressions;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
-import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.functions.MultiplyBy;
 import edu.it.itba.functions.Negative;
 import edu.it.itba.functions.SumImage;
@@ -30,6 +29,7 @@ import edu.it.itba.swing.dialogs.ATIImpulsiveNoiseDialog;
 import edu.it.itba.swing.dialogs.ATILoadImageDialog;
 import edu.it.itba.swing.dialogs.ATIMeanWindowDialog;
 import edu.it.itba.swing.dialogs.ATIMediumWindowDialog;
+import edu.it.itba.swing.dialogs.ATIMultiplyScalarDialog;
 import edu.it.itba.swing.dialogs.ATIPixelValueDialog;
 import edu.it.itba.swing.dialogs.ATIPixelValueEditDialog;
 import edu.it.itba.swing.dialogs.ATIRayleighImageDialog;
@@ -68,6 +68,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem modifyPixelValueLeft;
 	private JMenuItem modifyPixelValueRight;
 
+	private JMenuItem multplyByScalar;
 	private JMenuItem subImage;
 	private JMenuItem sumImages;
 	private JMenuItem substractImages;
@@ -154,12 +155,13 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		modifyPixelValueRight = addMenuItemToMenu("Pixel right...", edit, true);
 
 		// Operation
+		multplyByScalar = addMenuItemToMenu("Multiply by scalar", operation, true);
 		subImage = addMenuItemToMenu("Sub Image...", operation, true);
 		sumImages = addMenuItemToMenu("Sum Images", operation, true);
 		substractImages = addMenuItemToMenu("Substract Images", operation, true);
 		negImage = addMenuItemToMenu("Negative Image", operation, true);
 		applyContrastLeft = addMenuItemToMenu("Apply Contrast left image ...", operation, true);
-		applyContrastRight=addMenuItemToMenu("Apply Contrast right image ...", operation,true);
+		applyContrastRight = addMenuItemToMenu("Apply Contrast right image ...", operation,true);
 
 		// Noises
 		impulsiveSee = addMenuItemToMenu("See", impulsive, true);
@@ -312,14 +314,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleLinealCompression();
 			else if (source == dynamicCompression)
 				handleDynamicCompression();
+			else if (source == multplyByScalar)
+				handleMultiplyByScalar();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	private void handleApplyContrast(Side side) {
-
-		new ATIContrastDialog(parent, side);
 	}
 
 	// Windows
@@ -445,6 +444,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	// Operation
+	private void handleMultiplyByScalar() {
+		new ATIMultiplyScalarDialog(parent, parent.getPanels()[Side.LEFT.getValue()].getImage());
+	}
+
+	private void handleApplyContrast(Side side) {
+		new ATIContrastDialog(parent, side);
+	}
+	
 	private void handleSubImage() {
 		new ATISubImageDialog(parent);
 	}

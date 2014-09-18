@@ -17,6 +17,7 @@ import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 
+@SuppressWarnings("serial")
 public class ATIContrastDialog extends JDialog implements ActionListener {
 
 	private ATIJFrame owner;
