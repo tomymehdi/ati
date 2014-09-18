@@ -80,7 +80,7 @@ public class ATIGaussNoiseImageDialog extends JDialog implements ActionListener 
 		double mu = Double.valueOf(m.getText());
 		double sigma = Double.valueOf(s.getText());
 		ATImage image = ImageUtils.guassImage(mu, sigma);
-		image.applyFunction(new LinearTransform(image), 100);
+		owner.applyTransform(image);
 		owner.addImage(image);
 		handleClose();
 	}

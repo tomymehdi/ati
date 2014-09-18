@@ -12,6 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import edu.it.itba.enums.Compressions;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
 import edu.it.itba.functions.LinearTransform;
@@ -97,6 +98,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem meanWindow;
 	private JMenuItem mediumWindow;
 
+	private JMenuItem linealCompression;
+	private JMenuItem dynamicCompression;
 	private JMenuItem clear;
 
 	public ATIMenu(ATIJFrame parent) {
@@ -189,6 +192,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				true);
 
 		// Options
+		linealCompression = addMenuItemToMenu("Linear compression", options, true);
+		dynamicCompression = addMenuItemToMenu("Dynamic compression", options, true);
 		clear = addMenuItemToMenu("Clear", options, true);
 
 		addToMenu(file);
@@ -303,6 +308,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleApplyContrast(Side.LEFT);
 			else if (source == applyContrastRight)
 				handleApplyContrast(Side.RIGHT);
+			else if (source == linealCompression)
+				handleLinealCompression();
+			else if (source == dynamicCompression)
+				handleDynamicCompression();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -423,6 +432,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	// Options
+	private void handleLinealCompression() {
+		parent.compression = Compressions.LC;
+	}
+	
+	private void handleDynamicCompression() {
+		parent.compression = Compressions.DC;
+	}
+	
 	private void handleClear() {
 		parent.clear();
 	}
@@ -447,7 +464,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				parent.getPanels()[Side.RIGHT.getValue()].getImage());
 		ATImage sum = new ATImage(imageL);
 		sum.applyFunction(new SumImage(imageR), 100);
-		sum.applyFunction(new LinearTransform(sum), 100);
+		parent.applyTransform(sum);
 		parent.addImage(sum);
 	}
 
@@ -462,7 +479,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		imgRight.applyFunction(new MultiplyBy(-1), 100);
 
 		imgLeft.applyFunction(new SumImage(imgRight), 100);
-		imgLeft.applyFunction(new LinearTransform(imgLeft), 100);
+		parent.applyTransform(imgLeft);
 		parent.addImage(imgLeft);
 
 	}
