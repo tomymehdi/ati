@@ -19,6 +19,7 @@ import edu.it.itba.functions.MultiplyBy;
 import edu.it.itba.functions.Negative;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
+import edu.it.itba.swing.dialogs.ATIContrastDialog;
 import edu.it.itba.swing.dialogs.ATIExpDialog;
 import edu.it.itba.swing.dialogs.ATIExpImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
@@ -70,6 +71,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem sumImages;
 	private JMenuItem substractImages;
 	private JMenuItem negImage;
+	private JMenuItem applyContrastLeft;
+	private JMenuItem applyContrastRight;
 
 	private JMenuItem impulsiveSee;
 	private JMenuItem impulsiveAppLeft;
@@ -152,6 +155,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		sumImages = addMenuItemToMenu("Sum Images", operation, true);
 		substractImages = addMenuItemToMenu("Substract Images", operation, true);
 		negImage = addMenuItemToMenu("Negative Image", operation, true);
+		applyContrastLeft = addMenuItemToMenu("Apply Contrast left image ...", operation, true);
+		applyContrastRight=addMenuItemToMenu("Apply Contrast right image ...", operation,true);
 
 		// Noises
 		impulsiveSee = addMenuItemToMenu("See", impulsive, true);
@@ -294,9 +299,18 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleMeanWindow();
 			else if (source == mediumWindow)
 				handleMediumWindow();
+			else if (source == applyContrastLeft)
+				handleApplyContrast(Side.LEFT);
+			else if (source == applyContrastRight)
+				handleApplyContrast(Side.RIGHT);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void handleApplyContrast(Side side) {
+
+		new ATIContrastDialog(parent, side);
 	}
 
 	// Windows
@@ -377,8 +391,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		for (int i = 0; i < 100; i++) {
 			for (int j = 0; j < 100; j++) {
 				img.R.set(i, j, 1);
-				//img.G.set(i, j, 1);
-				//img.B.set(i, j, 1);
+				// img.G.set(i, j, 1);
+				// img.B.set(i, j, 1);
 			}
 		}
 		new ATIRayleighImageDialog(parent, img);
@@ -400,8 +414,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		for (int i = 0; i < 100; i++) {
 			for (int j = 0; j < 100; j++) {
 				img.R.set(i, j, 1);
-				//img.G.set(i, j, 1);
-				//img.B.set(i, j, 1);
+				// img.G.set(i, j, 1);
+				// img.B.set(i, j, 1);
 			}
 		}
 
@@ -451,7 +465,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		imgLeft.applyFunction(new LinearTransform(imgLeft), 100);
 		parent.addImage(imgLeft);
 
-		
 	}
 
 	// Edit
