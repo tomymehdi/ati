@@ -28,7 +28,7 @@ public class ATIMediumWindowDialog extends JDialog implements ActionListener {
 	public ATIMediumWindowDialog(ATIJFrame owner, ATImage img) {
 		super(owner, "Window size", true);
 		this.owner = owner;
-		this.img = img;
+		this.img = new ATImage(img);
 
 		setValue = new JButton("Set size");
 		setValue.addActionListener(this);
@@ -77,7 +77,7 @@ public class ATIMediumWindowDialog extends JDialog implements ActionListener {
 		int size = Integer.valueOf(s.getText());
 
 		img.applyFunction(new PassMultWindow(img, new MediumWindow(size)), 100);
-		img.applyFunction(new LinearTransform(img), 100);
+		owner.applyTransform(img);
 		owner.addImage(img);
 
 		

@@ -84,7 +84,7 @@ public class ATIGaussWindowDialog extends JDialog implements ActionListener {
 
 		img.applyFunction(new PassAdditiveWindow(img, new GaussianWIndow(
 				windowSize, gaussSigma)), 100);
-		img.applyFunction(new LinearTransform(img), 100);
+		owner.applyTransform(img);
 		owner.addImage(img);
 
 		handleClose();

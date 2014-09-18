@@ -8,6 +8,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import edu.it.itba.enums.Compressions;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
