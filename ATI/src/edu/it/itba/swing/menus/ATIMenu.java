@@ -16,6 +16,7 @@ import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
 import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.functions.MultiplyBy;
+import edu.it.itba.functions.Negative;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.dialogs.ATIExpDialog;
@@ -154,8 +155,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		// Noises
 		impulsiveSee = addMenuItemToMenu("See", impulsive, true);
-		impulsiveAppLeft = addMenuItemToMenu("Apply left...", impulsive, true);
-		impulsiveAppRight = addMenuItemToMenu("Apply right...", impulsive, true);
+		impulsiveAppLeft = addMenuItemToMenu("Apply left", impulsive, true);
+		impulsiveAppRight = addMenuItemToMenu("Apply right", impulsive, true);
 
 		gaussSee = addMenuItemToMenu("See", gauss, true);
 		gaussAppLeft = addMenuItemToMenu("Apply left", gauss, true);
@@ -168,9 +169,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		expSee = addMenuItemToMenu("See", exp, true);
 		expAppLeft = addMenuItemToMenu("Apply left", exp, true);
 		expAppRight = addMenuItemToMenu("Apply right", exp, true);
-
-		impulsiveAppLeft = addMenuItemToMenu("Apply left", impulsive, true);
-		impulsiveAppRight = addMenuItemToMenu("Apply right", impulsive, true);
 
 		// Umbrals
 		umbralAppLeft = addMenuItemToMenu("Apply umbral left...", umbrals, true);

@@ -25,7 +25,7 @@ public class Band {
 	}
 	
 	public double getValue(int row, int col) {
-		if(row < 0 || col < 0 || row > rows || col > cols) {
+		if(row < 0 || col < 0 || row >= rows || col >= cols) {
 			return 0;
 		}
 		return matrix[row][col];

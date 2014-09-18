@@ -27,13 +27,7 @@ public class PassAdditiveWindow implements Function {
 
 		for (int i = rowStart, z = 0; i <= rowEnd; i++, z++) {
 			for (int j = colStart, k = 0; j <= colEnd; j++, k++) {
-				try {
-					currPixel = clone.getBand(band).getValue(i, j);
-				} catch (ArrayIndexOutOfBoundsException e) {
-					currPixel = 0;
-
-				}
-
+				currPixel = clone.getBand(band).getValue(i, j);
 				resp += currPixel * window.window[z * window.size + k];
 			}
 		}

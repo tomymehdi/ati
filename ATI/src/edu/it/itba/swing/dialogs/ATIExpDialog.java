@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -14,7 +13,6 @@ import javax.swing.JTextField;
 
 import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
-import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
 public class ATIExpDialog extends JDialog implements ActionListener {

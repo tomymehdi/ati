@@ -1,4 +1,4 @@
-package edu.it.itba.swing.menus;
+package edu.it.itba.functions;
 
 import edu.it.itba.enums.Bands;
 import edu.it.itba.interfaces.Function;

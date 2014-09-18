@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 
+@SuppressWarnings("serial")
 public class ATIExpImageDialog extends JDialog implements ActionListener {
 
 	private ATIJFrame owner;

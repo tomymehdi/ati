@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -18,6 +17,7 @@ import edu.it.itba.models.ATImage;
 import edu.it.itba.models.GaussianWIndow;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 
+@SuppressWarnings("serial")
 public class ATIGaussWindowDialog extends JDialog implements ActionListener {
 	private ATIJFrame owner;
 	private JTextField size;
@@ -29,7 +29,7 @@ public class ATIGaussWindowDialog extends JDialog implements ActionListener {
 	public ATIGaussWindowDialog(ATIJFrame owner, ATImage img) {
 		super(owner, "Gauss Window", true);
 		this.owner = owner;
-		this.img = img;
+		this.img = new ATImage(img);
 
 		setValue = new JButton("Apply window");
 		setValue.addActionListener(this);

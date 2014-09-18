@@ -1,7 +1,6 @@
 package edu.it.itba.swing.frames;
 
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
