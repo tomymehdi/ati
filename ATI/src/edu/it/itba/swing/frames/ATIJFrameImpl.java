@@ -1,6 +1,7 @@
 package edu.it.itba.swing.frames;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -76,7 +77,20 @@ public class ATIJFrameImpl extends ATIJFrame {
 	@Override
 	public void loadImage(File file, Dimension dim) {
 		try {
-			addImage(new ATImage(ImageUtils.load(file, dim), ImageType.RGB));
+
+			BufferedImage image = ImageUtils.load(file, dim);
+
+			ImageType type = ImageType.GRAYSCALE;
+
+			switch (image.getType()) {
+			case BufferedImage.TYPE_INT_RGB:
+				type = ImageType.RGB;
+				break;
+			case BufferedImage.TYPE_BYTE_GRAY:
+				type = ImageType.GRAYSCALE;
+			}
+
+			addImage(new ATImage(image, type));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

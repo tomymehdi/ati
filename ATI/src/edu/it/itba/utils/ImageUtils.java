@@ -77,6 +77,7 @@ public class ImageUtils {
 				image.setRGB(i, j, ret.getRGB(i, j));
 			}
 		}
+
 		return image;
 	}
 
@@ -113,7 +114,7 @@ public class ImageUtils {
 				i++;
 			}
 		}
-		
+
 		return new ATImage(image, ImageType.RGB);
 	}
 
@@ -628,7 +629,7 @@ public class ImageUtils {
 
 	/* Devuelve una imagen de 100 X 100 con ruido gaussiano */
 	public static ATImage guassImage(double mu, double sigma) {
-		ATImage retImage = new ATImage(100,100,ImageType.GRAYSCALE);
+		ATImage retImage = new ATImage(100, 100, ImageType.GRAYSCALE);
 
 		for (int row = 0; row < retImage.getHeight(); row++) {
 			for (int col = 0; col < retImage.getWidth(); col++) {

@@ -362,7 +362,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private void handleImpulsiveSee() {
 
-		ATImage img = new ATImage(100, 100, ImageType.RGB);
+		ATImage img = new ATImage(100, 100, ImageType.GRAYSCALE);
 
 		img.applyFunction(new SaltAndPepperNoise(), 100);
 		parent.addImage(img);

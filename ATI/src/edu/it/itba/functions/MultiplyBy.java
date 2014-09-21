@@ -9,7 +9,12 @@ public class MultiplyBy implements Function {
 	public MultiplyBy( double scalar ) {
 		this.scalar = scalar;
 	}
-
+	// TODO Falta:
+	//			-cambiar imagen de lado
+	//			-equalizar imagen
+	//			-ventana realce de borde
+	//			-revisar rawlena por el punto naranja
+	
 	@Override
 	public double apply(double value, int row, int col, Bands band) {
 		return value*scalar;
