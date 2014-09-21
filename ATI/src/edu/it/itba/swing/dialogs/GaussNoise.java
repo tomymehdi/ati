@@ -8,10 +8,8 @@ public class GaussNoise implements Function {
 	private double mu, sigma;
 
 	public GaussNoise(double mu, double sigma) {
-
 		this.mu = mu;
 		this.sigma = sigma;
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

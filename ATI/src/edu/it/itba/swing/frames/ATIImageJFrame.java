@@ -17,12 +17,14 @@ import edu.it.itba.swing.panels.ATImageJPanel;
 @SuppressWarnings("serial")
 public class ATIImageJFrame extends ATIJFrame {
 
+	private ATIJFrame parent;
 	private JPanel mainPanel;
 	private ATIJPanel image;
 
-	public ATIImageJFrame(ATIJPanel image) {
+	public ATIImageJFrame(ATIJFrame parent, ATIJPanel image) {
 
 		super();
+		this.parent = parent;
 		this.image = image;
 		// Create and set up the window.
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -60,7 +62,7 @@ public class ATIImageJFrame extends ATIJFrame {
 	@Override
 	public void addImage(ATImage img) {
 		mainPanel.removeAll();
-		image = new ATImageJPanel(img);
+		image = new ATImageJPanel(parent, img);
 		mainPanel.add(image);
 		image.revalidate();
 		image.repaint();
@@ -68,7 +70,7 @@ public class ATIImageJFrame extends ATIJFrame {
 
 	@Override
 	public void loadImage(File file, Dimension dim) {
-		// TODO Auto-generated method stub
+		// TODO Not implemented
 	}
 
 }

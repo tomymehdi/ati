@@ -14,7 +14,6 @@ public class RayleighNoise implements Function {
 
 	@Override
 	public double apply(double value, int row, int col, Bands band) {
-		// TODO Auto-generated method stub
 		return rayleigh(eta) * value;
 	}
 

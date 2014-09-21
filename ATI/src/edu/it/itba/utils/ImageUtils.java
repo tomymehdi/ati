@@ -370,7 +370,6 @@ public class ImageUtils {
 	}
 
 	public static double gauss(double mu, double sigma) {
-
 		double seed = Math.random();
 		double seed2 = Math.random();
 
@@ -395,22 +394,18 @@ public class ImageUtils {
 	}
 
 	public static double exponential(double lambda) {
-
 		double seed = Math.random();
-
 		double exponentialRandom = (-1 / lambda) * Math.log(seed);
-		System.out.println("seed" + seed);
-		System.out.println(exponentialRandom);
+
 		return exponentialRandom;
 	}
 
 	// Recives and image and returns an Histogram that extends JPanel so it know
 	// how to paint on the frame.
 	public static Histogram histogram(ATImage image) {
-
-		if (image == null)
+		if (image == null) {
 			return null;
-
+		}
 		return new Histogram(image);
 	}
 

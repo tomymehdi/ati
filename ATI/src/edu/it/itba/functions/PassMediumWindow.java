@@ -5,14 +5,14 @@ import java.util.Arrays;
 import edu.it.itba.enums.Bands;
 import edu.it.itba.interfaces.Function;
 import edu.it.itba.models.ATImage;
-import edu.it.itba.models.Window;
+import edu.it.itba.models.windows.Window;
 
-public class PassMultWindow implements Function {
+public class PassMediumWindow implements Function {
 
 	private Window window;
 	private ATImage clone;
 
-	public PassMultWindow(ATImage image, Window window) {
+	public PassMediumWindow(ATImage image, Window window) {
 		this.window = window;
 		this.clone = new ATImage(image);
 	}
@@ -29,7 +29,6 @@ public class PassMultWindow implements Function {
 		for (int i = rowStart; i <= rowEnd; i++) {
 			for (int j = colStart; j <= colEnd; j++, k++) {
 				try {
-
 					w[k] = clone.getBand(band).getValue(i, j);
 				} catch (ArrayIndexOutOfBoundsException e) {
 					w[k] = 0;

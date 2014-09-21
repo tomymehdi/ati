@@ -1,4 +1,4 @@
-package edu.it.itba.models;
+package edu.it.itba.models.windows;
 
 public abstract class Window {
 
@@ -6,7 +6,6 @@ public abstract class Window {
 	public int size;
 
 	public Window(int size) {
-
 		window = new double[size * size];
 		this.size = size;
 	}

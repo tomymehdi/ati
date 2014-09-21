@@ -1,4 +1,5 @@
-package edu.it.itba.models;
+package edu.it.itba.models.windows;
+
 
 public class MediumWindow extends Window {
 
@@ -8,7 +9,6 @@ public class MediumWindow extends Window {
 
 	@Override
 	public void fillWindowValues() {
-		// TODO Auto-generated method stub
-
 	}
+
 }

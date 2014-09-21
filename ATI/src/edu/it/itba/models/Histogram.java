@@ -44,9 +44,6 @@ public class Histogram extends ATIJPanel {
 				} else {
 					amount = 1;
 				}
-				if(value >255 || value < 0){
-					System.out.println(value);
-				}
 				mapHistory.put(value, amount);
 			}
 		}

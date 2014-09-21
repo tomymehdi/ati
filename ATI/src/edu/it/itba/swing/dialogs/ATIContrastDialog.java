@@ -13,7 +13,6 @@ import javax.swing.JTextField;
 
 import edu.it.itba.enums.Side;
 import edu.it.itba.functions.Contrast;
-import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 
@@ -85,7 +84,6 @@ public class ATIContrastDialog extends JDialog implements ActionListener {
 
 		img.applyFunction(new Contrast(value1, value2), 100);
 
-		img.applyFunction(new LinearTransform(img), 100);
 		owner.addImage(img);
 		handleClose();
 	}

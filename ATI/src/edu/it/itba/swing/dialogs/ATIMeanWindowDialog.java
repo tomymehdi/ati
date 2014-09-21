@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.models.ATImage;
-import edu.it.itba.models.MeanWindow;
+import edu.it.itba.models.windows.MeanWindow;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 
 @SuppressWarnings("serial")
@@ -77,7 +77,6 @@ public class ATIMeanWindowDialog extends JDialog implements ActionListener {
 
 		img.applyFunction(new PassAdditiveWindow(img, new MeanWindow(size)),
 				100);
-		owner.applyTransform(img);
 		owner.addImage(img);
 
 		handleClose();

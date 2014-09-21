@@ -11,9 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import edu.it.itba.functions.PassMultWindow;
+import edu.it.itba.functions.PassMediumWindow;
 import edu.it.itba.models.ATImage;
-import edu.it.itba.models.MediumWindow;
+import edu.it.itba.models.windows.MediumWindow;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 
 @SuppressWarnings("serial")
@@ -75,8 +75,7 @@ public class ATIMediumWindowDialog extends JDialog implements ActionListener {
 	private void handleSetValue() {
 		int size = Integer.valueOf(s.getText());
 
-		img.applyFunction(new PassMultWindow(img, new MediumWindow(size)), 100);
-		owner.applyTransform(img);
+		img.applyFunction(new PassMediumWindow(img, new MediumWindow(size)), 100);
 		owner.addImage(img);
 
 		

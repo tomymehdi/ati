@@ -19,12 +19,9 @@ public class ExponentialNoise implements Function {
 	}
 
 	private double exponential(double lambda) {
-
 		double seed = Math.random();
-
 		double exponentialRandom = (-1 / lambda) * Math.log(seed);
-		System.out.println("seed" + seed);
-		System.out.println(exponentialRandom);
+		
 		return exponentialRandom;
 	}
 }

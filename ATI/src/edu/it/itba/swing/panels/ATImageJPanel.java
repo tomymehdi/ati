@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.models.ATImage;
+import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.interfaces.ATIJPanel;
 import edu.it.itba.utils.ImageUtils;
 
@@ -18,6 +19,7 @@ public class ATImageJPanel extends ATIJPanel {
 
 	private static final long serialVersionUID = 1L;
 
+	
 	private ATImage image;
 
 	public ATImageJPanel(File file, Dimension dim) throws IOException {
@@ -32,7 +34,7 @@ public class ATImageJPanel extends ATIJPanel {
 		setSize(imageDimension);
 	}
 
-	public ATImageJPanel(BufferedImage image) {
+	public ATImageJPanel(ATIJFrame parent, BufferedImage image) {
 		super();
 		this.image = new ATImage(image, ImageType.RGB);
 		Dimension imgDim = new Dimension(image.getWidth(), image.getHeight());
@@ -40,8 +42,7 @@ public class ATImageJPanel extends ATIJPanel {
 		setSize(imgDim);
 	}
 
-	public ATImageJPanel(ATImage image) {
-
+	public ATImageJPanel(ATIJFrame parent, ATImage image) {
 		super();
 		this.image = image;
 		Dimension imgDim = new Dimension(image.getWidth(), image.getHeight());
