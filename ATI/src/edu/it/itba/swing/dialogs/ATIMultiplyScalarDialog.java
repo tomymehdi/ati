@@ -76,7 +76,6 @@ public class ATIMultiplyScalarDialog extends JDialog implements ActionListener {
 		double scalar = Double.valueOf(s.getText());
 
 		img.applyFunction(new MultiplyBy(scalar), 100);
-		owner.applyTransform(img);
 		owner.addImage(img);
 		handleClose();
 	}

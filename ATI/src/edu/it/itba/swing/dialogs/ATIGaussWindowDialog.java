@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.models.ATImage;
-import edu.it.itba.models.GaussianWIndow;
+import edu.it.itba.models.windows.GaussianWIndow;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 
 @SuppressWarnings("serial")
@@ -83,7 +83,6 @@ public class ATIGaussWindowDialog extends JDialog implements ActionListener {
 
 		img.applyFunction(new PassAdditiveWindow(img, new GaussianWIndow(
 				windowSize, gaussSigma)), 100);
-		owner.applyTransform(img);
 		owner.addImage(img);
 
 		handleClose();

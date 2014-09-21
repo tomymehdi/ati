@@ -1,4 +1,4 @@
-package edu.it.itba.models;
+package edu.it.itba.models.windows;
 
 import edu.it.itba.utils.ImageUtils;
 
