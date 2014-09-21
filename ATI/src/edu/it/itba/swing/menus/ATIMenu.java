@@ -15,6 +15,7 @@ import javax.swing.JMenuItem;
 import edu.it.itba.enums.Compressions;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
+import edu.it.itba.functions.Equalize;
 import edu.it.itba.functions.MultiplyBy;
 import edu.it.itba.functions.Negative;
 import edu.it.itba.functions.SumImage;
@@ -75,6 +76,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem negImage;
 	private JMenuItem applyContrastLeft;
 	private JMenuItem applyContrastRight;
+	private JMenuItem equalize;
 
 	private JMenuItem impulsiveSee;
 	private JMenuItem impulsiveAppLeft;
@@ -98,9 +100,12 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem gaussWindow;
 	private JMenuItem meanWindow;
 	private JMenuItem mediumWindow;
+	
+	private JMenuItem linearCompLeft;
+	private JMenuItem linearCompRight;
+	private JMenuItem logCompLeft;
+	private JMenuItem logCompRight;
 
-	private JMenuItem linealCompression;
-	private JMenuItem dynamicCompression;
 	private JMenuItem clear;
 
 	public ATIMenu(ATIJFrame parent) {
@@ -127,6 +132,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		JMenu slideWindow = new JMenu("Slide window");
 
+		JMenu compression = new JMenu("Compressions");
+		
 		JMenu options = new JMenu("Options");
 
 		// File
@@ -162,6 +169,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		negImage = addMenuItemToMenu("Negative Image", operation, true);
 		applyContrastLeft = addMenuItemToMenu("Apply Contrast left image ...", operation, true);
 		applyContrastRight = addMenuItemToMenu("Apply Contrast right image ...", operation,true);
+		equalize = addMenuItemToMenu("Equalize", operation, true);
 
 		// Noises
 		impulsiveSee = addMenuItemToMenu("See", impulsive, true);
@@ -192,10 +200,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				true);
 		mediumWindow = addMenuItemToMenu("Slide medium window...", slideWindow,
 				true);
-
+		
+		// Compressions
+		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
+		linearCompRight = addMenuItemToMenu("LC right", compression, true);
+		logCompLeft = addMenuItemToMenu("DC left", compression, true);
+		logCompRight = addMenuItemToMenu("DC right", compression, true);
+		
 		// Options
-		linealCompression = addMenuItemToMenu("Linear compression", options, true);
-		dynamicCompression = addMenuItemToMenu("Dynamic compression", options, true);
 		clear = addMenuItemToMenu("Clear", options, true);
 
 		addToMenu(file);
@@ -206,6 +218,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		addToMenu(noises);
 		addToMenu(umbrals);
 		addToMenu(slideWindow);
+		addToMenu(compression);
 		addToMenu(options);
 	}
 
@@ -310,15 +323,37 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleApplyContrast(Side.LEFT);
 			else if (source == applyContrastRight)
 				handleApplyContrast(Side.RIGHT);
-			else if (source == linealCompression)
-				handleLinealCompression();
-			else if (source == dynamicCompression)
-				handleDynamicCompression();
+			else if (source == linearCompLeft)
+				handleLCL();
+			else if (source == linearCompRight)
+				handleLCR();
+			else if (source == logCompLeft)
+				handleDCL();
+			else if (source == logCompRight)
+				handleDCR();
 			else if (source == multplyByScalar)
 				handleMultiplyByScalar();
+			else if (source == equalize)
+				handleEqualize();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void handleDCR() {
+		// TODO Auto-generated method stub
+	}
+
+	private void handleDCL() {
+		// TODO Auto-generated method stub
+	}
+
+	private void handleLCR() {
+		// TODO Auto-generated method stub
+	}
+
+	private void handleLCL() {
+		// TODO Auto-generated method stub
 	}
 
 	// Windows
@@ -328,7 +363,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleMeanWindow() {
-
 		new ATIMeanWindowDialog(parent,
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
@@ -431,14 +465,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	// Options
-	private void handleLinealCompression() {
-		parent.compression = Compressions.LC;
-	}
-	
-	private void handleDynamicCompression() {
-		parent.compression = Compressions.DC;
-	}
-	
 	private void handleClear() {
 		parent.clear();
 	}
@@ -471,7 +497,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				parent.getPanels()[Side.RIGHT.getValue()].getImage());
 		ATImage sum = new ATImage(imageL);
 		sum.applyFunction(new SumImage(imageR), 100);
-		parent.applyTransform(sum);
 		parent.addImage(sum);
 	}
 
@@ -486,9 +511,13 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		imgRight.applyFunction(new MultiplyBy(-1), 100);
 
 		imgLeft.applyFunction(new SumImage(imgRight), 100);
-		parent.applyTransform(imgLeft);
 		parent.addImage(imgLeft);
-
+	}
+	
+	private void handleEqualize() {
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new Equalize(img), 100);
 	}
 
 	// Edit
@@ -510,12 +539,12 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleHistogramLeft() {
-		new ATIImageJFrame(ImageUtils.histogram(parent.getPanels()[0]
+		new ATIImageJFrame(parent, ImageUtils.histogram(parent.getPanels()[0]
 				.getImage()));
 	}
 
 	private void handleHistogramRight() {
-		new ATIImageJFrame(ImageUtils.histogram(parent.getPanels()[1]
+		new ATIImageJFrame(parent, ImageUtils.histogram(parent.getPanels()[1]
 				.getImage()));
 	}
 

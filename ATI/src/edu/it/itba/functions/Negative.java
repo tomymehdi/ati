@@ -7,7 +7,6 @@ public class Negative implements Function {
 
 	@Override
 	public double apply(double value, int row, int col, Bands band) {
-		// TODO Auto-generated method stub
 		return 255 - value;
 	}
 

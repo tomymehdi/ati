@@ -3,7 +3,7 @@ package edu.it.itba.functions;
 import edu.it.itba.enums.Bands;
 import edu.it.itba.interfaces.Function;
 import edu.it.itba.models.ATImage;
-import edu.it.itba.models.Window;
+import edu.it.itba.models.windows.Window;
 
 public class PassAdditiveWindow implements Function {
 

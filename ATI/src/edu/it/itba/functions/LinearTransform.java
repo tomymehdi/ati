@@ -61,9 +61,6 @@ public class LinearTransform implements Function {
 		// y m = (900+100)/(255-0)
 		m = (maxRGB - minRGB) / (max - min);
 		resp = m * value - min * (m);
-		if(resp < 0 || resp >255){
-			System.out.println(resp);
-		}
 
 		return resp;
 	}

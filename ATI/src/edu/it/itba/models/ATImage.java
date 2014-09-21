@@ -9,6 +9,7 @@ import java.util.List;
 
 import edu.it.itba.enums.Bands;
 import edu.it.itba.enums.ImageType;
+import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.interfaces.Function;
 
 public class ATImage {
@@ -121,7 +122,7 @@ public class ATImage {
 		}
 	}
 
-	public BufferedImage getVisual() {
+	public BufferedImage getVisual() {		
 		int format = BufferedImage.TYPE_INT_RGB;
 		if (type.equals(ImageType.GRAYSCALE)) {
 			format = BufferedImage.TYPE_BYTE_GRAY;
@@ -130,8 +131,12 @@ public class ATImage {
 		} else if (type.equals(ImageType.RGB)) {
 			format = BufferedImage.TYPE_INT_RGB;
 		} else if (type.equals(ImageType.HSV)) {
-			// TODO
+			// TODO HSV images
 		}
+		
+		// Apply compression, always is linear. To apply other compression go to compressions tab.
+		applyFunction(new LinearTransform(this), 100);
+		
 		BufferedImage resp = new BufferedImage(cols, rows, format);
 		WritableRaster raster = resp.getRaster();
 		for (int row = 0; row < rows; row++) {
