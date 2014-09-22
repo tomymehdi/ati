@@ -40,7 +40,6 @@ import edu.it.itba.swing.frames.ATIImageJFrame;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.panels.ATISaltAndPepperDialog;
 import edu.it.itba.swing.panels.ATIUmbralDialog;
-import edu.it.itba.swing.panels.ATImageJPanel;
 import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
@@ -100,6 +99,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem gaussWindow;
 	private JMenuItem meanWindow;
 	private JMenuItem mediumWindow;
+	private JMenuItem borderWindow;
 
 	private JMenuItem linearCompLeft;
 	private JMenuItem linearCompRight;
@@ -204,6 +204,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				true);
 		mediumWindow = addMenuItemToMenu("Slide medium window...", slideWindow,
 				true);
+		borderWindow = addMenuItemToMenu("Slide border window ... ",
+				slideWindow, true);
 
 		// Compressions
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
@@ -325,6 +327,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleMeanWindow();
 			else if (source == mediumWindow)
 				handleMediumWindow();
+			else if (source == borderWindow)
+				handleBorderWindow();
 			else if (source == applyContrastLeft)
 				handleApplyContrast(Side.LEFT);
 			else if (source == applyContrastRight)
@@ -346,6 +350,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void handleBorderWindow() {
+		new ATIBorderWindowDialog(parent,
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
 
 	private void handleChangePositions() {
