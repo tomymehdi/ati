@@ -12,7 +12,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import edu.it.itba.enums.Compressions;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
 import edu.it.itba.functions.Equalize;
@@ -41,6 +40,7 @@ import edu.it.itba.swing.frames.ATIImageJFrame;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.panels.ATISaltAndPepperDialog;
 import edu.it.itba.swing.panels.ATIUmbralDialog;
+import edu.it.itba.swing.panels.ATImageJPanel;
 import edu.it.itba.utils.ImageUtils;
 
 @SuppressWarnings("serial")
@@ -100,13 +100,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem gaussWindow;
 	private JMenuItem meanWindow;
 	private JMenuItem mediumWindow;
-	
+
 	private JMenuItem linearCompLeft;
 	private JMenuItem linearCompRight;
 	private JMenuItem logCompLeft;
 	private JMenuItem logCompRight;
 
 	private JMenuItem clear;
+	private JMenuItem changePositions;
 
 	public ATIMenu(ATIJFrame parent) {
 		super();
@@ -133,7 +134,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu slideWindow = new JMenu("Slide window");
 
 		JMenu compression = new JMenu("Compressions");
-		
+
 		JMenu options = new JMenu("Options");
 
 		// File
@@ -162,13 +163,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		modifyPixelValueRight = addMenuItemToMenu("Pixel right...", edit, true);
 
 		// Operation
-		multplyByScalar = addMenuItemToMenu("Multiply by scalar", operation, true);
+		multplyByScalar = addMenuItemToMenu("Multiply by scalar", operation,
+				true);
 		subImage = addMenuItemToMenu("Sub Image...", operation, true);
 		sumImages = addMenuItemToMenu("Sum Images", operation, true);
 		substractImages = addMenuItemToMenu("Substract Images", operation, true);
 		negImage = addMenuItemToMenu("Negative Image", operation, true);
-		applyContrastLeft = addMenuItemToMenu("Apply Contrast left image ...", operation, true);
-		applyContrastRight = addMenuItemToMenu("Apply Contrast right image ...", operation,true);
+		applyContrastLeft = addMenuItemToMenu("Apply Contrast left image ...",
+				operation, true);
+		applyContrastRight = addMenuItemToMenu(
+				"Apply Contrast right image ...", operation, true);
 		equalize = addMenuItemToMenu("Equalize", operation, true);
 
 		// Noises
@@ -200,15 +204,17 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				true);
 		mediumWindow = addMenuItemToMenu("Slide medium window...", slideWindow,
 				true);
-		
+
 		// Compressions
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
 		linearCompRight = addMenuItemToMenu("LC right", compression, true);
 		logCompLeft = addMenuItemToMenu("DC left", compression, true);
 		logCompRight = addMenuItemToMenu("DC right", compression, true);
-		
+
 		// Options
 		clear = addMenuItemToMenu("Clear", options, true);
+		changePositions = addMenuItemToMenu("Change image positions", options,
+				true);
 
 		addToMenu(file);
 		addToMenu(newImage);
@@ -335,9 +341,17 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleMultiplyByScalar();
 			else if (source == equalize)
 				handleEqualize();
+			else if (source == changePositions)
+				handleChangePositions();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void handleChangePositions() {
+
+		parent.swapImages();
+
 	}
 
 	private void handleDCR() {
@@ -471,13 +485,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Operation
 	private void handleMultiplyByScalar() {
-		new ATIMultiplyScalarDialog(parent, parent.getPanels()[Side.LEFT.getValue()].getImage());
+		new ATIMultiplyScalarDialog(parent,
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
 
 	private void handleApplyContrast(Side side) {
 		new ATIContrastDialog(parent, side);
 	}
-	
+
 	private void handleSubImage() {
 		new ATISubImageDialog(parent);
 	}
@@ -513,7 +528,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		imgLeft.applyFunction(new SumImage(imgRight), 100);
 		parent.addImage(imgLeft);
 	}
-	
+
 	private void handleEqualize() {
 		ATImage img = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());

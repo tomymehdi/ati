@@ -73,4 +73,10 @@ public class ATIImageJFrame extends ATIJFrame {
 		// TODO Not implemented
 	}
 
+	@Override
+	public void swapImages() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

@@ -108,6 +108,23 @@ public class ATIJFrameImpl extends ATIJFrame {
 		return imageRight;
 	}
 
+	public void swapImages() {
+		if (imageLeft != null && imageRight != null) {
+			ATImage aux;
+			aux = imageLeft.getImage();
+			imageLeft.setImage(imageRight.getImage());
+			imageRight.setImage(aux);
+			if (imageLeft != null) {
+				imageLeft.revalidate();
+				imageLeft.repaint();
+			}
+			if (imageRight != null) {
+				imageRight.revalidate();
+				imageRight.repaint();
+			}
+		}
+	}
+
 	@Override
 	public void clear() {
 		mainPanel.removeAll();

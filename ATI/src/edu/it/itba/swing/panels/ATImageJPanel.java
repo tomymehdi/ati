@@ -19,7 +19,6 @@ public class ATImageJPanel extends ATIJPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	private ATImage image;
 
 	public ATImageJPanel(File file, Dimension dim) throws IOException {
@@ -60,6 +59,10 @@ public class ATImageJPanel extends ATIJPanel {
 	@Override
 	public ATImage getImage() {
 		return image;
+	}
+
+	public void setImage(ATImage img) {
+		this.image = img;
 	}
 
 }
