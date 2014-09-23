@@ -1,4 +1,4 @@
-package edu.it.itba.swing.menus;
+package edu.it.itba.swing.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -12,14 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import edu.it.itba.functions.PassAdditiveWindow;
-import edu.it.itba.functions.PassMediumWindow;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.models.windows.BorderWindow;
-import edu.it.itba.models.windows.MediumWindow;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 
 public class ATIBorderWindowDialog extends JDialog implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
 	private ATIJFrame owner;
 	private JTextField s;
 	private JButton setValue;

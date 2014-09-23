@@ -70,12 +70,12 @@ public class ATIImageJFrame extends ATIJFrame {
 
 	@Override
 	public void loadImage(File file, Dimension dim) {
-		// TODO Not implemented
+		// TODO Not necesary
 	}
 
 	@Override
 	public void swapImages() {
-		// TODO Auto-generated method stub
+		// TODO Not necesary
 
 	}
 

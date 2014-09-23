@@ -15,10 +15,13 @@ import javax.swing.JMenuItem;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
 import edu.it.itba.functions.Equalize;
+import edu.it.itba.functions.LinearTransform;
+import edu.it.itba.functions.LogTransformation;
 import edu.it.itba.functions.MultiplyBy;
 import edu.it.itba.functions.Negative;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
+import edu.it.itba.swing.dialogs.ATIBorderWindowDialog;
 import edu.it.itba.swing.dialogs.ATIContrastDialog;
 import edu.it.itba.swing.dialogs.ATIExpDialog;
 import edu.it.itba.swing.dialogs.ATIExpImageDialog;
@@ -351,32 +354,30 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 			ex.printStackTrace();
 		}
 	}
-
-	private void handleBorderWindow() {
-		new ATIBorderWindowDialog(parent,
-				parent.getPanels()[Side.LEFT.getValue()].getImage());
-	}
-
-	private void handleChangePositions() {
-
-		parent.swapImages();
-
-	}
-
+	
+	//Compressions
 	private void handleDCR() {
-		// TODO Auto-generated method stub
+		ATImage img = new ATImage(parent.getPanels()[Side.RIGHT.getValue()].getImage());
+		img.applyFunction(new LogTransformation(img), 100);
+		parent.addImage(img);
 	}
 
 	private void handleDCL() {
-		// TODO Auto-generated method stub
+		ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new LogTransformation(img), 100);
+		parent.addImage(img);
 	}
 
 	private void handleLCR() {
-		// TODO Auto-generated method stub
+		ATImage img = new ATImage(parent.getPanels()[Side.RIGHT.getValue()].getImage());
+		img.applyFunction(new LinearTransform(img), 100);
+		parent.addImage(img);
 	}
 
 	private void handleLCL() {
-		// TODO Auto-generated method stub
+		ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new LinearTransform(img), 100);
+		parent.addImage(img);
 	}
 
 	// Windows
@@ -396,6 +397,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	}
 
+	private void handleBorderWindow() {
+		new ATIBorderWindowDialog(parent,
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+	}
 	// Umbrals
 	private void handleUmbralAppLeft() {
 		new ATIUmbralDialog(parent, Side.LEFT);
@@ -488,6 +493,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	// Options
+	private void handleChangePositions() {
+		parent.swapImages();
+	}
+	
 	private void handleClear() {
 		parent.clear();
 	}
@@ -542,6 +551,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		ATImage img = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
 		img.applyFunction(new Equalize(img), 100);
+		parent.addImage(img);
 	}
 
 	// Edit
