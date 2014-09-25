@@ -78,7 +78,7 @@ public class ImageUtils {
 			}
 		}
 
-		return image;
+		return ret;
 	}
 
 	public static ATImage grayScale() {

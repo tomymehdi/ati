@@ -354,28 +354,32 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 			ex.printStackTrace();
 		}
 	}
-	
-	//Compressions
+
+	// Compressions
 	private void handleDCR() {
-		ATImage img = new ATImage(parent.getPanels()[Side.RIGHT.getValue()].getImage());
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.RIGHT.getValue()].getImage());
 		img.applyFunction(new LogTransformation(img), 100);
 		parent.addImage(img);
 	}
 
 	private void handleDCL() {
-		ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 		img.applyFunction(new LogTransformation(img), 100);
 		parent.addImage(img);
 	}
 
 	private void handleLCR() {
-		ATImage img = new ATImage(parent.getPanels()[Side.RIGHT.getValue()].getImage());
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.RIGHT.getValue()].getImage());
 		img.applyFunction(new LinearTransform(img), 100);
 		parent.addImage(img);
 	}
 
 	private void handleLCL() {
-		ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 		img.applyFunction(new LinearTransform(img), 100);
 		parent.addImage(img);
 	}
@@ -401,6 +405,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		new ATIBorderWindowDialog(parent,
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
+
 	// Umbrals
 	private void handleUmbralAppLeft() {
 		new ATIUmbralDialog(parent, Side.LEFT);
@@ -496,7 +501,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleChangePositions() {
 		parent.swapImages();
 	}
-	
+
 	private void handleClear() {
 		parent.clear();
 	}
