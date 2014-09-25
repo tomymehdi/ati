@@ -10,11 +10,13 @@ public class SaltAndPepperNoise implements Function {
 
 		double random = Math.random();
 
-		if (random < 0.5)
-
+		if (random < 0.2){
 			return 0;
-		else
+		} else if(random >0.8){
 			return 255;
+		} else{
+			return value;
+		}
 	}
 
 }

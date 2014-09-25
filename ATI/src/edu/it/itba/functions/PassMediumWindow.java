@@ -28,11 +28,7 @@ public class PassMediumWindow implements Function {
 		double[] w = new double[window.size * window.size];
 		for (int i = rowStart; i <= rowEnd; i++) {
 			for (int j = colStart; j <= colEnd; j++, k++) {
-				try {
-					w[k] = clone.getBand(band).getValue(i, j);
-				} catch (ArrayIndexOutOfBoundsException e) {
-					w[k] = 0;
-				}
+				w[k] = clone.getBand(band).getValue(i, j);
 			}
 		}
 

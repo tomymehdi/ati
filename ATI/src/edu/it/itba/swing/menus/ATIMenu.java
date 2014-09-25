@@ -423,8 +423,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleImpulsiveAppLeft() {
-		new ATIImpulsiveNoiseDialog(parent,
-				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		new ATISaltAndPepperDialog(parent, Side.LEFT);
 	}
 
 	private void handleImpulsiveSee() {
