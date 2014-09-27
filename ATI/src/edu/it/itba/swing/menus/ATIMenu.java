@@ -12,6 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import edu.it.itba.enums.Direction;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
 import edu.it.itba.functions.Equalize;
@@ -19,8 +20,11 @@ import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.functions.LogTransformation;
 import edu.it.itba.functions.MultiplyBy;
 import edu.it.itba.functions.Negative;
+import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
+import edu.it.itba.models.windows.Prewitt;
+import edu.it.itba.models.windows.Sobel;
 import edu.it.itba.swing.dialogs.ATIBorderWindowDialog;
 import edu.it.itba.swing.dialogs.ATIContrastDialog;
 import edu.it.itba.swing.dialogs.ATIExpDialog;
@@ -28,7 +32,6 @@ import edu.it.itba.swing.dialogs.ATIExpImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussWindowDialog;
-import edu.it.itba.swing.dialogs.ATIImpulsiveNoiseDialog;
 import edu.it.itba.swing.dialogs.ATILoadImageDialog;
 import edu.it.itba.swing.dialogs.ATIMeanWindowDialog;
 import edu.it.itba.swing.dialogs.ATIMediumWindowDialog;
@@ -103,6 +106,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem meanWindow;
 	private JMenuItem mediumWindow;
 	private JMenuItem borderWindow;
+	
+	private JMenuItem prewittV;
+	private JMenuItem prewittH;
+	private JMenuItem prewittD;
+	private JMenuItem sobelV;
+	private JMenuItem sobelH;
+	private JMenuItem sobelD;
+	
 
 	private JMenuItem linearCompLeft;
 	private JMenuItem linearCompRight;
@@ -134,7 +145,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		JMenu umbrals = new JMenu("Umbrals");
 
-		JMenu slideWindow = new JMenu("Slide window");
+		JMenu slideWindow = new JMenu("Fillter");
+		
+		JMenu borderDetection = new JMenu("Border detection");
 
 		JMenu compression = new JMenu("Compressions");
 
@@ -209,6 +222,15 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				true);
 		borderWindow = addMenuItemToMenu("Slide border window ... ",
 				slideWindow, true);
+		
+		// Border detection
+		prewittV = addMenuItemToMenu("Prewitt vertical", borderDetection, true);
+		prewittH = addMenuItemToMenu("Prewitt horizontal", borderDetection, true);
+		prewittD = addMenuItemToMenu("Prewitt diagonal", borderDetection, true);
+		
+		sobelV = addMenuItemToMenu("Sobel vertical", borderDetection, true);
+		sobelH = addMenuItemToMenu("Sobel horizontal", borderDetection, true);
+		sobelD = addMenuItemToMenu("Sobel diagonal", borderDetection, true);
 
 		// Compressions
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
@@ -229,6 +251,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		addToMenu(noises);
 		addToMenu(umbrals);
 		addToMenu(slideWindow);
+		addToMenu(borderDetection);
 		addToMenu(compression);
 		addToMenu(options);
 	}
@@ -350,15 +373,39 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleEqualize();
 			else if (source == changePositions)
 				handleChangePositions();
+			else if (source == prewittV)
+				handlePrewitt(Direction.VERTICAL);
+			else if (source == prewittH)
+				handlePrewitt(Direction.HORIZONTAL);
+			else if (source == prewittD)
+				handlePrewitt(Direction.DIAGONAL);
+			else if (source == sobelV)
+				handleSobel(Direction.VERTICAL);
+			else if (source == sobelH)
+				handleSobel(Direction.HORIZONTAL);
+			else if (source == sobelD)
+				handleSobel(Direction.DIAGONAL);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
+	
+	// Border detection
+	private void handlePrewitt(Direction dir) {
+		ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new PassAdditiveWindow(img, new Prewitt(3, dir)), 100);
+		parent.addImage(img);
+	}
+	
+    private void handleSobel(Direction dir) {
+    	ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new PassAdditiveWindow(img, new Sobel(3, dir)), 100);
+		parent.addImage(img);
+	}
 
 	// Compressions
 	private void handleDCR() {
-		ATImage img = new ATImage(
-				parent.getPanels()[Side.RIGHT.getValue()].getImage());
+		ATImage img = new ATImage(parent.getPanels()[Side.RIGHT.getValue()].getImage());
 		img.applyFunction(new LogTransformation(img), 100);
 		parent.addImage(img);
 	}

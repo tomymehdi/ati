@@ -13,7 +13,6 @@ public class UmbralizeImage implements Function {
 
 	@Override
 	public double apply(double value, int row, int col, Bands band) {
-
 		if (value > umbral)
 			return 255;
 		else

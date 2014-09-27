@@ -12,7 +12,7 @@ public class MeanWindow extends Window {
 
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				window[i + j * size] = (double) 1 / (size * size);
+				window[i * size + j ] = (double) 1 / (size * size);
 			}
 		}
 	}
