@@ -1,6 +1,6 @@
 package edu.it.itba.functions;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import edu.it.itba.enums.Bands;
 import edu.it.itba.interfaces.Function;
@@ -10,25 +10,92 @@ public class OtzuUmbralization implements Function {
 	
 	private ATImage img;
 	private double umbralCalculated;
-	private List<Double> classes;
-	public OtzuUmbralization(ATImage img, List<Double> classes ) {
+	private ArrayList<Integer> histogram = new ArrayList<Integer>(255);
+	private double min = Double.MAX_VALUE, max = Double.MIN_VALUE;
+	
+	public OtzuUmbralization( ATImage img ) {
 		this.img = img;
-		this.classes = classes;
-		calculatePs();
-		calculateWs();
-		calculateMus(); //esperanza
+		for(int i = 0 ; i < 256 ; i++){
+			histogram.add(i, 0);
+		}
+		calculateHistogram();
 		algorithm();
 	}
 
+	private void calculateHistogram() {
+		for(int row = 0 ; row< img.getHeight() ; row++){
+			for(int col = 0 ; col < img.getWidth() ; col++){
+				histogram.add(histogram.get((int) img.R.getValue(row, col)), 
+						      histogram.get((int) img.R.getValue(row, col)) + 1);
+			}
+		}		
+	}
+
 	private void algorithm() {
-		// TODO Auto-generated method stub
+		int sum = 0;
+		for(int i = 0 ; i < histogram.size() ; i++){
+			sum += i * histogram.get(i);
+		}
+		int sumB = 0;
+		int wB = 0, wF = 0;
+		int mB, mF;
+		int total = img.getHeight() * img.getWidth();
+		double max = 0.0, between;
+		double threshold1 = 0.0, threshold2 = 0.0;
+		for(int i = 0; i < histogram.size(); ++i) {
+	        wB += histogram.get(i);
+	        if (wB == 0)
+	            continue;
+	        wF = total - wB;
+	        if (wF == 0)
+	            break;
+	        sumB += i * histogram.get(i);
+	        mB = sumB / wB;
+	        mF = (sum - sumB) / wF;
+	        between = wB * wF * Math.pow(mB - mF, 2);
+	        if ( between >= max ) {
+	            threshold1 = i;
+	            if ( between > max ) {
+	                threshold2 = i;
+	            }
+	            max = between;            
+	        }
+	    }
+		
+		umbralCalculated = ( threshold1 + threshold2 ) / 2.0;
 		
 	}
 
 	@Override
 	public double apply(double value, int row, int col, Bands band) {
-		// TODO Auto-generated method stub
-		return 0;
+		if (value > umbralCalculated)
+			return 255;
+		else
+			return 0;
+	}
+	
+	private void calculateMinMax() {
+		double r, g, b;
+		for (int row = 0; row < img.getHeight(); row++) {
+			for (int col = 0; col < img.getWidth(); col++) {
+				r = img.R.getValue(row, col);
+				if (r < min)
+					min = r;
+				if (r > max)
+					max = r;
+				g = img.G.getValue(row, col);
+				if (g < min)
+					min = g;
+				if (g > max)
+					max = g;
+				b = img.B.getValue(row, col);
+				if (b < min)
+					min = b;
+				if (b > max)
+					max = b;
+			}
+		}
+
 	}
 
 }

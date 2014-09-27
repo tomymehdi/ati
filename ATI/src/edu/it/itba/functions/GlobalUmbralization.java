@@ -10,11 +10,13 @@ public class GlobalUmbralization implements Function {
 	private int epocs; // TODO consultar si esta bien usar epocas o hay que usar error(un epsilon)
 	private double initialUmbral;
 	private double umbralCalculated;
+	private double min = Double.MAX_VALUE, max = Double.MIN_VALUE;
 	
 	public GlobalUmbralization(ATImage img, int epocs) {
 		this.img = new ATImage(img);
 		this.epocs = epocs;
-		initialUmbral = img.getMin() + 0.5 * (img.getMax() - img.getMin());
+		calculateMinMax();
+		initialUmbral = min + 0.5 * (max - min);
 		algorithm();
 	}
 
@@ -50,6 +52,30 @@ public class GlobalUmbralization implements Function {
 			return 255;
 		else
 			return 0;
+	}
+	
+	private void calculateMinMax() {
+		double r, g, b;
+		for (int row = 0; row < img.getHeight(); row++) {
+			for (int col = 0; col < img.getWidth(); col++) {
+				r = img.R.getValue(row, col);
+				if (r < min)
+					min = r;
+				if (r > max)
+					max = r;
+				g = img.G.getValue(row, col);
+				if (g < min)
+					min = g;
+				if (g > max)
+					max = g;
+				b = img.B.getValue(row, col);
+				if (b < min)
+					min = b;
+				if (b > max)
+					max = b;
+			}
+		}
+
 	}
 
 }

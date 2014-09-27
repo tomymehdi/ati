@@ -16,10 +16,12 @@ import edu.it.itba.enums.Direction;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
 import edu.it.itba.functions.Equalize;
+import edu.it.itba.functions.GlobalUmbralization;
 import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.functions.LogTransformation;
 import edu.it.itba.functions.MultiplyBy;
 import edu.it.itba.functions.Negative;
+import edu.it.itba.functions.OtzuUmbralization;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
@@ -101,6 +103,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private JMenuItem umbralAppLeft;
 	private JMenuItem umbralAppRight;
+	private JMenuItem globralUmbral;
+	private JMenuItem otzuUmbral;
 
 	private JMenuItem gaussWindow;
 	private JMenuItem meanWindow;
@@ -210,8 +214,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		// Umbrals
 		umbralAppLeft = addMenuItemToMenu("Apply umbral left...", umbrals, true);
-		umbralAppRight = addMenuItemToMenu("Apply umbral right...", umbrals,
-				true);
+		umbralAppRight = addMenuItemToMenu("Apply umbral right...", umbrals, true);
+		globralUmbral = addMenuItemToMenu("Global", umbrals, true);
+		otzuUmbral = addMenuItemToMenu("Otzu", umbrals, true);
 
 		// Slide window
 		gaussWindow = addMenuItemToMenu("Slide gauss window...", slideWindow,
@@ -385,11 +390,15 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleSobel(Direction.HORIZONTAL);
 			else if (source == sobelD)
 				handleSobel(Direction.DIAGONAL);
+			else if (source == globralUmbral)
+				handleGlobalUmbral();
+			else if (source == otzuUmbral)
+				handleOtzuUmbral();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	// Border detection
 	private void handlePrewitt(Direction dir) {
 		ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
@@ -460,8 +469,19 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleUmbralAppRight() {
-
 		new ATIUmbralDialog(parent, Side.RIGHT);
+	}
+	
+	private void handleGlobalUmbral() {
+		ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new GlobalUmbralization(img, 10), 100);
+		parent.addImage(img);
+	}
+	
+	private void handleOtzuUmbral() {
+		ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new OtzuUmbralization(img), 100);
+		parent.addImage(img);
 	}
 
 	// Noises
