@@ -21,19 +21,20 @@ public class GlobalUmbralization implements Function {
 	}
 
 	private void algorithm() {
-		double umbralCalculated = initialUmbral;
+		umbralCalculated = initialUmbral;
 		double m1=0,m2=0;
 		int countm1=0,countm2=0;
 		for(int i = 0 ; i < epocs ; i++) {
-			
+			m1=0;m2=0;
+			countm1=0;countm2=0;
 			for(int row=0 ; row < img.getHeight() ; row++){
 				for(int col=0 ; col < img.getWidth() ; col++){
 					if(img.getBand(Bands.R).getValue(row, col) < umbralCalculated){
-						countm1++;
 						m1 += img.getBand(Bands.R).getValue(row, col);
+						countm1++;
 					} else{
-						countm2++;
 						m2 += img.getBand(Bands.R).getValue(row, col);
+						countm2++;
 					}
 				}
 			}
@@ -42,7 +43,6 @@ public class GlobalUmbralization implements Function {
 			m2 = m2/countm2;
 			
 			umbralCalculated = 0.5 * (m1 + m2);
-			
 		}
 	}
 
