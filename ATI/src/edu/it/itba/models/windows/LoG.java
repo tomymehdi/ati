@@ -5,6 +5,7 @@ public class LoG extends Window {
 	public LoG(int size, double sigma) {
 		super(size);
 		this.sigma = sigma;
+		fillWindowValues();
 	}
 
 	@Override

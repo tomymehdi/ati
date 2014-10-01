@@ -4,6 +4,7 @@ public class Laplacian extends Window {
 
 	public Laplacian(int size) {
 		super(3);
+		fillWindowValues();
 	}
 
 	@Override
