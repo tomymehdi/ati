@@ -27,6 +27,9 @@ import edu.it.itba.functions.OtzuUmbralization;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
+import edu.it.itba.models.windows.Kirsh;
+import edu.it.itba.models.windows.Laplacian;
+import edu.it.itba.models.windows.LoG;
 import edu.it.itba.models.windows.Prewitt;
 import edu.it.itba.models.windows.Sobel;
 import edu.it.itba.swing.dialogs.ATIAnisotropicDiffusionDialog;
@@ -123,6 +126,13 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem sobelV;
 	private JMenuItem sobelH;
 	private JMenuItem sobelD;
+
+	private JMenuItem kirshV;
+	private JMenuItem kirshH;
+	private JMenuItem kirshD;
+	private JMenuItem laplacian;
+	private JMenuItem laplacianPendant;
+	private JMenuItem laplacianGaussian;
 
 	private JMenuItem linearCompLeft;
 	private JMenuItem linearCompRight;
@@ -247,6 +257,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		sobelV = addMenuItemToMenu("Sobel vertical", borderDetection, true);
 		sobelH = addMenuItemToMenu("Sobel horizontal", borderDetection, true);
 		sobelD = addMenuItemToMenu("Sobel diagonal", borderDetection, true);
+
+		kirshV = addMenuItemToMenu("Kirsh vertical", borderDetection, true);
+		kirshH = addMenuItemToMenu("Kirsh horizontal", borderDetection, true);
+		kirshD = addMenuItemToMenu("Kirsh diagonal", borderDetection, true);
+
+		laplacian = addMenuItemToMenu("Laplacian", borderDetection, true);
+		laplacianPendant = addMenuItemToMenu("Laplacian pendent",
+				borderDetection, true);
+		laplacianGaussian = addMenuItemToMenu("Laplacian Gaussian",
+				borderDetection, true);
 
 		// Compressions
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
@@ -409,6 +429,17 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleIsotropicDiffusion();
 			else if (source == anisotropicDiffusion)
 				handleAnisotropicDiffusion();
+
+			else if (source == kirshV)
+				handleKirsh(Direction.VERTICAL);
+			else if (source == kirshH)
+				handleKirsh(Direction.HORIZONTAL);
+			else if (source == kirshD)
+				handleKirsh(Direction.DIAGONAL);
+			else if (source == laplacian)
+				handleLaplacian();
+			else if (source == laplacianGaussian)
+				handleLaplacianGaussian();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -429,6 +460,27 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	// Border detection
+	private void handleLaplacianGaussian() {
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new PassAdditiveWindow(img, new LoG(9, 1.4)), 100);
+		parent.addImage(img);
+	}
+
+	private void handleLaplacian() {
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new PassAdditiveWindow(img, new Laplacian(3)), 100);
+		parent.addImage(img);
+	}
+
+	private void handleKirsh(Direction dir) {
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new PassAdditiveWindow(img, new Kirsh(3, dir)), 100);
+		parent.addImage(img);
+	}
+
 	private void handlePrewitt(Direction dir) {
 		ATImage img = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
