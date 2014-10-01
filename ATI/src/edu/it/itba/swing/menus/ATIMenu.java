@@ -429,7 +429,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	// Border detection
 	private void handleLaplacianGaussian() {
 		ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
-		img.applyFunction(new PassAdditiveWindow(img, new LoG(3,0.1)), 100);
+		img.applyFunction(new PassAdditiveWindow(img, new LoG(9,1.4)), 100);
 		parent.addImage(img);
 	}
 	
