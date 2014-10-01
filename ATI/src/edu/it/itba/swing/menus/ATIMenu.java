@@ -15,8 +15,10 @@ import javax.swing.JMenuItem;
 import edu.it.itba.enums.Direction;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
+import edu.it.itba.functions.Diffusion;
 import edu.it.itba.functions.Equalize;
 import edu.it.itba.functions.GlobalUmbralization;
+import edu.it.itba.functions.IsotropicMaterialHeatDistribution;
 import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.functions.LogTransformation;
 import edu.it.itba.functions.MultiplyBy;
@@ -84,6 +86,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem applyContrastLeft;
 	private JMenuItem applyContrastRight;
 	private JMenuItem equalize;
+	private JMenuItem isotropicDiffusion;
 
 	private JMenuItem impulsiveSee;
 	private JMenuItem impulsiveAppLeft;
@@ -110,14 +113,13 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem meanWindow;
 	private JMenuItem mediumWindow;
 	private JMenuItem borderWindow;
-	
+
 	private JMenuItem prewittV;
 	private JMenuItem prewittH;
 	private JMenuItem prewittD;
 	private JMenuItem sobelV;
 	private JMenuItem sobelH;
 	private JMenuItem sobelD;
-	
 
 	private JMenuItem linearCompLeft;
 	private JMenuItem linearCompRight;
@@ -150,7 +152,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu umbrals = new JMenu("Umbrals");
 
 		JMenu slideWindow = new JMenu("Fillter");
-		
+
 		JMenu borderDetection = new JMenu("Border detection");
 
 		JMenu compression = new JMenu("Compressions");
@@ -194,6 +196,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		applyContrastRight = addMenuItemToMenu(
 				"Apply Contrast right image ...", operation, true);
 		equalize = addMenuItemToMenu("Equalize", operation, true);
+		isotropicDiffusion = addMenuItemToMenu("Anisotropic Diffusion...",
+				operation, true);
 
 		// Noises
 		impulsiveSee = addMenuItemToMenu("See", impulsive, true);
@@ -214,7 +218,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		// Umbrals
 		umbralAppLeft = addMenuItemToMenu("Apply umbral left...", umbrals, true);
-		umbralAppRight = addMenuItemToMenu("Apply umbral right...", umbrals, true);
+		umbralAppRight = addMenuItemToMenu("Apply umbral right...", umbrals,
+				true);
 		globralUmbral = addMenuItemToMenu("Global", umbrals, true);
 		otzuUmbral = addMenuItemToMenu("Otzu", umbrals, true);
 
@@ -227,12 +232,13 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				true);
 		borderWindow = addMenuItemToMenu("Slide border window ... ",
 				slideWindow, true);
-		
+
 		// Border detection
 		prewittV = addMenuItemToMenu("Prewitt vertical", borderDetection, true);
-		prewittH = addMenuItemToMenu("Prewitt horizontal", borderDetection, true);
+		prewittH = addMenuItemToMenu("Prewitt horizontal", borderDetection,
+				true);
 		prewittD = addMenuItemToMenu("Prewitt diagonal", borderDetection, true);
-		
+
 		sobelV = addMenuItemToMenu("Sobel vertical", borderDetection, true);
 		sobelH = addMenuItemToMenu("Sobel horizontal", borderDetection, true);
 		sobelD = addMenuItemToMenu("Sobel diagonal", borderDetection, true);
@@ -394,27 +400,42 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleGlobalUmbral();
 			else if (source == otzuUmbral)
 				handleOtzuUmbral();
+			else if (source == isotropicDiffusion)
+				handleIsotropicDiffusion();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
+	private void handleIsotropicDiffusion() {
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		for (int i = 0; i < 100; i++) {
+			img.applyFunction(new Diffusion(img,
+					new IsotropicMaterialHeatDistribution()), 100);
+		}
+		parent.addImage(img);
+	}
+
 	// Border detection
 	private void handlePrewitt(Direction dir) {
-		ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 		img.applyFunction(new PassAdditiveWindow(img, new Prewitt(3, dir)), 100);
 		parent.addImage(img);
 	}
-	
-    private void handleSobel(Direction dir) {
-    	ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+
+	private void handleSobel(Direction dir) {
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 		img.applyFunction(new PassAdditiveWindow(img, new Sobel(3, dir)), 100);
 		parent.addImage(img);
 	}
 
 	// Compressions
 	private void handleDCR() {
-		ATImage img = new ATImage(parent.getPanels()[Side.RIGHT.getValue()].getImage());
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.RIGHT.getValue()].getImage());
 		img.applyFunction(new LogTransformation(img), 100);
 		parent.addImage(img);
 	}
@@ -471,15 +492,17 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleUmbralAppRight() {
 		new ATIUmbralDialog(parent, Side.RIGHT);
 	}
-	
+
 	private void handleGlobalUmbral() {
-		ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 		img.applyFunction(new GlobalUmbralization(img, 10), 100);
 		parent.addImage(img);
 	}
-	
+
 	private void handleOtzuUmbral() {
-		ATImage img = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 		img.applyFunction(new OtzuUmbralization(img), 100);
 		parent.addImage(img);
 	}
