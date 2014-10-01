@@ -29,6 +29,7 @@ import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.models.windows.Prewitt;
 import edu.it.itba.models.windows.Sobel;
+import edu.it.itba.swing.dialogs.ATIAnisotropicDiffusionDialog;
 import edu.it.itba.swing.dialogs.ATIBorderWindowDialog;
 import edu.it.itba.swing.dialogs.ATIContrastDialog;
 import edu.it.itba.swing.dialogs.ATIExpDialog;
@@ -45,6 +46,7 @@ import edu.it.itba.swing.dialogs.ATIPixelValueEditDialog;
 import edu.it.itba.swing.dialogs.ATIRayleighImageDialog;
 import edu.it.itba.swing.dialogs.ATIRaylightDialog;
 import edu.it.itba.swing.dialogs.ATISubImageDialog;
+import edu.it.itba.swing.dialogs.ATIsotropicDiffusionDialog;
 import edu.it.itba.swing.dialogs.SaltAndPepperNoise;
 import edu.it.itba.swing.frames.ATIImageJFrame;
 import edu.it.itba.swing.interfaces.ATIJFrame;
@@ -87,6 +89,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem applyContrastRight;
 	private JMenuItem equalize;
 	private JMenuItem isotropicDiffusion;
+	private JMenuItem anisotropicDiffusion;
 
 	private JMenuItem impulsiveSee;
 	private JMenuItem impulsiveAppLeft;
@@ -196,7 +199,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		applyContrastRight = addMenuItemToMenu(
 				"Apply Contrast right image ...", operation, true);
 		equalize = addMenuItemToMenu("Equalize", operation, true);
-		isotropicDiffusion = addMenuItemToMenu("Anisotropic Diffusion...",
+		isotropicDiffusion = addMenuItemToMenu("Isotropic Diffusion...",
+				operation, true);
+		anisotropicDiffusion = addMenuItemToMenu("Anisotropic Diffusion...",
 				operation, true);
 
 		// Noises
@@ -402,6 +407,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleOtzuUmbral();
 			else if (source == isotropicDiffusion)
 				handleIsotropicDiffusion();
+			else if (source == anisotropicDiffusion)
+				handleAnisotropicDiffusion();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -410,11 +417,15 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleIsotropicDiffusion() {
 		ATImage img = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		for (int i = 0; i < 100; i++) {
-			img.applyFunction(new Diffusion(img,
-					new IsotropicMaterialHeatDistribution()), 100);
-		}
-		parent.addImage(img);
+		new ATIsotropicDiffusionDialog(parent, img);
+	}
+
+	private void handleAnisotropicDiffusion() {
+
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+
+		new ATIAnisotropicDiffusionDialog(parent, img);
 	}
 
 	// Border detection

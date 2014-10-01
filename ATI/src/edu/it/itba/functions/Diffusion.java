@@ -8,11 +8,13 @@ public class Diffusion implements Function {
 
 	ATImage img;
 	MaterialHeatDistribution mhd;
+	int t;
 
-	public Diffusion(ATImage img, MaterialHeatDistribution mhd) {
+	public Diffusion(ATImage img, MaterialHeatDistribution mhd, int t) {
 
-		this.img = img;
+		this.img = new ATImage(img);
 		this.mhd = mhd;
+		this.t = t;
 	}
 
 	@Override
@@ -43,7 +45,15 @@ public class Diffusion implements Function {
 		double lambda = 0.25;
 		double newValueIJ = oldValueIJ + lambda
 				* (DnIijCnij + DsIijCsij + DeIijCeij + DoIijCoij);
-		return newValueIJ;
+		return newValueIJ /** GaussianKernel(row, col, t) */
+		;
+	}
+
+	private double GaussianKernel(int row, int col, double t) {
+
+		return (1 / (4 * Math.PI * t))
+				* Math.pow(Math.E, (Math.pow(row, 2) + Math.pow(col, 2))
+						/ (4 * t));
 	}
 
 }
