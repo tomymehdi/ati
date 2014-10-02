@@ -16,16 +16,18 @@ public class ZeroCrossings implements Function {
 	}
 
 	private void calculateResultImage() {
+		int aux = 0;
 		for(int row = 0 ; row < result.getHeight() ; row++){
 			for(int col = 0 ; col < result.getWidth() ; col++){
-				if(img.R.getValue(row, col) == 0){
-					result.R.set(row, col, 0);
-				} else if (img.R.getValue(row, col-1) < 0 &&
-						img.R.getValue(row, col) > 0){
-					result.R.set(row, col, 255);
-				} else {
-					result.R.set(row, col, 0);
+				if(img.R.getValue(row, col) < 0 && img.R.getValue(row, col-1) > 0 ||
+						img.R.getValue(row, col) > 0 && img.R.getValue(row, col-1) < 0) {
+					if(aux == 0){
+						aux = 255;
+					} else {
+						aux = 0;
+					}
 				}
+				result.R.set(row, col, aux);
 			}
 		}
 	}

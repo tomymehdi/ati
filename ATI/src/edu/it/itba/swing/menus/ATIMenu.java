@@ -24,6 +24,7 @@ import edu.it.itba.functions.Negative;
 import edu.it.itba.functions.OtzuUmbralization;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
+import edu.it.itba.functions.ZeroCrossings;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
@@ -92,6 +93,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem equalize;
 	private JMenuItem isotropicDiffusion;
 	private JMenuItem anisotropicDiffusion;
+	private JMenuItem zeroCrossings;
 
 	private JMenuItem impulsiveSee;
 	private JMenuItem impulsiveAppLeft;
@@ -211,6 +213,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		applyContrastRight = addMenuItemToMenu(
 				"Apply Contrast right image ...", operation, true);
 		equalize = addMenuItemToMenu("Equalize", operation, true);
+		zeroCrossings = addMenuItemToMenu("Zero crossings", operation, true);
 		isotropicDiffusion = addMenuItemToMenu("Isotropic Diffusion...",
 				operation, true);
 		anisotropicDiffusion = addMenuItemToMenu("Anisotropic Diffusion...",
@@ -436,7 +439,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleIsotropicDiffusion();
 			else if (source == anisotropicDiffusion)
 				handleAnisotropicDiffusion();
-
 			else if (source == kirshV)
 				handleKirsh(Direction.VERTICAL);
 			else if (source == kirshH)
@@ -453,9 +455,18 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleKirshMax();
 			else if (source == prewittMax)
 				handlePrewittMax();
+			else if (source == zeroCrossings)
+				handleZeroCrossings();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void handleZeroCrossings() {
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new ZeroCrossings(img), 100);
+		parent.addImage(img);
 	}
 
 	private void handlePrewittMax() {
@@ -564,6 +575,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
 		img.applyFunction(new PassAdditiveWindow(img, new Laplacian(3)), 100);
 		parent.addImage(img);
+		ATImage img2 = new ATImage(img);
+		img2.applyFunction(new ZeroCrossings(img2), 100);
+		parent.addImage(img2);
 	}
 
 	private void handleKirsh(Direction dir) {
