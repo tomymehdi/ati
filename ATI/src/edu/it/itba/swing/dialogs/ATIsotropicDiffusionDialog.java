@@ -28,7 +28,7 @@ public class ATIsotropicDiffusionDialog extends JDialog implements
 	private ATImage img;
 
 	public ATIsotropicDiffusionDialog(ATIJFrame owner, ATImage img) {
-		super(owner, "Anisotropic Difussion", true);
+		super(owner, "isotropic Difussion", true);
 		this.owner = owner;
 		this.img = new ATImage(img);
 

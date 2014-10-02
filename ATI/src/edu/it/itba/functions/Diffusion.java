@@ -45,14 +45,16 @@ public class Diffusion implements Function {
 		double lambda = 0.25;
 		double newValueIJ = oldValueIJ + lambda
 				* (DnIijCnij + DsIijCsij + DeIijCeij + DoIijCoij);
-		return newValueIJ /** GaussianKernel(row, col, t) */
-		;
+		
+		newValueIJ*=GaussianKernel(row, col, t);
+		System.out.println(GaussianKernel(row, col, t));
+		return newValueIJ;
 	}
 
 	private double GaussianKernel(int row, int col, double t) {
 
 		return (1 / (4 * Math.PI * t))
-				* Math.pow(Math.E, (Math.pow(row, 2) + Math.pow(col, 2))
+				* Math.pow(Math.E, -(Math.pow(row, 2) + Math.pow(col, 2))
 						/ (4 * t));
 	}
 
