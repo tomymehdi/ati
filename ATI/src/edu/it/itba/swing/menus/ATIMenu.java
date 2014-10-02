@@ -15,10 +15,7 @@ import javax.swing.JMenuItem;
 import edu.it.itba.enums.Direction;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
-import edu.it.itba.functions.Diffusion;
 import edu.it.itba.functions.Equalize;
-import edu.it.itba.functions.GlobalUmbralization;
-import edu.it.itba.functions.IsotropicMaterialHeatDistribution;
 import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.functions.LogTransformation;
 import edu.it.itba.functions.MultiplyBy;
@@ -29,7 +26,6 @@ import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
-import edu.it.itba.models.windows.LoG;
 import edu.it.itba.models.windows.Prewitt;
 import edu.it.itba.models.windows.Sobel;
 import edu.it.itba.swing.dialogs.ATIAnisotropicDiffusionDialog;
@@ -50,6 +46,8 @@ import edu.it.itba.swing.dialogs.ATIRayleighImageDialog;
 import edu.it.itba.swing.dialogs.ATIRaylightDialog;
 import edu.it.itba.swing.dialogs.ATISubImageDialog;
 import edu.it.itba.swing.dialogs.ATIsotropicDiffusionDialog;
+import edu.it.itba.swing.dialogs.GlobalUmbralDialog;
+import edu.it.itba.swing.dialogs.LaplacianGaussianDialog;
 import edu.it.itba.swing.dialogs.SaltAndPepperNoise;
 import edu.it.itba.swing.frames.ATIImageJFrame;
 import edu.it.itba.swing.interfaces.ATIJFrame;
@@ -461,10 +459,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Border detection
 	private void handleLaplacianGaussian() {
-		ATImage img = new ATImage(
-				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		img.applyFunction(new PassAdditiveWindow(img, new LoG(9, 1.4)), 100);
-		parent.addImage(img);
+		new LaplacianGaussianDialog(parent, parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
 
 	private void handleLaplacian() {
@@ -559,8 +554,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleGlobalUmbral() {
 		ATImage img = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		img.applyFunction(new GlobalUmbralization(img, 10), 100);
-		parent.addImage(img);
+		new GlobalUmbralDialog(parent, img);
 	}
 
 	private void handleOtzuUmbral() {
