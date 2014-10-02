@@ -3,7 +3,7 @@ package edu.it.itba.models.windows;
 import edu.it.itba.enums.Direction;
 
 public class Kirsh extends Window {
-	
+
 	private Direction dir;
 
 	public Kirsh(int size, Direction dir) {
@@ -11,43 +11,45 @@ public class Kirsh extends Window {
 		this.dir = dir;
 		fillWindowValues();
 	}
-	
+
 	@Override
 	public void fillWindowValues() {
-		if(dir.equals(Direction.HORIZONTAL)){
+		if (dir.equals(Direction.HORIZONTAL)) {
 			horizontal();
-		} else if(dir.equals(Direction.VERTICAL)){
+		} else if (dir.equals(Direction.VERTICAL)) {
 			vertical();
-		} else if(dir.equals(Direction.DIAGONAL)){
+		} else if (dir.equals(Direction.DIAGONAL)) {
 			diagonal();
-		}
+		} else if (dir.equals(Direction.ADIAGONAL))
+			adiagonal();
 	}
 
 	private void diagonal() {
-		double [] aux = {5,5,-3,
-						 5,0,-3,
-						 -3,-3,-3};
-		for(int i = 0; i < size*size ; i++){
+		double[] aux = { 5, 5, -3, 5, 0, -3, -3, -3, -3 };
+		for (int i = 0; i < size * size; i++) {
 			window[i] = aux[i];
 		}
 	}
 
 	private void vertical() {
-		double [] aux = {5,5,5,
-						 -3,0,-3,
-						 -3,-3,-3};
-		for(int i = 0; i < size*size ; i++){
+		double[] aux = { 5, 5, 5, -3, 0, -3, -3, -3, -3 };
+		for (int i = 0; i < size * size; i++) {
 			window[i] = aux[i];
 		}
 	}
 
 	private void horizontal() {
-		double [] aux = {5,-3,-3,
-						 5,0,-3,
-						 5,-3,-3};
-		for(int i = 0; i < size*size ; i++){
+		double[] aux = { 5, -3, -3, 5, 0, -3, 5, -3, -3 };
+		for (int i = 0; i < size * size; i++) {
 			window[i] = aux[i];
 		}
 	}
-	
+
+	private void adiagonal() {
+		double[] aux = { -3, -3, -3, -3, 0, 5, -3, 5, 5 };
+		for (int i = 0; i < size * size; i++) {
+			window[i] = aux[i];
+		}
+	}
+
 }

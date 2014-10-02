@@ -20,7 +20,8 @@ public class Prewitt extends Window {
 			vertical();
 		} else if(dir.equals(Direction.DIAGONAL)){
 			diagonal();
-		}
+		} else if(dir.equals(Direction.ADIAGONAL))
+			adiagonal();
 
 	}
 	
@@ -60,6 +61,21 @@ public class Prewitt extends Window {
 				} else if((i+j)<2){
 					window[i * size + j ] = (double) 1.0;
 				} else if((i+j)>2){
+					window[i * size + j ] = (double) -1.0;
+				}
+			}
+		}
+	}
+	
+	
+	private void adiagonal(){
+		for(int i =0; i< size;i++){
+			for(int j=0;j<size;j++){
+				if(i==j){
+					window[i * size + j ] = (double) 0.0;
+				} else if (i>j){
+					window[i * size + j ] = (double) 1.0;
+				}else if (i<j){
 					window[i * size + j ] = (double) -1.0;
 				}
 			}

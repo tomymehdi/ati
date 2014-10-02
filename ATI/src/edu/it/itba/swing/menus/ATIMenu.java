@@ -18,6 +18,7 @@ import edu.it.itba.enums.Side;
 import edu.it.itba.functions.Equalize;
 import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.functions.LogTransformation;
+import edu.it.itba.functions.Max;
 import edu.it.itba.functions.MultiplyBy;
 import edu.it.itba.functions.Negative;
 import edu.it.itba.functions.OtzuUmbralization;
@@ -118,6 +119,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem mediumWindow;
 	private JMenuItem borderWindow;
 
+	private JMenuItem prewittMax;
+	private JMenuItem sobelMax;
+	private JMenuItem kirshMax;
 	private JMenuItem prewittV;
 	private JMenuItem prewittH;
 	private JMenuItem prewittD;
@@ -266,7 +270,12 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		laplacianGaussian = addMenuItemToMenu("Laplacian Gaussian",
 				borderDetection, true);
 
+		prewittMax = addMenuItemToMenu("Max Prewitt", borderDetection, true);
+		kirshMax = addMenuItemToMenu("Max Kirsh", borderDetection, true);
+		sobelMax = addMenuItemToMenu("Max Sobel", borderDetection, true);
+
 		// Compressions
+
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
 		linearCompRight = addMenuItemToMenu("LC right", compression, true);
 		logCompLeft = addMenuItemToMenu("DC left", compression, true);
@@ -438,9 +447,96 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleLaplacian();
 			else if (source == laplacianGaussian)
 				handleLaplacianGaussian();
+			else if (source == sobelMax)
+				handleSobelMax();
+			else if (source == kirshMax)
+				handleKirshMax();
+			else if (source == prewittMax)
+				handlePrewittMax();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void handlePrewittMax() {
+		ATImage imgHor = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgHor.applyFunction(new PassAdditiveWindow(imgHor, new Prewitt(3,
+				Direction.HORIZONTAL)), 100);
+		ATImage imgVer = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgVer.applyFunction(new PassAdditiveWindow(imgVer, new Prewitt(3,
+				Direction.VERTICAL)), 100);
+		ATImage imgDia = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgDia.applyFunction(new PassAdditiveWindow(imgDia, new Prewitt(3,
+				Direction.DIAGONAL)), 100);
+		ATImage imgAdia = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgAdia.applyFunction(new PassAdditiveWindow(imgAdia, new Prewitt(3,
+				Direction.ADIAGONAL)), 100);
+
+		ATImage resp = new ATImage(imgHor);
+		resp.applyFunction(new Max(imgVer), 100);
+		resp.applyFunction(new Max(imgDia), 100);
+		resp.applyFunction(new Max(imgAdia), 100);
+
+		parent.addImage(resp);
+
+	}
+
+	private void handleKirshMax() {
+		ATImage imgHor = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgHor.applyFunction(new PassAdditiveWindow(imgHor, new Kirsh(3,
+				Direction.HORIZONTAL)), 100);
+		ATImage imgVer = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgVer.applyFunction(new PassAdditiveWindow(imgVer, new Kirsh(3,
+				Direction.VERTICAL)), 100);
+		ATImage imgDia = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgDia.applyFunction(new PassAdditiveWindow(imgDia, new Kirsh(3,
+				Direction.DIAGONAL)), 100);
+		ATImage imgAdia = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgAdia.applyFunction(new PassAdditiveWindow(imgAdia, new Kirsh(3,
+				Direction.ADIAGONAL)), 100);
+
+		ATImage resp = new ATImage(imgHor);
+		resp.applyFunction(new Max(imgVer), 100);
+		resp.applyFunction(new Max(imgDia), 100);
+		resp.applyFunction(new Max(imgAdia), 100);
+
+		parent.addImage(resp);
+
+	}
+
+	private void handleSobelMax() {
+		ATImage imgHor = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgHor.applyFunction(new PassAdditiveWindow(imgHor, new Sobel(3,
+				Direction.HORIZONTAL)), 100);
+		ATImage imgVer = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgVer.applyFunction(new PassAdditiveWindow(imgVer, new Sobel(3,
+				Direction.VERTICAL)), 100);
+		ATImage imgDia = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgDia.applyFunction(new PassAdditiveWindow(imgDia, new Sobel(3,
+				Direction.DIAGONAL)), 100);
+		ATImage imgAdia = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgAdia.applyFunction(new PassAdditiveWindow(imgAdia, new Sobel(3,
+				Direction.ADIAGONAL)), 100);
+
+		ATImage resp = new ATImage(imgHor);
+		resp.applyFunction(new Max(imgVer), 100);
+		resp.applyFunction(new Max(imgDia), 100);
+		resp.applyFunction(new Max(imgAdia), 100);
+
+		parent.addImage(resp);
+
 	}
 
 	private void handleIsotropicDiffusion() {
@@ -459,7 +555,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Border detection
 	private void handleLaplacianGaussian() {
-		new LaplacianGaussianDialog(parent, parent.getPanels()[Side.LEFT.getValue()].getImage());
+		new LaplacianGaussianDialog(parent,
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
 	}
 
 	private void handleLaplacian() {
