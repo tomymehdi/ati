@@ -30,6 +30,7 @@ import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
 import edu.it.itba.models.windows.Prewitt;
 import edu.it.itba.models.windows.Sobel;
+import edu.it.itba.models.windows.UnNamedWindow;
 import edu.it.itba.swing.dialogs.ATIAnisotropicDiffusionDialog;
 import edu.it.itba.swing.dialogs.ATIBorderWindowDialog;
 import edu.it.itba.swing.dialogs.ATIContrastDialog;
@@ -121,6 +122,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem mediumWindow;
 	private JMenuItem borderWindow;
 
+	private JMenuItem unNamedMax;
 	private JMenuItem prewittMax;
 	private JMenuItem sobelMax;
 	private JMenuItem kirshMax;
@@ -276,7 +278,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		prewittMax = addMenuItemToMenu("Max Prewitt", borderDetection, true);
 		kirshMax = addMenuItemToMenu("Max Kirsh", borderDetection, true);
 		sobelMax = addMenuItemToMenu("Max Sobel", borderDetection, true);
-
+		unNamedMax = addMenuItemToMenu("Max UnNamed", borderDetection, true);
 		// Compressions
 
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
@@ -457,9 +459,37 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handlePrewittMax();
 			else if (source == zeroCrossings)
 				handleZeroCrossings();
+			else if (source == unNamedMax)
+				handleUnNamedMax();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void handleUnNamedMax() {
+		ATImage imgHor = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgHor.applyFunction(new PassAdditiveWindow(imgHor, new UnNamedWindow(3,
+				Direction.HORIZONTAL)), 100);
+		ATImage imgVer = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgVer.applyFunction(new PassAdditiveWindow(imgVer, new UnNamedWindow(3,
+				Direction.VERTICAL)), 100);
+		ATImage imgDia = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgDia.applyFunction(new PassAdditiveWindow(imgDia, new UnNamedWindow(3,
+				Direction.DIAGONAL)), 100);
+		ATImage imgAdia = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		imgAdia.applyFunction(new PassAdditiveWindow(imgAdia, new UnNamedWindow(3,
+				Direction.ADIAGONAL)), 100);
+
+		ATImage resp = new ATImage(imgHor);
+		resp.applyFunction(new Max(imgVer), 100);
+		resp.applyFunction(new Max(imgDia), 100);
+		resp.applyFunction(new Max(imgAdia), 100);
+
+		parent.addImage(resp);		
 	}
 
 	private void handleZeroCrossings() {
