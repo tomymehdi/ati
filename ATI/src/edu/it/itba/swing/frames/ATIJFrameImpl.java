@@ -86,8 +86,12 @@ public class ATIJFrameImpl extends ATIJFrame {
 			case BufferedImage.TYPE_INT_RGB:
 				type = ImageType.RGB;
 				break;
+			case 5:
+				type = ImageType.RGB;
+				break;
 			case BufferedImage.TYPE_BYTE_GRAY:
 				type = ImageType.GRAYSCALE;
+				break;
 			}
 
 			addImage(new ATImage(image, type));
