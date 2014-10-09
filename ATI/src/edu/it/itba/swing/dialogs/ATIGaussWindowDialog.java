@@ -79,7 +79,7 @@ public class ATIGaussWindowDialog extends JDialog implements ActionListener {
 
 	private void handleSetValue() {
 		int windowSize = Integer.valueOf(size.getText());
-		int gaussSigma = Integer.valueOf(sigma.getText());
+		double gaussSigma = Double.valueOf(sigma.getText());
 
 		img.applyFunction(new PassAdditiveWindow(img, new GaussianWIndow(
 				windowSize, gaussSigma)), 100);

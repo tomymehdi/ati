@@ -46,8 +46,7 @@ public class Diffusion implements Function {
 		double newValueIJ = oldValueIJ + lambda
 				* (DnIijCnij + DsIijCsij + DeIijCeij + DoIijCoij);
 		
-		newValueIJ*=GaussianKernel(row, col, t);
-		System.out.println(GaussianKernel(row, col, t));
+		//newValueIJ*=GaussianKernel(row, col, t);
 		return newValueIJ;
 	}
 
