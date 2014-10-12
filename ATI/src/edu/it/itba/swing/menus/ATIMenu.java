@@ -134,6 +134,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem sobelH;
 	private JMenuItem sobelD;
 	private JMenuItem canny;
+	private JMenuItem susanBorder;
+	
+	private JMenuItem susanCorner;
+	
+	private JMenuItem hough;
 
 	private JMenuItem kirshV;
 	private JMenuItem kirshH;
@@ -175,6 +180,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu slideWindow = new JMenu("Fillter");
 
 		JMenu borderDetection = new JMenu("Border detection");
+		
+		JMenu cornerDetection = new JMenu("Corner detecion");
+		
+		JMenu lineDetection = new JMenu("Line detection");
 
 		JMenu compression = new JMenu("Compressions");
 
@@ -282,9 +291,15 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		sobelMax = addMenuItemToMenu("Max Sobel", borderDetection, true);
 		unNamedMax = addMenuItemToMenu("Max UnNamed", borderDetection, true);
 		canny = addMenuItemToMenu("Canny", borderDetection, true);
+		susanBorder = addMenuItemToMenu("SUSAN", borderDetection, true);
 
+		// Corner detection
+		susanCorner = addMenuItemToMenu("SUSAN", cornerDetection, true);
+		
+		// Line detection
+		hough = addMenuItemToMenu("Hough", lineDetection, true);
+		
 		// Compressions
-
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
 		linearCompRight = addMenuItemToMenu("LC right", compression, true);
 		logCompLeft = addMenuItemToMenu("DC left", compression, true);
@@ -304,6 +319,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		addToMenu(umbrals);
 		addToMenu(slideWindow);
 		addToMenu(borderDetection);
+		addToMenu(cornerDetection);
+		addToMenu(lineDetection);
 		addToMenu(compression);
 		addToMenu(options);
 	}
@@ -467,11 +484,33 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleUnNamedMax();
 			else if (source == canny)
 				handleCanny();
+			else if (source == susanBorder)
+				handleSusanBorder();
+			else if (source == susanCorner)
+				handleSusanCorner();
+			else if (source == hough)
+				handleHough();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
+	
+	//Lines detection
+	private void handleHough() {
+		// TODO Auto-generated method stub
+		
+	}
 
+	//Corner detection
+	private void handleSusanCorner() {
+		// TODO Auto-generated method stub
+	}
+	
+	//Border detection
+	private void handleSusanBorder() {
+		// TODO Auto-generated method stub
+	}
+	
 	private void handleUnNamedMax() {
 		ATImage imgHor = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
@@ -496,13 +535,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		resp.applyFunction(new Max(imgAdia), 100);
 
 		parent.addImage(resp);		
-	}
-
-	private void handleZeroCrossings() {
-		ATImage img = new ATImage(
-				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		img.applyFunction(new ZeroCrossings(img), 100);
-		parent.addImage(img);
 	}
 
 	private void handlePrewittMax() {
@@ -600,7 +632,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		new ATIAnisotropicDiffusionDialog(parent, img);
 	}
 
-	// Border detection
+	
 	private void handleCanny() {
 		
 		// Filtro gaussiano
@@ -644,6 +676,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		
 		ATImage resp = new ATImage(hor);
 		
+		// Supresion de no maximos
 		for(int row = 1 ; row < img.getHeight()-1 ; row++){
 			for(int col = 1 ; col < img.getWidth()-1 ; col++){
 				switch (direction[row][col]){
@@ -682,9 +715,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 			}
 		}
 		
+		// Humbralizacion con histeresis
 		double t1;
 		
-		t1 = 10;
+		t1 = 250;
 		
 		for(int row = 1 ; row < img.getHeight()-1 ; row++){
 			for(int col = 1 ; col < img.getWidth()-1 ; col++){
@@ -904,6 +938,13 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	// Operation
+	private void handleZeroCrossings() {
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new ZeroCrossings(img), 100);
+		parent.addImage(img);
+	}
+	
 	private void handleMultiplyByScalar() {
 		new ATIMultiplyScalarDialog(parent,
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
