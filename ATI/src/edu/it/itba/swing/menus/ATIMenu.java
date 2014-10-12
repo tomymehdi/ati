@@ -26,6 +26,7 @@ import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.functions.ZeroCrossings;
 import edu.it.itba.models.ATImage;
+import edu.it.itba.models.windows.GaussianWIndow;
 import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
 import edu.it.itba.models.windows.Prewitt;
@@ -132,6 +133,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem sobelV;
 	private JMenuItem sobelH;
 	private JMenuItem sobelD;
+	private JMenuItem canny;
 
 	private JMenuItem kirshV;
 	private JMenuItem kirshH;
@@ -279,6 +281,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		kirshMax = addMenuItemToMenu("Max Kirsh", borderDetection, true);
 		sobelMax = addMenuItemToMenu("Max Sobel", borderDetection, true);
 		unNamedMax = addMenuItemToMenu("Max UnNamed", borderDetection, true);
+		canny = addMenuItemToMenu("Canny", borderDetection, true);
+
 		// Compressions
 
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
@@ -461,6 +465,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleZeroCrossings();
 			else if (source == unNamedMax)
 				handleUnNamedMax();
+			else if (source == canny)
+				handleCanny();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -595,6 +601,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	// Border detection
+	private void handleCanny() {
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new PassAdditiveWindow(img, new GaussianWIndow(5, 1)), 100);
+		img.applyFunction(new PassAdditiveWindow(img, new Sobel(3, Direction.HORIZONTAL)), 100);
+		
+	}
+	
 	private void handleLaplacianGaussian() {
 		new LaplacianGaussianDialog(parent,
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
