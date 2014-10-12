@@ -604,8 +604,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleCanny() {
 		ATImage img = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		img.applyFunction(new PassAdditiveWindow(img, new GaussianWIndow(5, 1)), 100);
-		img.applyFunction(new PassAdditiveWindow(img, new Sobel(3, Direction.HORIZONTAL)), 100);
+		img.applyFunction(new PassAdditiveWindow(img, new GaussianWIndow(5, 1.4)), 100);
+		//img.applyFunction(new PassAdditiveWindow(img, new Sobel(3, Direction.HORIZONTAL)), 100);
 		
 	}
 	
