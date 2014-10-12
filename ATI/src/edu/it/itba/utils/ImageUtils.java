@@ -787,7 +787,7 @@ public class ImageUtils {
 	public static double gaussNumber(int i, int j, double sigma) {
 
 		return (1 / (2 * Math.PI * sigma * sigma)) * Math.pow(	Math.E,-(i*i+j*j)
-																/ (2 * sigma * sigma));
+																/ (sigma * sigma));
 				
 				
 	}

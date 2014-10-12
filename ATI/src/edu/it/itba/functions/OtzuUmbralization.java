@@ -11,6 +11,8 @@ public class OtzuUmbralization implements Function {
 	
 	private ATImage img;
 	private double umbralCalculated;
+	
+
 	private Map<Integer, Integer> histogram = new HashMap<Integer,Integer>();
 	private double min = Double.MAX_VALUE, max = Double.MIN_VALUE;
 	
@@ -102,5 +104,8 @@ public class OtzuUmbralization implements Function {
 		}
 
 	}
-
+	
+	public double getUmbralCalculated() {
+		return umbralCalculated;
+	}
 }
