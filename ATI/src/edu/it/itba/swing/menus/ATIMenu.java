@@ -15,6 +15,7 @@ import javax.swing.JMenuItem;
 import edu.it.itba.enums.Direction;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
+import edu.it.itba.functions.Crossing;
 import edu.it.itba.functions.Equalize;
 import edu.it.itba.functions.LinearTransform;
 import edu.it.itba.functions.LogTransformation;
@@ -24,7 +25,6 @@ import edu.it.itba.functions.Negative;
 import edu.it.itba.functions.OtzuUmbralization;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
-import edu.it.itba.functions.ZeroCrossings;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
@@ -94,7 +94,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem equalize;
 	private JMenuItem isotropicDiffusion;
 	private JMenuItem anisotropicDiffusion;
-	private JMenuItem zeroCrossings;
 
 	private JMenuItem impulsiveSee;
 	private JMenuItem impulsiveAppLeft;
@@ -215,7 +214,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		applyContrastRight = addMenuItemToMenu(
 				"Apply Contrast right image ...", operation, true);
 		equalize = addMenuItemToMenu("Equalize", operation, true);
-		zeroCrossings = addMenuItemToMenu("Zero crossings", operation, true);
 		isotropicDiffusion = addMenuItemToMenu("Isotropic Diffusion...",
 				operation, true);
 		anisotropicDiffusion = addMenuItemToMenu("Anisotropic Diffusion...",
@@ -457,46 +455,50 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleKirshMax();
 			else if (source == prewittMax)
 				handlePrewittMax();
-			else if (source == zeroCrossings)
-				handleZeroCrossings();
 			else if (source == unNamedMax)
 				handleUnNamedMax();
+			else if (source == laplacianPendant)
+				handleLaplacianPendant();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
+	private void handleLaplacianPendant() {
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new PassAdditiveWindow(img, new Laplacian(3)), 100);
+		parent.clear();
+		parent.addImage(img);
+		ATImage img2 = new ATImage(img);
+		img2.applyFunction(new Crossing(img2, 50), 100);
+		parent.addImage(img2);
+	}
+
 	private void handleUnNamedMax() {
 		ATImage imgHor = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		imgHor.applyFunction(new PassAdditiveWindow(imgHor, new UnNamedWindow(3,
-				Direction.HORIZONTAL)), 100);
+		imgHor.applyFunction(new PassAdditiveWindow(imgHor, new UnNamedWindow(
+				3, Direction.HORIZONTAL)), 100);
 		ATImage imgVer = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		imgVer.applyFunction(new PassAdditiveWindow(imgVer, new UnNamedWindow(3,
-				Direction.VERTICAL)), 100);
+		imgVer.applyFunction(new PassAdditiveWindow(imgVer, new UnNamedWindow(
+				3, Direction.VERTICAL)), 100);
 		ATImage imgDia = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		imgDia.applyFunction(new PassAdditiveWindow(imgDia, new UnNamedWindow(3,
-				Direction.DIAGONAL)), 100);
+		imgDia.applyFunction(new PassAdditiveWindow(imgDia, new UnNamedWindow(
+				3, Direction.DIAGONAL)), 100);
 		ATImage imgAdia = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		imgAdia.applyFunction(new PassAdditiveWindow(imgAdia, new UnNamedWindow(3,
-				Direction.ADIAGONAL)), 100);
+		imgAdia.applyFunction(new PassAdditiveWindow(imgAdia,
+				new UnNamedWindow(3, Direction.ADIAGONAL)), 100);
 
 		ATImage resp = new ATImage(imgHor);
 		resp.applyFunction(new Max(imgVer), 100);
 		resp.applyFunction(new Max(imgDia), 100);
 		resp.applyFunction(new Max(imgAdia), 100);
 
-		parent.addImage(resp);		
-	}
-
-	private void handleZeroCrossings() {
-		ATImage img = new ATImage(
-				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		img.applyFunction(new ZeroCrossings(img), 100);
-		parent.addImage(img);
+		parent.addImage(resp);
 	}
 
 	private void handlePrewittMax() {
@@ -604,9 +606,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		ATImage img = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
 		img.applyFunction(new PassAdditiveWindow(img, new Laplacian(3)), 100);
+		parent.clear();
 		parent.addImage(img);
 		ATImage img2 = new ATImage(img);
-		img2.applyFunction(new ZeroCrossings(img2), 100);
+		img2.applyFunction(new Crossing(img2, 0), 100);
 		parent.addImage(img2);
 	}
 
