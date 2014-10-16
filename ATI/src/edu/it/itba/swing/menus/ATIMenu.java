@@ -298,8 +298,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		susanCorner = addMenuItemToMenu("SUSAN", cornerDetection, true);
 		
 		// Line detection
-		houghLines = addMenuItemToMenu("Hough", lineDetection, true);
-		houghCircles = addMenuItemToMenu("Hough", lineDetection, true);
+		houghLines = addMenuItemToMenu("Hough lines", lineDetection, true);
+		houghCircles = addMenuItemToMenu("Hough circles", lineDetection, true);
 		
 		// Compressions
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
@@ -501,9 +501,61 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	
 	//Lines detection
 	private void handleHoughLines() {
-		// TODO Auto-generated method stub
+		handleCanny();
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.RIGHT.getValue()].getImage());
+		img.applyFunction(new LinearTransform(img), 100);
+		img.applyFunction(new OtzuUmbralization(img), 100);
+		parent.addImage(img);
 		
+		// Para cada pixel blanco analizar si cumple la ecuacion de la recta en todas las direcciones
+		int [][] votes = new int[img.getHeight()][img.getWidth()];
+		int D = Math.max(img.getWidth(), img.getHeight());
+		double epsilon = 0.0001;
+		double min = Double.MAX_VALUE;
+		
+		for(int row = 1; row < img.getHeight()-1 ; row++){
+			for(int col = 1 ; col < img.getWidth()-1 ; col++){
+				
+				if(img.R.getValue(row, col) == 255){
+					for(double theta = -Math.PI/2 ; theta < Math.PI/2 ; theta += Math.PI/180){
+						for(double ro = -Math.sqrt(2)*D ; ro < Math.sqrt(2)*D ; ro += 1){
+							//System.out.println(Math.abs(ro - col*Math.cos(theta) - row*Math.sin(theta)));
+							if( Math.abs(ro - col*Math.cos(theta) - row*Math.sin(theta)) < epsilon){
+								votes[row][col] += 1;
+							}
+							if( Math.abs(ro - col*Math.cos(theta) - row*Math.sin(theta)) < min){
+								min = Math.abs(ro - col*Math.cos(theta) - row*Math.sin(theta));
+							}
+						}
+					}
+				}
+				
+				
+			}
+		}
+		
+		//Examinar el resultado del paso 4
+		ATImage aux = new ATImage(512, 512, ImageType.RGB);
+		int max = 0;
+		for(int row = 0; row < img.getHeight() ; row++){
+			for(int col = 0 ; col < img.getWidth() ; col++){
+				//System.out.println(votes[row][col]);
+				if(max < votes[row][col]){
+					max = votes[row][col];
+				}
+				if(votes[row][col] >= 1){
+					aux.G.set(row, col, 100);
+				} else {
+					aux.R.set(row, col, 0);
+				}
+			}
+		}
+		System.out.println(max);
+		System.out.println(min);
+		parent.addImage(aux);
 	}
+	//Circles detection
 	private void handleHoughCircles() {
 		// TODO Auto-generated method stub
 		
