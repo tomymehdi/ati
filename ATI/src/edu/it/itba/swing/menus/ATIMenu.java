@@ -39,6 +39,7 @@ import edu.it.itba.swing.dialogs.ATIExpImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussWindowDialog;
+import edu.it.itba.swing.dialogs.ATILaplacianPendantDialog;
 import edu.it.itba.swing.dialogs.ATILoadImageDialog;
 import edu.it.itba.swing.dialogs.ATIMeanWindowDialog;
 import edu.it.itba.swing.dialogs.ATIMediumWindowDialog;
@@ -465,14 +466,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleLaplacianPendant() {
-		ATImage img = new ATImage(
+
+		new ATILaplacianPendantDialog(parent,
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		img.applyFunction(new PassAdditiveWindow(img, new Laplacian(3)), 100);
-		parent.clear();
-		parent.addImage(img);
-		ATImage img2 = new ATImage(img);
-		img2.applyFunction(new Crossing(img2, 50), 100);
-		parent.addImage(img2);
+
 	}
 
 	private void handleUnNamedMax() {
