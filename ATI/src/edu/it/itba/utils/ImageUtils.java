@@ -786,11 +786,10 @@ public class ImageUtils {
 	/* Calcula un numero gaussiano para cierta posicion de la ventana */
 	public static double gaussNumber(int i, int j, double sigma) {
 
-		return (1 / (2 * Math.PI * Math.pow(sigma, 2)))
-				* Math.pow(
-						Math.E,
-						-((Math.pow(i, 2) + Math.pow(j, 2)))
-								/ Math.pow(sigma, 2));
+		return (1 / (2 * Math.PI * sigma * sigma)) * Math.pow(	Math.E,-(i*i+j*j)
+																/ (sigma * sigma));
+				
+				
 	}
 
 	/* Devuelve una ventana de la mediana ( vacia por q depende de la imagen) */

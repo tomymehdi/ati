@@ -26,6 +26,7 @@ import edu.it.itba.functions.OtzuUmbralization;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
+import edu.it.itba.models.windows.GaussianWIndow;
 import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
 import edu.it.itba.models.windows.Prewitt;
@@ -132,6 +133,13 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem sobelV;
 	private JMenuItem sobelH;
 	private JMenuItem sobelD;
+	private JMenuItem canny;
+	private JMenuItem susanBorder;
+
+	private JMenuItem susanCorner;
+
+	private JMenuItem houghLines;
+	private JMenuItem houghCircles;
 
 	private JMenuItem kirshV;
 	private JMenuItem kirshH;
@@ -173,6 +181,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu slideWindow = new JMenu("Fillter");
 
 		JMenu borderDetection = new JMenu("Border detection");
+
+		JMenu cornerDetection = new JMenu("Corner detecion");
+
+		JMenu lineDetection = new JMenu("Line detection");
 
 		JMenu compression = new JMenu("Compressions");
 
@@ -278,8 +290,17 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		kirshMax = addMenuItemToMenu("Max Kirsh", borderDetection, true);
 		sobelMax = addMenuItemToMenu("Max Sobel", borderDetection, true);
 		unNamedMax = addMenuItemToMenu("Max UnNamed", borderDetection, true);
-		// Compressions
+		canny = addMenuItemToMenu("Canny", borderDetection, true);
+		susanBorder = addMenuItemToMenu("SUSAN", borderDetection, true);
 
+		// Corner detection
+		susanCorner = addMenuItemToMenu("SUSAN", cornerDetection, true);
+
+		// Line detection
+		houghLines = addMenuItemToMenu("Hough", lineDetection, true);
+		houghCircles = addMenuItemToMenu("Hough", lineDetection, true);
+
+		// Compressions
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
 		linearCompRight = addMenuItemToMenu("LC right", compression, true);
 		logCompLeft = addMenuItemToMenu("DC left", compression, true);
@@ -299,6 +320,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		addToMenu(umbrals);
 		addToMenu(slideWindow);
 		addToMenu(borderDetection);
+		addToMenu(cornerDetection);
+		addToMenu(lineDetection);
 		addToMenu(compression);
 		addToMenu(options);
 	}
@@ -460,9 +483,30 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleUnNamedMax();
 			else if (source == laplacianPendant)
 				handleLaplacianPendant();
+			else if (source == canny)
+				handleCanny();
+			else if (source == susanBorder)
+				handleSusanBorder();
+			else if (source == susanCorner)
+				handleSusanCorner();
+			else if (source == houghLines)
+				handleHoughLines();
+			else if (source == houghCircles)
+				handleHoughCircles();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	// Lines detection
+	private void handleHoughLines() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void handleHoughCircles() {
+		// TODO Auto-generated method stub
+
 	}
 
 	private void handleLaplacianPendant() {
@@ -470,6 +514,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		new ATILaplacianPendantDialog(parent,
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
 
+	}
+
+	// Corner detection
+	private void handleSusanCorner() {
+		// TODO Auto-generated method stub
+	}
+
+	// Border detection
+	private void handleSusanBorder() {
+		// TODO Auto-generated method stub
 	}
 
 	private void handleUnNamedMax() {
@@ -593,7 +647,116 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		new ATIAnisotropicDiffusionDialog(parent, img);
 	}
 
-	// Border detection
+	private void handleCanny() {
+
+		// Filtro gaussiano
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new PassAdditiveWindow(img,
+				new GaussianWIndow(5, 1.4)), 100);
+
+		// Usar sobel para calcular el modulo de cada pixel y la direccion de
+		// maxima variacion
+		ATImage hor = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		hor.applyFunction(new PassAdditiveWindow(hor, new Sobel(3,
+				Direction.HORIZONTAL)), 100);
+		ATImage ver = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		ver.applyFunction(new PassAdditiveWindow(ver, new Sobel(3,
+				Direction.VERTICAL)), 100);
+
+		double gx, gy, angle, mag;
+		double magnitude[][] = new double[img.getHeight()][img.getWidth()];
+		Direction direction[][] = new Direction[img.getHeight()][img.getWidth()];
+		for (int row = 0; row < img.getHeight(); row++) {
+			for (int col = 0; col < img.getWidth(); col++) {
+				gx = hor.R.getValue(row, col);
+				gy = ver.R.getValue(row, col);
+				magnitude[row][col] = Math.sqrt(gx * gx + gy * gy);
+				angle = Math.atan2(gy, gx);
+
+				if (angle <= Math.PI / 8) {
+					direction[row][col] = Direction.HORIZONTAL;
+				} else if (angle <= Math.PI * 3 / 8) {
+					direction[row][col] = Direction.DIAGONAL;
+				} else if (angle <= Math.PI * 5 / 8) {
+					direction[row][col] = Direction.VERTICAL;
+				} else if (angle <= Math.PI * 7 / 8) {
+					direction[row][col] = Direction.ADIAGONAL;
+				} else {
+					direction[row][col] = Direction.HORIZONTAL;
+				}
+			}
+		}
+
+		ATImage resp = new ATImage(hor);
+
+		// Supresion de no maximos
+		for (int row = 1; row < img.getHeight() - 1; row++) {
+			for (int col = 1; col < img.getWidth() - 1; col++) {
+				switch (direction[row][col]) {
+				case HORIZONTAL:
+					if (magnitude[row][col] < magnitude[row][col - 1]
+							&& magnitude[row][col] < magnitude[row][col + 1]) {
+						resp.R.set(row, col, 0);
+					} else {
+						resp.R.set(row, col, magnitude[row][col]);
+					}
+					break;
+				case ADIAGONAL:
+					if (magnitude[row][col] < magnitude[row + 1][col - 1]
+							&& magnitude[row][col] < magnitude[row - 1][col + 1]) {
+						resp.R.set(row, col, 0);
+					} else {
+						resp.R.set(row, col, magnitude[row][col]);
+					}
+					break;
+				case DIAGONAL:
+					if (magnitude[row][col] < magnitude[row - 1][col - 1]
+							&& magnitude[row][col] < magnitude[row + 1][col + 1]) {
+						resp.R.set(row, col, 0);
+					} else {
+						resp.R.set(row, col, magnitude[row][col]);
+					}
+					break;
+				case VERTICAL:
+					if (magnitude[row][col] < magnitude[row - 1][col]
+							&& magnitude[row][col] < magnitude[row + 1][col]) {
+						resp.R.set(row, col, 0);
+					} else {
+						resp.R.set(row, col, magnitude[row][col]);
+					}
+					break;
+				default:
+					break;
+				}
+
+			}
+		}
+
+		// Humbralizacion con histeresis
+		double t1;
+
+		t1 = 250;
+
+		for (int row = 1; row < img.getHeight() - 1; row++) {
+			for (int col = 1; col < img.getWidth() - 1; col++) {
+				if (resp.R.getValue(row, col) <= t1 * 2 / 3
+						|| (resp.R.getValue(row, col) <= t1
+								&& resp.R.getValue(row, col - 1) == 0
+								&& resp.R.getValue(row, col + 1) == 0
+								&& resp.R.getValue(row - 1, col) == 0 && resp.R
+								.getValue(row + 1, col) == 0)) {
+					resp.R.set(row, col, 0);
+				}
+			}
+		}
+
+		parent.addImage(resp);
+
+	}
+
 	private void handleLaplacianGaussian() {
 		new LaplacianGaussianDialog(parent,
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
@@ -793,7 +956,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		parent.clear();
 	}
 
-	// Operation
 	private void handleMultiplyByScalar() {
 		new ATIMultiplyScalarDialog(parent,
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
