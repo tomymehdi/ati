@@ -138,7 +138,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	
 	private JMenuItem susanCorner;
 	
-	private JMenuItem hough;
+	private JMenuItem houghLines;
+	private JMenuItem houghCircles;
 
 	private JMenuItem kirshV;
 	private JMenuItem kirshH;
@@ -297,7 +298,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		susanCorner = addMenuItemToMenu("SUSAN", cornerDetection, true);
 		
 		// Line detection
-		hough = addMenuItemToMenu("Hough", lineDetection, true);
+		houghLines = addMenuItemToMenu("Hough", lineDetection, true);
+		houghCircles = addMenuItemToMenu("Hough", lineDetection, true);
 		
 		// Compressions
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
@@ -488,15 +490,21 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleSusanBorder();
 			else if (source == susanCorner)
 				handleSusanCorner();
-			else if (source == hough)
-				handleHough();
+			else if (source == houghLines)
+				handleHoughLines();
+			else if (source == houghCircles)
+				handleHoughCircles();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 	
 	//Lines detection
-	private void handleHough() {
+	private void handleHoughLines() {
+		// TODO Auto-generated method stub
+		
+	}
+	private void handleHoughCircles() {
 		// TODO Auto-generated method stub
 		
 	}
