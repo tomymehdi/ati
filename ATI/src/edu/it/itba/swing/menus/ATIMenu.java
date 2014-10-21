@@ -299,8 +299,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		susanCorner = addMenuItemToMenu("SUSAN", cornerDetection, true);
 
 		// Line detection
-		houghLines = addMenuItemToMenu("Hough", lineDetection, true);
-		houghCircles = addMenuItemToMenu("Hough", lineDetection, true);
+		houghLines = addMenuItemToMenu("Hough lines", lineDetection, true);
+		houghCircles = addMenuItemToMenu("Hough circles", lineDetection, true);
 
 		// Compressions
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
@@ -724,7 +724,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		ver.applyFunction(new PassAdditiveWindow(ver, new Sobel(3,
 				Direction.VERTICAL)), 100);
 
-		double gx, gy, angle, mag;
+		double gx, gy, angle;
 		double magnitude[][] = new double[img.getHeight()][img.getWidth()];
 		Direction direction[][] = new Direction[img.getHeight()][img.getWidth()];
 		for (int row = 0; row < img.getHeight(); row++) {
