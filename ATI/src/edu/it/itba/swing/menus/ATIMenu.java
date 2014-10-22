@@ -24,6 +24,7 @@ import edu.it.itba.functions.MultiplyBy;
 import edu.it.itba.functions.Negative;
 import edu.it.itba.functions.OtzuUmbralization;
 import edu.it.itba.functions.PassAdditiveWindow;
+import edu.it.itba.functions.PassSusanWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.models.windows.GaussianWIndow;
@@ -518,12 +519,23 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Corner detection
 	private void handleSusanCorner() {
-		// TODO Auto-generated method stub
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+
+		img.applyFunction(new PassSusanWindow(img, 15, 2, 0.05), 100);
+
+		parent.addImage(img);
+
 	}
 
 	// Border detection
 	private void handleSusanBorder() {
-		// TODO Auto-generated method stub
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+
+		img.applyFunction(new PassSusanWindow(img, 15, 1, 0.05), 100);
+
+		parent.addImage(img);
 	}
 
 	private void handleUnNamedMax() {
