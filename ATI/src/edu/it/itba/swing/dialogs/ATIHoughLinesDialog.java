@@ -26,9 +26,8 @@ import edu.it.itba.swing.interfaces.ATIJFrame;
 @SuppressWarnings("serial")
 public class ATIHoughLinesDialog extends JDialog implements ActionListener {
 	private ATIJFrame owner;
-	private JTextField d;
-	private JTextField m;
-	private JTextField s;
+	private JTextField e;
+	private JTextField t;
 	private JButton setValue;
 	private JButton close;
 	private ATImage img;
@@ -42,9 +41,8 @@ public class ATIHoughLinesDialog extends JDialog implements ActionListener {
 		setValue.addActionListener(this);
 		close = new JButton("Close");
 		close.addActionListener(this);
-		d = new JTextField(4);
-		m = new JTextField(4);
-		s = new JTextField(4);
+		e = new JTextField(4);
+		t = new JTextField(4);
 
 		JPanel mainPanel = new JPanel();
 		JPanel centralPanel = new JPanel();
@@ -53,10 +51,10 @@ public class ATIHoughLinesDialog extends JDialog implements ActionListener {
 		JPanel p = new JPanel();
 
 		p.add(new JLabel("Umbral(%)"));
-		p.add(m);
+		p.add(t);
 
 		p.add(new JLabel("Epsilon(0.1 recomendado)"));
-		p.add(s);
+		p.add(e);
 
 		p.add(setValue);
 		p.add(close);
@@ -88,8 +86,8 @@ public class ATIHoughLinesDialog extends JDialog implements ActionListener {
 	}
 
 	private void handleSetValue() {
-		double mu = Double.valueOf(m.getText());
-		double sigma = Double.valueOf(s.getText());
+		double threshold = Double.valueOf(t.getText());
+		double epsilon = Double.valueOf(e.getText());
 		
 		img.applyFunction(new LinearTransform(img), 100);
 		img.applyFunction(new OtzuUmbralization(img), 100);
@@ -98,8 +96,6 @@ public class ATIHoughLinesDialog extends JDialog implements ActionListener {
 		// Para cada pixel blanco analizar si cumple la ecuacion de la recta en todas las direcciones
 		int D = Math.max(img.getWidth(), img.getHeight());
 		int [][] votes = new int[(int) (2*Math.sqrt(2) * D)][180];
-		double epsilon = 0.1;
-		double threshold = 1;
 		
 		for(int row = 1; row < img.getHeight()-1 ; row++){
 			for(int col = 1 ; col < img.getWidth()-1 ; col++){

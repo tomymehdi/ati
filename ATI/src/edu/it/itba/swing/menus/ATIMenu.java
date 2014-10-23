@@ -48,6 +48,7 @@ import edu.it.itba.swing.dialogs.ATIExpImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussWindowDialog;
+import edu.it.itba.swing.dialogs.ATIHoughCirclesDialog;
 import edu.it.itba.swing.dialogs.ATIHoughLinesDialog;
 import edu.it.itba.swing.dialogs.ATILaplacianPendantDialog;
 import edu.it.itba.swing.dialogs.ATILoadImageDialog;
@@ -514,12 +515,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				parent.getPanels()[Side.RIGHT.getValue()].getImage());
 		
 		new ATIHoughLinesDialog(parent, img);
-		
 	}
 	//Circles detection
 	private void handleHoughCircles() {
-		// TODO Auto-generated method stub
-
+		handleCanny();
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.RIGHT.getValue()].getImage());
+		
+		new ATIHoughCirclesDialog(parent, img);
 	}
 
 	private void handleLaplacianPendant() {
