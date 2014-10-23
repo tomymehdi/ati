@@ -24,7 +24,6 @@ import edu.it.itba.functions.MultiplyBy;
 import edu.it.itba.functions.Negative;
 import edu.it.itba.functions.OtzuUmbralization;
 import edu.it.itba.functions.PassAdditiveWindow;
-import edu.it.itba.functions.PassSusanWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.models.windows.GaussianWIndow;
@@ -34,8 +33,10 @@ import edu.it.itba.models.windows.Prewitt;
 import edu.it.itba.models.windows.Sobel;
 import edu.it.itba.models.windows.UnNamedWindow;
 import edu.it.itba.swing.dialogs.ATIAnisotropicDiffusionDialog;
+import edu.it.itba.swing.dialogs.ATIBorderSusanDialog;
 import edu.it.itba.swing.dialogs.ATIBorderWindowDialog;
 import edu.it.itba.swing.dialogs.ATIContrastDialog;
+import edu.it.itba.swing.dialogs.ATICornerSusanDialog;
 import edu.it.itba.swing.dialogs.ATIExpDialog;
 import edu.it.itba.swing.dialogs.ATIExpImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
@@ -519,23 +520,17 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Corner detection
 	private void handleSusanCorner() {
-		ATImage img = new ATImage(
+
+		new ATICornerSusanDialog(parent,
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
-
-		img.applyFunction(new PassSusanWindow(img, 15, 2, 0.05), 100);
-
-		parent.addImage(img);
 
 	}
 
 	// Border detection
 	private void handleSusanBorder() {
-		ATImage img = new ATImage(
+
+		new ATIBorderSusanDialog(parent,
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
-
-		img.applyFunction(new PassSusanWindow(img, 15, 1, 0.05), 100);
-
-		parent.addImage(img);
 	}
 
 	private void handleUnNamedMax() {

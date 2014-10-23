@@ -39,7 +39,7 @@ public class PassSusanWindow implements Function {
 				}
 			}
 		}
-		double porcentaje = counter / 37.0;
+		double porcentaje = 1-( counter / 37.0);
 		switch (opt) {
 		case 1:
 			if (porcentaje > 0.5 - error && porcentaje < 0.5 + error)
