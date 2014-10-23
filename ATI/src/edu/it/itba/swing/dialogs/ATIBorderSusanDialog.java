@@ -78,11 +78,12 @@ public class ATIBorderSusanDialog extends JDialog implements ActionListener {
 	private void handleSetValue() {
 		Double porcentajeError = Double.valueOf(error.getText());
 		int pixelDelta = Integer.valueOf(delta.getText());
-
+		ATImage img2 = new ATImage(img);
 		img.applyFunction(new PassSusanWindow(img, pixelDelta, 1,
 				porcentajeError), 100);
 
-		owner.addImage(img);
+		ATImage ret = img2.applyLayer(img);
+		owner.addImage(ret);
 		handleClose();
 	}
 
