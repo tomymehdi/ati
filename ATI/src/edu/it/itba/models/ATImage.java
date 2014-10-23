@@ -43,7 +43,7 @@ public class ATImage {
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
 				R.set(row, col, raster.getSample(col, row, 0));
-				if(ImageType.RGB == type) {
+				if (ImageType.RGB == type) {
 					G.set(row, col, raster.getSample(col, row, 1));
 					B.set(row, col, raster.getSample(col, row, 2));
 				}
@@ -71,58 +71,58 @@ public class ATImage {
 
 	public void applyFunction(Function function, double density) {
 		List<Pixel> positions = getPixels(density);
-		
+
 		applyFunctionR(function, positions);
-		if(ImageType.RGB == type) {
+		if (ImageType.RGB == type) {
 			applyFunctionG(function, positions);
 			applyFunctionB(function, positions);
 		}
 	}
 
 	private List<Pixel> getPixels(double density) {
-		double value = density/100;
+		double value = density / 100;
 		int amountPixels = (int) (value * rows * cols);
-		
+
 		List<Pixel> pixels = new ArrayList<Pixel>();
 		List<Pixel> positions = new ArrayList<Pixel>();
-		
-		for(int i = 0 ; i < rows ; i++){
-			for(int j = 0 ; j < cols ; j++) {
-				positions.add(new Pixel(i,j));
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				positions.add(new Pixel(i, j));
 			}
 		}
-		if(density == 100) {
+		if (density == 100) {
 			return positions;
 		}
-		
+
 		Collections.shuffle(positions);
-		
-		for(int i = 0 ; i < amountPixels ; i++ ){
+
+		for (int i = 0; i < amountPixels; i++) {
 			pixels.add(positions.get(i));
 		}
-		
+
 		return pixels;
 	}
 
 	private void applyFunctionR(Function function, List<Pixel> positions) {
-		for(Pixel pos: positions){
+		for (Pixel pos : positions) {
 			R.apply(function, pos.row, pos.col);
 		}
 	}
 
 	private void applyFunctionG(Function function, List<Pixel> positions) {
-		for(Pixel pos: positions){
+		for (Pixel pos : positions) {
 			G.apply(function, pos.row, pos.col);
 		}
 	}
 
 	private void applyFunctionB(Function function, List<Pixel> positions) {
-		for(Pixel pos: positions){
+		for (Pixel pos : positions) {
 			B.apply(function, pos.row, pos.col);
 		}
 	}
 
-	public BufferedImage getVisual() {		
+	public BufferedImage getVisual() {
 		int format = BufferedImage.TYPE_INT_RGB;
 		if (type.equals(ImageType.GRAYSCALE)) {
 			format = BufferedImage.TYPE_BYTE_GRAY;
@@ -133,16 +133,17 @@ public class ATImage {
 		} else if (type.equals(ImageType.HSV)) {
 			// TODO HSV images
 		}
-		
-		// Apply compression, always is linear. To apply other compression go to compressions tab.
+
+		// Apply compression, always is linear. To apply other compression go to
+		// compressions tab.
 		applyFunction(new LinearTransform(this), 100);
-		
+
 		BufferedImage resp = new BufferedImage(cols, rows, format);
 		WritableRaster raster = resp.getRaster();
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
 				raster.setSample(col, row, 0, R.getValue(row, col));
-				if(ImageType.RGB == type) {
+				if (ImageType.RGB == type) {
 					raster.setSample(col, row, 1, G.getValue(row, col));
 					raster.setSample(col, row, 2, B.getValue(row, col));
 				}
@@ -190,6 +191,28 @@ public class ATImage {
 		resp[2] = resp[2] / (height * width);
 
 		return resp;
+	}
+
+	public ATImage applyLayer(ATImage img) {
+
+		BufferedImage image1 = getVisual();
+		BufferedImage image = new BufferedImage(image1.getWidth(),
+				image1.getHeight(), BufferedImage.TYPE_INT_RGB);
+		for (int i = 0; i < image1.getWidth(); i++) {
+			for (int j = 0; j < image1.getHeight(); j++) {
+				image.setRGB(i, j, image1.getRGB(i, j));
+			}
+		}
+
+		ATImage ret = new ATImage(image, ImageType.RGB);
+
+		for (int row = 0; row < getHeight(); row++)
+			for (int col = 0; col < getWidth(); col++) {
+				if (img.getBand(Bands.R).getValue(row, col) == 255)
+					ret.getBand(Bands.R).set(row, col,
+							img.getBand(Bands.R).getValue(row, col));
+			}
+		return ret;
 	}
 
 }
