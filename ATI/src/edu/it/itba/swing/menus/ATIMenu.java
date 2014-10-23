@@ -6,6 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.JMenu;
@@ -26,6 +31,7 @@ import edu.it.itba.functions.OtzuUmbralization;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
+import edu.it.itba.models.Line;
 import edu.it.itba.models.windows.GaussianWIndow;
 import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
@@ -299,8 +305,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		susanCorner = addMenuItemToMenu("SUSAN", cornerDetection, true);
 
 		// Line detection
-		houghLines = addMenuItemToMenu("Hough", lineDetection, true);
-		houghCircles = addMenuItemToMenu("Hough", lineDetection, true);
+		houghLines = addMenuItemToMenu("Hough lines", lineDetection, true);
+		houghCircles = addMenuItemToMenu("Hough circles", lineDetection, true);
 
 		// Compressions
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
@@ -502,10 +508,94 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// Lines detection
 	private void handleHoughLines() {
-		// TODO Auto-generated method stub
+		handleCanny();
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.RIGHT.getValue()].getImage());
+		img.applyFunction(new LinearTransform(img), 100);
+		img.applyFunction(new OtzuUmbralization(img), 100);
+		parent.addImage(img);
+		
+		// Para cada pixel blanco analizar si cumple la ecuacion de la recta en todas las direcciones
+		int D = Math.max(img.getWidth(), img.getHeight());
+		int [][] votes = new int[(int) (2*Math.sqrt(2) * D)][180];
+		double epsilon = 0.1;
+		double threshold = 1;
+		
+		for(int row = 1; row < img.getHeight()-1 ; row++){
+			for(int col = 1 ; col < img.getWidth()-1 ; col++){
+				
+				if(img.R.getValue(row, col) == 255){
+					
+					for(int theta = 0 ; theta < 180 ; theta ++){
+						
+						double thetaValue = -90 + theta;
+						double thetaTerm = col
+								* Math.cos(thetaValue * Math.PI / 180) - row
+								* Math.sin(thetaValue * Math.PI / 180);
+						
+						for(int ro = 0 ; ro < 2*Math.sqrt(2) * D -1; ro ++){
+							double roValue = -Math.sqrt(2) * D + ro;
+							double total = roValue - thetaTerm;
+							
+							if (Math.abs(total) < epsilon) {
+								votes[ro][theta] +=1;
+							}
+						}
+					}
+				}
+				
+				
+			}
+		}
 
+		Set<Line> allBuckets = new HashSet<Line>();
+		for (int theta = 0; theta < 180; theta++) {
+			for (int ro = 0; ro < 2*Math.sqrt(2) * D -1; ro++) {
+				Line l = new Line(ro, theta, votes[ro][theta]);
+				allBuckets.add(l);
+			}
+		}
+		
+		List<Line> allBucketsAsList = new ArrayList<Line>(
+				allBuckets);
+		Collections.sort(allBucketsAsList);
+		int maxVotes = allBucketsAsList.get(0).votes;
+		
+		ATImage aux = new ATImage(img);
+		aux.type = ImageType.RGB;
+		
+		if (maxVotes > 1) {
+			for (Line b : allBucketsAsList) {
+
+				// Only for those with max votes
+				if (b.votes < maxVotes * threshold) {
+					break;
+				}
+
+				double roValue = -Math.sqrt(2) * D + b.ro;
+				double thetaValue = -90 + b.theta;
+
+				for (int row = 0; row < img.getHeight(); row++) {
+					for (int col = 0; col < img.getWidth(); col++) {
+						double thetaTerm = col
+								* Math.cos(thetaValue * Math.PI / 180) - row
+								* Math.sin(thetaValue * Math.PI / 180);
+						double total = roValue - thetaTerm;
+						// Step 6
+						if (Math.abs(total) < epsilon) {
+							aux.R.set(row, col, 0);
+							aux.B.set(row, col, 0);
+							aux.G.set(row, col, 255);
+						}
+					}
+				}
+
+			}
+		}
+		
+		parent.addImage(aux);
 	}
-
+	//Circles detection
 	private void handleHoughCircles() {
 		// TODO Auto-generated method stub
 
@@ -673,7 +763,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		ver.applyFunction(new PassAdditiveWindow(ver, new Sobel(3,
 				Direction.VERTICAL)), 100);
 
-		double gx, gy, angle, mag;
+		double gx, gy, angle;
 		double magnitude[][] = new double[img.getHeight()][img.getWidth()];
 		Direction direction[][] = new Direction[img.getHeight()][img.getWidth()];
 		for (int row = 0; row < img.getHeight(); row++) {
