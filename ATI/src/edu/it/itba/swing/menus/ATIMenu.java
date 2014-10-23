@@ -520,7 +520,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		int [][] votes = new int[(int) (2*Math.sqrt(2) * D)][180];
 		double epsilon = 0.1;
 		double threshold = 1;
-		double min = Double.MAX_VALUE;
 		
 		for(int row = 1; row < img.getHeight()-1 ; row++){
 			for(int col = 1 ; col < img.getWidth()-1 ; col++){
@@ -548,7 +547,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				
 			}
 		}
-		
+
 		Set<Line> allBuckets = new HashSet<Line>();
 		for (int theta = 0; theta < 180; theta++) {
 			for (int ro = 0; ro < 2*Math.sqrt(2) * D -1; ro++) {
