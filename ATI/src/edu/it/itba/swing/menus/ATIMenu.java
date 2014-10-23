@@ -6,6 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.JMenu;
@@ -26,6 +31,7 @@ import edu.it.itba.functions.OtzuUmbralization;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
+import edu.it.itba.models.Line;
 import edu.it.itba.models.windows.GaussianWIndow;
 import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
@@ -510,23 +516,30 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		parent.addImage(img);
 		
 		// Para cada pixel blanco analizar si cumple la ecuacion de la recta en todas las direcciones
-		int [][] votes = new int[img.getHeight()][img.getWidth()];
 		int D = Math.max(img.getWidth(), img.getHeight());
-		double epsilon = 0.0001;
+		int [][] votes = new int[(int) (2*Math.sqrt(2) * D)][180];
+		double epsilon = 0.1;
+		double threshold = 1;
 		double min = Double.MAX_VALUE;
 		
 		for(int row = 1; row < img.getHeight()-1 ; row++){
 			for(int col = 1 ; col < img.getWidth()-1 ; col++){
 				
 				if(img.R.getValue(row, col) == 255){
-					for(double theta = -Math.PI/2 ; theta < Math.PI/2 ; theta += Math.PI/180){
-						for(double ro = -Math.sqrt(2)*D ; ro < Math.sqrt(2)*D ; ro += 1){
-							//System.out.println(Math.abs(ro - col*Math.cos(theta) - row*Math.sin(theta)));
-							if( Math.abs(ro - col*Math.cos(theta) - row*Math.sin(theta)) < epsilon){
-								votes[row][col] += 1;
-							}
-							if( Math.abs(ro - col*Math.cos(theta) - row*Math.sin(theta)) < min){
-								min = Math.abs(ro - col*Math.cos(theta) - row*Math.sin(theta));
+					
+					for(int theta = 0 ; theta < 180 ; theta ++){
+						
+						double thetaValue = -90 + theta;
+						double thetaTerm = col
+								* Math.cos(thetaValue * Math.PI / 180) - row
+								* Math.sin(thetaValue * Math.PI / 180);
+						
+						for(int ro = 0 ; ro < 2*Math.sqrt(2) * D -1; ro ++){
+							double roValue = -Math.sqrt(2) * D + ro;
+							double total = roValue - thetaTerm;
+							
+							if (Math.abs(total) < epsilon) {
+								votes[ro][theta] +=1;
 							}
 						}
 					}
@@ -536,24 +549,51 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 			}
 		}
 		
-		//Examinar el resultado del paso 4
-		ATImage aux = new ATImage(512, 512, ImageType.RGB);
-		int max = 0;
-		for(int row = 0; row < img.getHeight() ; row++){
-			for(int col = 0 ; col < img.getWidth() ; col++){
-				//System.out.println(votes[row][col]);
-				if(max < votes[row][col]){
-					max = votes[row][col];
-				}
-				if(votes[row][col] >= 1){
-					aux.G.set(row, col, 100);
-				} else {
-					aux.R.set(row, col, 0);
-				}
+		Set<Line> allBuckets = new HashSet<Line>();
+		for (int theta = 0; theta < 180; theta++) {
+			for (int ro = 0; ro < 2*Math.sqrt(2) * D -1; ro++) {
+				Line l = new Line(ro, theta, votes[ro][theta]);
+				allBuckets.add(l);
 			}
 		}
-		System.out.println(max);
-		System.out.println(min);
+		
+		List<Line> allBucketsAsList = new ArrayList<Line>(
+				allBuckets);
+		Collections.sort(allBucketsAsList);
+		int maxVotes = allBucketsAsList.get(0).votes;
+		
+		ATImage aux = new ATImage(img);
+		aux.type = ImageType.RGB;
+		
+		if (maxVotes > 1) {
+			for (Line b : allBucketsAsList) {
+
+				// Only for those with max votes
+				if (b.votes < maxVotes * threshold) {
+					break;
+				}
+
+				double roValue = -Math.sqrt(2) * D + b.ro;
+				double thetaValue = -90 + b.theta;
+
+				for (int row = 0; row < img.getHeight(); row++) {
+					for (int col = 0; col < img.getWidth(); col++) {
+						double thetaTerm = col
+								* Math.cos(thetaValue * Math.PI / 180) - row
+								* Math.sin(thetaValue * Math.PI / 180);
+						double total = roValue - thetaTerm;
+						// Step 6
+						if (Math.abs(total) < epsilon) {
+							aux.R.set(row, col, 0);
+							aux.B.set(row, col, 0);
+							aux.G.set(row, col, 255);
+						}
+					}
+				}
+
+			}
+		}
+		
 		parent.addImage(aux);
 	}
 	//Circles detection

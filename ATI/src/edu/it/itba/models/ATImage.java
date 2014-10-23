@@ -19,7 +19,7 @@ public class ATImage {
 	public Band B;
 	private int rows;
 	private int cols;
-	private ImageType type;
+	public ImageType type;
 
 	public ATImage(int rows, int cols, ImageType type) {
 		this.rows = rows;
