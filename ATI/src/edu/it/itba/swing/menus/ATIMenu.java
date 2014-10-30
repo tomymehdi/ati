@@ -6,11 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.JMenu;
@@ -20,6 +15,7 @@ import javax.swing.JMenuItem;
 import edu.it.itba.enums.Direction;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
+import edu.it.itba.functions.Canny;
 import edu.it.itba.functions.Crossing;
 import edu.it.itba.functions.Equalize;
 import edu.it.itba.functions.LinearTransform;
@@ -31,8 +27,6 @@ import edu.it.itba.functions.OtzuUmbralization;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
-import edu.it.itba.models.Line;
-import edu.it.itba.models.windows.GaussianWIndow;
 import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
 import edu.it.itba.models.windows.Prewitt;
@@ -513,15 +507,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		handleCanny();
 		ATImage img = new ATImage(
 				parent.getPanels()[Side.RIGHT.getValue()].getImage());
-		
+
 		new ATIHoughLinesDialog(parent, img);
 	}
-	//Circles detection
+
+	// Circles detection
 	private void handleHoughCircles() {
 		handleCanny();
 		ATImage img = new ATImage(
 				parent.getPanels()[Side.RIGHT.getValue()].getImage());
-		
+
 		new ATIHoughCirclesDialog(parent, img);
 	}
 
@@ -670,110 +665,116 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private void handleCanny() {
 
-		// Filtro gaussiano
+		// // Filtro gaussiano
+		// ATImage img = new ATImage(
+		// parent.getPanels()[Side.LEFT.getValue()].getImage());
+		// img.applyFunction(new PassAdditiveWindow(img,
+		// new GaussianWIndow(5, 1.4)), 100);
+		//
+		// // Usar sobel para calcular el modulo de cada pixel y la direccion de
+		// // maxima variacion
+		// ATImage hor = new ATImage(
+		// parent.getPanels()[Side.LEFT.getValue()].getImage());
+		// hor.applyFunction(new PassAdditiveWindow(hor, new Sobel(3,
+		// Direction.HORIZONTAL)), 100);
+		// ATImage ver = new ATImage(
+		// parent.getPanels()[Side.LEFT.getValue()].getImage());
+		// ver.applyFunction(new PassAdditiveWindow(ver, new Sobel(3,
+		// Direction.VERTICAL)), 100);
+		//
+		// double gx, gy, angle;
+		// double magnitude[][] = new double[img.getHeight()][img.getWidth()];
+		// Direction direction[][] = new
+		// Direction[img.getHeight()][img.getWidth()];
+		// for (int row = 0; row < img.getHeight(); row++) {
+		// for (int col = 0; col < img.getWidth(); col++) {
+		// gx = hor.R.getValue(row, col);
+		// gy = ver.R.getValue(row, col);
+		// magnitude[row][col] = Math.sqrt(gx * gx + gy * gy);
+		// angle = Math.atan2(gy, gx);
+		//
+		// if (angle <= Math.PI / 8) {
+		// direction[row][col] = Direction.HORIZONTAL;
+		// } else if (angle <= Math.PI * 3 / 8) {
+		// direction[row][col] = Direction.DIAGONAL;
+		// } else if (angle <= Math.PI * 5 / 8) {
+		// direction[row][col] = Direction.VERTICAL;
+		// } else if (angle <= Math.PI * 7 / 8) {
+		// direction[row][col] = Direction.ADIAGONAL;
+		// } else {
+		// direction[row][col] = Direction.HORIZONTAL;
+		// }
+		// }
+		// }
+		//
+		// ATImage resp = new ATImage(hor);
+		//
+		// // Supresion de no maximos
+		// for (int row = 1; row < img.getHeight() - 1; row++) {
+		// for (int col = 1; col < img.getWidth() - 1; col++) {
+		// switch (direction[row][col]) {
+		// case HORIZONTAL:
+		// if (magnitude[row][col] < magnitude[row][col - 1]
+		// && magnitude[row][col] < magnitude[row][col + 1]) {
+		// resp.R.set(row, col, 0);
+		// } else {
+		// resp.R.set(row, col, magnitude[row][col]);
+		// }
+		// break;
+		// case ADIAGONAL:
+		// if (magnitude[row][col] < magnitude[row + 1][col - 1]
+		// && magnitude[row][col] < magnitude[row - 1][col + 1]) {
+		// resp.R.set(row, col, 0);
+		// } else {
+		// resp.R.set(row, col, magnitude[row][col]);
+		// }
+		// break;
+		// case DIAGONAL:
+		// if (magnitude[row][col] < magnitude[row - 1][col - 1]
+		// && magnitude[row][col] < magnitude[row + 1][col + 1]) {
+		// resp.R.set(row, col, 0);
+		// } else {
+		// resp.R.set(row, col, magnitude[row][col]);
+		// }
+		// break;
+		// case VERTICAL:
+		// if (magnitude[row][col] < magnitude[row - 1][col]
+		// && magnitude[row][col] < magnitude[row + 1][col]) {
+		// resp.R.set(row, col, 0);
+		// } else {
+		// resp.R.set(row, col, magnitude[row][col]);
+		// }
+		// break;
+		// default:
+		// break;
+		// }
+		//
+		// }
+		// }
+		//
+		// // Humbralizacion con histeresis
+		// double t1;
+		//
+		// t1 = 250;
+		//
+		// for (int row = 1; row < img.getHeight() - 1; row++) {
+		// for (int col = 1; col < img.getWidth() - 1; col++) {
+		// if (resp.R.getValue(row, col) <= t1 * 2 / 3
+		// || (resp.R.getValue(row, col) <= t1
+		// && resp.R.getValue(row, col - 1) == 0
+		// && resp.R.getValue(row, col + 1) == 0
+		// && resp.R.getValue(row - 1, col) == 0 && resp.R
+		// .getValue(row + 1, col) == 0)) {
+		// resp.R.set(row, col, 0);
+		// }
+		// }
+		// }
+
 		ATImage img = new ATImage(
 				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		img.applyFunction(new PassAdditiveWindow(img,
-				new GaussianWIndow(5, 1.4)), 100);
 
-		// Usar sobel para calcular el modulo de cada pixel y la direccion de
-		// maxima variacion
-		ATImage hor = new ATImage(
-				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		hor.applyFunction(new PassAdditiveWindow(hor, new Sobel(3,
-				Direction.HORIZONTAL)), 100);
-		ATImage ver = new ATImage(
-				parent.getPanels()[Side.LEFT.getValue()].getImage());
-		ver.applyFunction(new PassAdditiveWindow(ver, new Sobel(3,
-				Direction.VERTICAL)), 100);
-
-		double gx, gy, angle;
-		double magnitude[][] = new double[img.getHeight()][img.getWidth()];
-		Direction direction[][] = new Direction[img.getHeight()][img.getWidth()];
-		for (int row = 0; row < img.getHeight(); row++) {
-			for (int col = 0; col < img.getWidth(); col++) {
-				gx = hor.R.getValue(row, col);
-				gy = ver.R.getValue(row, col);
-				magnitude[row][col] = Math.sqrt(gx * gx + gy * gy);
-				angle = Math.atan2(gy, gx);
-
-				if (angle <= Math.PI / 8) {
-					direction[row][col] = Direction.HORIZONTAL;
-				} else if (angle <= Math.PI * 3 / 8) {
-					direction[row][col] = Direction.DIAGONAL;
-				} else if (angle <= Math.PI * 5 / 8) {
-					direction[row][col] = Direction.VERTICAL;
-				} else if (angle <= Math.PI * 7 / 8) {
-					direction[row][col] = Direction.ADIAGONAL;
-				} else {
-					direction[row][col] = Direction.HORIZONTAL;
-				}
-			}
-		}
-
-		ATImage resp = new ATImage(hor);
-
-		// Supresion de no maximos
-		for (int row = 1; row < img.getHeight() - 1; row++) {
-			for (int col = 1; col < img.getWidth() - 1; col++) {
-				switch (direction[row][col]) {
-				case HORIZONTAL:
-					if (magnitude[row][col] < magnitude[row][col - 1]
-							&& magnitude[row][col] < magnitude[row][col + 1]) {
-						resp.R.set(row, col, 0);
-					} else {
-						resp.R.set(row, col, magnitude[row][col]);
-					}
-					break;
-				case ADIAGONAL:
-					if (magnitude[row][col] < magnitude[row + 1][col - 1]
-							&& magnitude[row][col] < magnitude[row - 1][col + 1]) {
-						resp.R.set(row, col, 0);
-					} else {
-						resp.R.set(row, col, magnitude[row][col]);
-					}
-					break;
-				case DIAGONAL:
-					if (magnitude[row][col] < magnitude[row - 1][col - 1]
-							&& magnitude[row][col] < magnitude[row + 1][col + 1]) {
-						resp.R.set(row, col, 0);
-					} else {
-						resp.R.set(row, col, magnitude[row][col]);
-					}
-					break;
-				case VERTICAL:
-					if (magnitude[row][col] < magnitude[row - 1][col]
-							&& magnitude[row][col] < magnitude[row + 1][col]) {
-						resp.R.set(row, col, 0);
-					} else {
-						resp.R.set(row, col, magnitude[row][col]);
-					}
-					break;
-				default:
-					break;
-				}
-
-			}
-		}
-
-		// Humbralizacion con histeresis
-		double t1;
-
-		t1 = 250;
-
-		for (int row = 1; row < img.getHeight() - 1; row++) {
-			for (int col = 1; col < img.getWidth() - 1; col++) {
-				if (resp.R.getValue(row, col) <= t1 * 2 / 3
-						|| (resp.R.getValue(row, col) <= t1
-								&& resp.R.getValue(row, col - 1) == 0
-								&& resp.R.getValue(row, col + 1) == 0
-								&& resp.R.getValue(row - 1, col) == 0 && resp.R
-								.getValue(row + 1, col) == 0)) {
-					resp.R.set(row, col, 0);
-				}
-			}
-		}
-
+		Canny can = new Canny(img, 5, 1.4, 75, 150);
+		ATImage resp = can.applyCanny();
 		parent.addImage(resp);
 
 	}
