@@ -87,7 +87,7 @@ public class ATIJFrameImpl extends ATIJFrame {
 				type = ImageType.RGB;
 				break;
 			case 5:
-				type = ImageType.RGB;
+				type = ImageType.GRAYSCALE;
 				break;
 			case BufferedImage.TYPE_BYTE_GRAY:
 				type = ImageType.GRAYSCALE;

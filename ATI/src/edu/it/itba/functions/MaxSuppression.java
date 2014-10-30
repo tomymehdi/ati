@@ -55,7 +55,7 @@ public class MaxSuppression implements Function {
 				switch (direction[row][col]) {
 				case HORIZONTAL:
 					if (magnitude[row][col] < magnitude[row][col - 1]
-							&& magnitude[row][col] < magnitude[row][col + 1]) {
+							|| magnitude[row][col] < magnitude[row][col + 1]) {
 						resp.R.set(row, col, 0);
 					} else {
 						resp.R.set(row, col, magnitude[row][col]);
@@ -63,7 +63,7 @@ public class MaxSuppression implements Function {
 					break;
 				case ADIAGONAL:
 					if (magnitude[row][col] < magnitude[row + 1][col - 1]
-							&& magnitude[row][col] < magnitude[row - 1][col + 1]) {
+							|| magnitude[row][col] < magnitude[row - 1][col + 1]) {
 						resp.R.set(row, col, 0);
 					} else {
 						resp.R.set(row, col, magnitude[row][col]);
@@ -71,7 +71,7 @@ public class MaxSuppression implements Function {
 					break;
 				case DIAGONAL:
 					if (magnitude[row][col] < magnitude[row - 1][col - 1]
-							&& magnitude[row][col] < magnitude[row + 1][col + 1]) {
+							|| magnitude[row][col] < magnitude[row + 1][col + 1]) {
 						resp.R.set(row, col, 0);
 					} else {
 						resp.R.set(row, col, magnitude[row][col]);
@@ -79,7 +79,7 @@ public class MaxSuppression implements Function {
 					break;
 				case VERTICAL:
 					if (magnitude[row][col] < magnitude[row - 1][col]
-							&& magnitude[row][col] < magnitude[row + 1][col]) {
+							|| magnitude[row][col] < magnitude[row + 1][col]) {
 						resp.R.set(row, col, 0);
 					} else {
 						resp.R.set(row, col, magnitude[row][col]);

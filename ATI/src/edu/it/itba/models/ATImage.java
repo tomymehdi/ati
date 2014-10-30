@@ -209,8 +209,7 @@ public class ATImage {
 		for (int row = 0; row < getHeight(); row++)
 			for (int col = 0; col < getWidth(); col++) {
 				if (img.getBand(Bands.R).getValue(row, col) == 255)
-					ret.getBand(Bands.R).set(row, col,
-							img.getBand(Bands.R).getValue(row, col));
+					ret.getBand(Bands.R).set(row, col, 255);
 			}
 		return ret;
 	}

@@ -83,7 +83,7 @@ public class ATICornerSusanDialog extends JDialog implements ActionListener {
 				porcentajeError), 100);
 
 		ATImage ret = img2.applyLayer(img);
-		owner.addImage(ret);
+		owner.addImage(img);
 		handleClose();
 	}
 

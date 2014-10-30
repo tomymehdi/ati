@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import edu.it.itba.functions.Canny;
 import edu.it.itba.functions.Diffusion;
 import edu.it.itba.functions.LeclercBorderDetector;
 import edu.it.itba.functions.LorentzBorderDetector;
@@ -23,13 +24,13 @@ import edu.it.itba.swing.interfaces.ATIJFrame;
 public class ATICannyDialog extends JDialog implements ActionListener {
 
 	private ATIJFrame owner;
-	private JTextField t;
+	private JTextField window;
 	private JTextField sigma;
+	private JTextField t1;
+	private JTextField t2;
 	private JButton setValue;
 	private JButton close;
 	private ATImage img;
-	private JRadioButton lorentz;
-	private JRadioButton leclerc;
 
 	public ATICannyDialog(ATIJFrame owner, ATImage img) {
 		super(owner, "Canny", true);
@@ -40,29 +41,28 @@ public class ATICannyDialog extends JDialog implements ActionListener {
 		setValue.addActionListener(this);
 		close = new JButton("Close");
 		close.addActionListener(this);
-		t = new JTextField(4);
+		window = new JTextField(4);
 		sigma = new JTextField(4);
-
-		lorentz = new JRadioButton("Lorentz");
-		leclerc = new JRadioButton("Leclerc");
-		lorentz.setSelected(true);
-		ButtonGroup group = new ButtonGroup();
-		group.add(lorentz);
-		group.add(leclerc);
+		t1 = new JTextField(4);
+		t2 = new JTextField(4);
 
 		JPanel mainPanel = new JPanel();
 		JPanel centralPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 
 		JPanel p = new JPanel();
-		p.add(new JLabel("t"));
-		p.add(t);
+		p.add(new JLabel("window"));
+		p.add(window);
 
 		p.add(new JLabel("Sigma"));
 		p.add(sigma);
 
-		p.add(lorentz);
-		p.add(leclerc);
+		p.add(new JLabel("t1"));
+		p.add(t1);
+
+		p.add(new JLabel("t2"));
+		p.add(t2);
+
 		p.add(setValue);
 		p.add(close);
 		centralPanel.add(p);
@@ -93,18 +93,14 @@ public class ATICannyDialog extends JDialog implements ActionListener {
 	}
 
 	private void handleSetValue() {
-		int time = Integer.valueOf(t.getText());
+		int windowSize = Integer.valueOf(window.getText());
 		Double gaussSigma = Double.valueOf(sigma.getText());
-		MaterialHeatDistribution mhd;
-		if (lorentz.isSelected())
-			mhd = new LorentzBorderDetector(gaussSigma);
-		else
-			mhd = new LeclercBorderDetector(gaussSigma);
+		int umb1 = Integer.valueOf(t1.getText());
+		int umb2 = Integer.valueOf(t2.getText());
 
-		for (int i = 0; i < time; i++) {
-			img.applyFunction(new Diffusion(img, mhd, i), 100);
-		}
-		owner.addImage(img);
+		Canny can = new Canny(img, windowSize, gaussSigma, umb1, umb2);
+		ATImage resp = can.applyCanny();
+		owner.addImage(resp);
 		handleClose();
 	}
 
