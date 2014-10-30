@@ -104,8 +104,6 @@ public class ATIHoughCirclesDialog extends JDialog implements ActionListener {
 		owner.addImage(img);
 		
 		// Para cada pixel blanco analizar si cumple la ecuacion de la recta en todas las direcciones
-		int D = Math.max(img.getWidth(), img.getHeight());
-
 		int aSize = (int) (img.getWidth() - 2*rMin);
 		int bSize = (int) (img.getHeight() - 2*rMin);
 		int rSize = (int) (rMax - rMin);

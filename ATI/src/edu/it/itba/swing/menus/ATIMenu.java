@@ -719,7 +719,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				switch (direction[row][col]) {
 				case HORIZONTAL:
 					if (magnitude[row][col] < magnitude[row][col - 1]
-							&& magnitude[row][col] < magnitude[row][col + 1]) {
+							|| magnitude[row][col] < magnitude[row][col + 1]) {
 						resp.R.set(row, col, 0);
 					} else {
 						resp.R.set(row, col, magnitude[row][col]);
@@ -727,7 +727,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 					break;
 				case ADIAGONAL:
 					if (magnitude[row][col] < magnitude[row + 1][col - 1]
-							&& magnitude[row][col] < magnitude[row - 1][col + 1]) {
+							|| magnitude[row][col] < magnitude[row - 1][col + 1]) {
 						resp.R.set(row, col, 0);
 					} else {
 						resp.R.set(row, col, magnitude[row][col]);
@@ -735,7 +735,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 					break;
 				case DIAGONAL:
 					if (magnitude[row][col] < magnitude[row - 1][col - 1]
-							&& magnitude[row][col] < magnitude[row + 1][col + 1]) {
+							|| magnitude[row][col] < magnitude[row + 1][col + 1]) {
 						resp.R.set(row, col, 0);
 					} else {
 						resp.R.set(row, col, magnitude[row][col]);
@@ -743,7 +743,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 					break;
 				case VERTICAL:
 					if (magnitude[row][col] < magnitude[row - 1][col]
-							&& magnitude[row][col] < magnitude[row + 1][col]) {
+							|| magnitude[row][col] < magnitude[row + 1][col]) {
 						resp.R.set(row, col, 0);
 					} else {
 						resp.R.set(row, col, magnitude[row][col]);
@@ -761,8 +761,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		t1 = 250;
 
-		for (int row = 1; row < img.getHeight() - 1; row++) {
-			for (int col = 1; col < img.getWidth() - 1; col++) {
+		for (int row = 0; row < img.getHeight() ; row++) {
+			for (int col = 0; col < img.getWidth() ; col++) {
 				if (resp.R.getValue(row, col) <= t1 * 2 / 3
 						|| (resp.R.getValue(row, col) <= t1
 								&& resp.R.getValue(row, col - 1) == 0
@@ -770,6 +770,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 								&& resp.R.getValue(row - 1, col) == 0 && resp.R
 								.getValue(row + 1, col) == 0)) {
 					resp.R.set(row, col, 0);
+				} else{
+					resp.R.set(row, col, 255);
 				}
 			}
 		}
