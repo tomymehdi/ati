@@ -55,6 +55,7 @@ import edu.it.itba.swing.dialogs.ATIPixelValueEditDialog;
 import edu.it.itba.swing.dialogs.ATIRayleighImageDialog;
 import edu.it.itba.swing.dialogs.ATIRaylightDialog;
 import edu.it.itba.swing.dialogs.ATISubImageDialog;
+import edu.it.itba.swing.dialogs.ATITrackingStaticDialog;
 import edu.it.itba.swing.dialogs.ATIsotropicDiffusionDialog;
 import edu.it.itba.swing.dialogs.GlobalUmbralDialog;
 import edu.it.itba.swing.dialogs.LaplacianGaussianDialog;
@@ -152,6 +153,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem laplacian;
 	private JMenuItem laplacianPendant;
 	private JMenuItem laplacianGaussian;
+	
+	private JMenuItem trackingStatic;
+	private JMenuItem trackingVideo;
 
 	private JMenuItem linearCompLeft;
 	private JMenuItem linearCompRight;
@@ -190,6 +194,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu cornerDetection = new JMenu("Corner detecion");
 
 		JMenu lineDetection = new JMenu("Line detection");
+		
+		JMenu tracking = new JMenu("Tracking");
 
 		JMenu compression = new JMenu("Compressions");
 
@@ -304,6 +310,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		// Line detection
 		houghLines = addMenuItemToMenu("Hough lines", lineDetection, true);
 		houghCircles = addMenuItemToMenu("Hough circles", lineDetection, true);
+		
+		// Tracking
+		trackingStatic = addMenuItemToMenu("Tracking imagen", tracking, true);
+		trackingVideo = addMenuItemToMenu("Tracking video", tracking, true);
 
 		// Compressions
 		linearCompLeft = addMenuItemToMenu("LC left", compression, true);
@@ -327,6 +337,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		addToMenu(borderDetection);
 		addToMenu(cornerDetection);
 		addToMenu(lineDetection);
+		addToMenu(tracking);
 		addToMenu(compression);
 		addToMenu(options);
 	}
@@ -498,9 +509,16 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleHoughLines();
 			else if (source == houghCircles)
 				handleHoughCircles();
+			else if (source == trackingStatic)
+				handleTrackingStatic();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	//Tracking
+	private void handleTrackingStatic(){
+		new ATITrackingStaticDialog(parent);
 	}
 
 	// Lines detection
