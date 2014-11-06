@@ -122,9 +122,6 @@ public class ATIHoughCirclesDialog extends JDialog implements ActionListener {
 
 		img = can.applyCanny();
 
-		img.applyFunction(new LinearTransform(img), 100);
-		img.applyFunction(new OtzuUmbralization(img), 100);
-
 		// Para cada pixel blanco analizar si cumple la ecuacion de la recta en
 		// todas las direcciones
 		int aSize = (int) (img.getWidth() - 2 * rMin);
@@ -132,7 +129,7 @@ public class ATIHoughCirclesDialog extends JDialog implements ActionListener {
 		int rSize = (int) (rMax - rMin);
 		int[][][] votes = new int[aSize][bSize][rSize];
 
-		for (int r = 0; r < rSize; r += 2) {
+		for (int r = 0; r < rSize; r += 5) {
 			double rValue = rMin + r;
 			double rTerm = Math.pow(rValue, 2);
 			for (int a = 0; a < aSize; a += 2) {
@@ -140,9 +137,9 @@ public class ATIHoughCirclesDialog extends JDialog implements ActionListener {
 				for (int b = 0; b < bSize; b += 2) {
 					double bValue = rMin + b;
 
-					for (int row = 0; row < img.getWidth(); row += 2) {
+					for (int row = 0; row < img.getHeight(); row += 1) {
 						double aTerm = Math.pow(row - aValue, 2);
-						for (int col = 0; col < img.getHeight(); col += 2) {
+						for (int col = 0; col < img.getWidth(); col += 1) {
 							if (img.R.getValue(row, col) == 255) {
 								double bTerm = Math.pow(col - bValue, 2);
 								double total = rTerm - aTerm - bTerm;
@@ -228,6 +225,7 @@ public class ATIHoughCirclesDialog extends JDialog implements ActionListener {
 			y++;
 			errorY += 2;
 			error += errorY;
+
 			image.G.set(x0 + x, y0 + y, 100);
 			image.G.set(x0 - x, y0 + y, 100);
 			image.G.set(x0 + x, y0 - y, 100);
