@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashSet;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -26,6 +26,7 @@ public class ATITrackingStaticDialog extends JDialog implements ActionListener {
 	private JTextField y;
 	private JTextField width;
 	private JTextField height;
+	private JTextField delta;
 	private JButton getSubImage;
 	private JLabel data;
 
@@ -40,6 +41,7 @@ public class ATITrackingStaticDialog extends JDialog implements ActionListener {
 		width = new JTextField(4);
 		height = new JTextField(4);
 		data = new JLabel();
+		delta = new JTextField(4);
 
 		JPanel mainPanel = new JPanel();
 		JPanel centralPanel = new JPanel();
@@ -48,6 +50,8 @@ public class ATITrackingStaticDialog extends JDialog implements ActionListener {
 		JPanel p = new JPanel();
 		p.add(new JLabel("x"));
 		p.add(x);
+		p.add(new JLabel("delta"));
+		p.add(delta);
 
 		p.add(new JLabel("y"));
 		p.add(y);
@@ -91,11 +95,14 @@ public class ATITrackingStaticDialog extends JDialog implements ActionListener {
 		int row = Integer.parseInt(this.y.getText());
 		int width = Integer.parseInt(this.width.getText());
 		int height = Integer.parseInt(this.height.getText());
+		int deltaP = Integer.parseInt(this.delta.getText());
+		ATImage img = new ATImage(
+				owner.getPanels()[Side.LEFT.getValue()].getImage());
 
-		ATImage img = new ATImage(owner.getPanels()[Side.LEFT.getValue()].getImage());
+		img.applyFunction(new Tracking(img, row, col, width, height,
+				new HashMap<Pixel, Integer>(), new HashMap<Pixel, Integer>(),
+				deltaP), 100);
 
-		img.applyFunction(new Tracking(img, row, col, width, height, new HashSet<Pixel>(), new HashSet<Pixel>()), 100);
-		
 		owner.addImage(img);
 	}
 }
