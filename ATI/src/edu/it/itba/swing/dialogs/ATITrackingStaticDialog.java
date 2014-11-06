@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
 import edu.it.itba.functions.Tracking;
 import edu.it.itba.models.ATImage;
@@ -99,9 +100,22 @@ public class ATITrackingStaticDialog extends JDialog implements ActionListener {
 		ATImage img = new ATImage(
 				owner.getPanels()[Side.LEFT.getValue()].getImage());
 
-		img.applyFunction(new Tracking(img, row, col, width, height,
-				new HashMap<Pixel, Integer>(), new HashMap<Pixel, Integer>(),
-				deltaP), 100);
+		Tracking tracking = new Tracking(img, row, col, width, height,
+				new ArrayList<Pixel>(), new ArrayList<Pixel>(),
+				deltaP);
+		
+		ATImage draw = new ATImage(img.getHeight(), img.getWidth(), ImageType.GRAYSCALE);
+		for(int r=0 ; r < img.getHeight() ; r++){
+			for(int c=0; c < img.getWidth() ; c++){
+				if(tracking.in.contains(new Pixel(r,c))){
+					draw.R.set(r, c, 255);
+				} else{
+					draw.R.set(r,c,0);
+				}
+			}
+		}
+		img.applyLayer(draw);
+		
 
 		owner.addImage(img);
 	}
