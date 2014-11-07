@@ -6,16 +6,18 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import mpi.cbg.fly.Feature;
+import mpi.cbg.fly.SIFT;
 import edu.it.itba.enums.Direction;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
-import edu.it.itba.functions.Canny;
 import edu.it.itba.functions.Crossing;
 import edu.it.itba.functions.Equalize;
 import edu.it.itba.functions.LinearTransform;
@@ -1068,5 +1070,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		}
 	}
-
+	
+	// SIFT
+	private void handleSIFT() {
+		ATImage image = new ATImage(100,100,ImageType.BINARY);
+		Vector<Feature> features = SIFT.getFeatures(image.getVisual());
+		for (Feature feature : features) {
+			// dibujar los descriptores
+		}
+	}
+	
 }

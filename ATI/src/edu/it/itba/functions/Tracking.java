@@ -211,7 +211,6 @@ public class Tracking implements Function {
 
 	}
 
-	@Override
 	public double apply(double value, int row, int col, Bands band) {
 		return value;
 	}
