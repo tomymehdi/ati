@@ -96,7 +96,7 @@ public class ATITrackingStaticDialog extends JDialog implements ActionListener {
 		int row = Integer.parseInt(this.y.getText());
 		int width = Integer.parseInt(this.width.getText());
 		int height = Integer.parseInt(this.height.getText());
-		int deltaP = Integer.parseInt(this.delta.getText());
+		double deltaP = Double.parseDouble(this.delta.getText());
 		ATImage img = new ATImage(
 				owner.getPanels()[Side.LEFT.getValue()].getImage());
 
@@ -118,5 +118,12 @@ public class ATITrackingStaticDialog extends JDialog implements ActionListener {
 		img.applyLayer(draw);
 
 		owner.addImage(draw);
+		handleClose();
+	}
+	
+	private void handleClose() {
+		setVisible(false);
+		dispose();
+		return;
 	}
 }

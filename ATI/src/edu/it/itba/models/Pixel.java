@@ -49,5 +49,10 @@ public class Pixel {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return String.valueOf(row) + col;
+	}
 
 }
