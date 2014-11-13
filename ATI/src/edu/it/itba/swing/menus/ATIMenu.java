@@ -6,15 +6,14 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import mpi.cbg.fly.Feature;
-import mpi.cbg.fly.SIFT;
+//import mpi.cbg.fly.Feature;
+//import mpi.cbg.fly.SIFT;
 import edu.it.itba.enums.Direction;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
@@ -58,6 +57,7 @@ import edu.it.itba.swing.dialogs.ATIRayleighImageDialog;
 import edu.it.itba.swing.dialogs.ATIRaylightDialog;
 import edu.it.itba.swing.dialogs.ATISubImageDialog;
 import edu.it.itba.swing.dialogs.ATITrackingStaticDialog;
+import edu.it.itba.swing.dialogs.ATITrackingVideoDialog;
 import edu.it.itba.swing.dialogs.ATIsotropicDiffusionDialog;
 import edu.it.itba.swing.dialogs.GlobalUmbralDialog;
 import edu.it.itba.swing.dialogs.LaplacianGaussianDialog;
@@ -155,7 +155,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem laplacian;
 	private JMenuItem laplacianPendant;
 	private JMenuItem laplacianGaussian;
-	
+
 	private JMenuItem trackingStatic;
 	private JMenuItem trackingVideo;
 
@@ -196,7 +196,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu cornerDetection = new JMenu("Corner detecion");
 
 		JMenu lineDetection = new JMenu("Line detection");
-		
+
 		JMenu tracking = new JMenu("Tracking");
 
 		JMenu compression = new JMenu("Compressions");
@@ -312,7 +312,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		// Line detection
 		houghLines = addMenuItemToMenu("Hough lines", lineDetection, true);
 		houghCircles = addMenuItemToMenu("Hough circles", lineDetection, true);
-		
+
 		// Tracking
 		trackingStatic = addMenuItemToMenu("Tracking imagen", tracking, true);
 		trackingVideo = addMenuItemToMenu("Tracking video", tracking, true);
@@ -513,13 +513,19 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleHoughCircles();
 			else if (source == trackingStatic)
 				handleTrackingStatic();
+			else if (source == trackingVideo)
+				handleTrackingVideo();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-	
-	//Tracking
-	private void handleTrackingStatic(){
+
+	private void handleTrackingVideo() {
+		new ATITrackingVideoDialog(parent);
+	}
+
+	// Tracking
+	private void handleTrackingStatic() {
 		new ATITrackingStaticDialog(parent);
 	}
 
@@ -1070,14 +1076,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 		}
 	}
-	
+
 	// SIFT
 	private void handleSIFT() {
-		ATImage image = new ATImage(100,100,ImageType.BINARY);
-		Vector<Feature> features = SIFT.getFeatures(image.getVisual());
-		for (Feature feature : features) {
-			// dibujar los descriptores
-		}
+		// ATImage image = new ATImage(100,100,ImageType.BINARY);
+		// Vector<Feature> features = SIFT.getFeatures(image.getVisual());
+		// for (Feature feature : features) {
+		// // dibujar los descriptores
+		// }
 	}
-	
+
 }

@@ -19,10 +19,11 @@ public class Tracking implements Function {
 	double delta;
 
 	public Tracking(ATImage img, int row, int col, int width, int height,
-			List<Pixel> in, List<Pixel> out, double delta) {
+			List<Pixel> in, List<Pixel> out, int[][] fis, double delta) {
 		this.img = img;
 		this.in = in;
 		this.out = out;
+		this.fis = fis;
 		this.row = row;
 		this.height = height;
 		this.col = col;
@@ -52,12 +53,12 @@ public class Tracking implements Function {
 
 			for (int i = in.size() - 1; i >= 0; i--) {
 				Pixel p = in.get(i);
-				if(!(p.getRow() <= 0 || p.getRow() >= img.getHeight()-1 
-						|| p.getCol() <= 0 || p.getCol() >= img.getWidth()-1)){
+				if (!(p.getRow() <= 0 || p.getRow() >= img.getHeight() - 1
+						|| p.getCol() <= 0 || p.getCol() >= img.getWidth() - 1)) {
 					if (fis[p.getRow() - 1][p.getCol()] <= -1
 							&& fis[p.getRow()][p.getCol() + 1] <= -1
-							&& fis[p.getRow() + 1][p.getCol()] <= -1 && 
-							fis[p.getRow()][p.getCol() - 1] <= -1) {
+							&& fis[p.getRow() + 1][p.getCol()] <= -1
+							&& fis[p.getRow()][p.getCol() - 1] <= -1) {
 						in.remove(p);
 						fis[p.getRow()][p.getCol()] = -3;
 					}
@@ -72,11 +73,11 @@ public class Tracking implements Function {
 
 			for (int i = out.size() - 1; i >= 0; i--) {
 				Pixel p = out.get(i);
-				if(!(p.getRow() <= 0 || p.getRow() >= img.getHeight()-1 
-						|| p.getCol() <= 0 || p.getCol() >= img.getWidth()-1)){
+				if (!(p.getRow() <= 0 || p.getRow() >= img.getHeight() - 1
+						|| p.getCol() <= 0 || p.getCol() >= img.getWidth() - 1)) {
 					if (fis[p.getRow() - 1][p.getCol()] >= 1
 							&& fis[p.getRow()][p.getCol() + 1] >= 1
-							&& fis[p.getRow() + 1][p.getCol()] >= 1 
+							&& fis[p.getRow() + 1][p.getCol()] >= 1
 							&& fis[p.getRow()][p.getCol() - 1] >= 1) {
 						out.remove(p);
 						fis[p.getRow()][p.getCol()] = 3;
@@ -102,9 +103,9 @@ public class Tracking implements Function {
 		out.remove(p);
 		in.add(p);
 		fis[p.getRow()][p.getCol()] = -1;
-		
-		if(!(p.getRow() <= 0 || p.getRow() >= img.getHeight()-1 
-				|| p.getCol() <= 0 || p.getCol() >= img.getWidth()-1)){
+
+		if (!(p.getRow() <= 0 || p.getRow() >= img.getHeight() - 1
+				|| p.getCol() <= 0 || p.getCol() >= img.getWidth() - 1)) {
 			if (fis[p.getRow() - 1][p.getCol()] == 3) {
 				out.add(new Pixel(p.getRow() - 1, p.getCol()));
 				fis[p.getRow() - 1][p.getCol()] = 1;
@@ -129,8 +130,8 @@ public class Tracking implements Function {
 		in.remove(p);
 		out.add(p);
 		fis[p.getRow()][p.getCol()] = 1;
-		if(!(p.getRow() <= 0 || p.getRow() >= img.getHeight()-1 
-				|| p.getCol() <= 0 || p.getCol() >= img.getWidth()-1)){
+		if (!(p.getRow() <= 0 || p.getRow() >= img.getHeight() - 1
+				|| p.getCol() <= 0 || p.getCol() >= img.getWidth() - 1)) {
 			if (fis[p.getRow() - 1][p.getCol()] == -3) {
 				in.add(new Pixel(p.getRow() - 1, p.getCol()));
 				fis[p.getRow() - 1][p.getCol()] = -1;
@@ -157,9 +158,9 @@ public class Tracking implements Function {
 			Pixel p1, p2, p3, p4;
 
 			p1 = new Pixel(row, this.col);
-			p2 = new Pixel(row, this.col + this.width-1);
+			p2 = new Pixel(row, this.col + this.width - 1);
 			p3 = new Pixel(row, this.col - 1);
-			p4 = new Pixel(row, this.col + this.width-1 + 1);
+			p4 = new Pixel(row, this.col + this.width - 1 + 1);
 
 			if (!in.contains(p1))
 				in.add(p1);
@@ -175,9 +176,9 @@ public class Tracking implements Function {
 
 			Pixel p1, p2, p3, p4;
 			p1 = new Pixel(this.row, col);
-			p2 = new Pixel(this.row + height-1, col);
+			p2 = new Pixel(this.row + height - 1, col);
 			p3 = new Pixel(this.row - 1, col);
-			p4 = new Pixel(this.row + height -1 + 1, col);
+			p4 = new Pixel(this.row + height - 1 + 1, col);
 
 			if (!in.contains(p1))
 				in.add(p1);

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
+import javax.swing.JFrame;
 
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.models.ATImage;
@@ -41,7 +42,7 @@ public class ATImageJPanel extends ATIJPanel {
 		setSize(imgDim);
 	}
 
-	public ATImageJPanel(ATIJFrame parent, ATImage image) {
+	public ATImageJPanel(JFrame parent, ATImage image) {
 		super();
 		this.image = image;
 		Dimension imgDim = new Dimension(image.getWidth(), image.getHeight());

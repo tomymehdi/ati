@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -17,10 +18,11 @@ import edu.it.itba.enums.Side;
 import edu.it.itba.functions.Tracking;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.models.Pixel;
+import edu.it.itba.swing.frames.ATITrackingJFrame;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 
 @SuppressWarnings("serial")
-public class ATITrackingStaticDialog extends JDialog implements ActionListener {
+public class ATITrackingVideoDialog extends JDialog implements ActionListener {
 
 	private ATIJFrame owner;
 	private JTextField x;
@@ -31,9 +33,9 @@ public class ATITrackingStaticDialog extends JDialog implements ActionListener {
 	private JButton getSubImage;
 	private JLabel data;
 
-	public ATITrackingStaticDialog(ATIJFrame owner) {
+	public ATITrackingVideoDialog(ATIJFrame owner) {
 
-		super(owner, "Get Sub Image", true);
+		super(owner, "TRacking Video", true);
 		this.owner = owner;
 		getSubImage = new JButton("Get Sub Image");
 		getSubImage.addActionListener(this);
@@ -92,33 +94,21 @@ public class ATITrackingStaticDialog extends JDialog implements ActionListener {
 	}
 
 	private void handleSubImage() {
+		handleClose();
 		int col = Integer.parseInt(this.x.getText());
 		int row = Integer.parseInt(this.y.getText());
 		int width = Integer.parseInt(this.width.getText());
 		int height = Integer.parseInt(this.height.getText());
 		double deltaP = Double.parseDouble(this.delta.getText());
-		ATImage img = new ATImage(
-				owner.getPanels()[Side.LEFT.getValue()].getImage());
 
-		Tracking tracking = new Tracking(img, row, col, width, height,
-				new ArrayList<Pixel>(), new ArrayList<Pixel>(), null, deltaP);
-		System.out.println(tracking.in.size());
-		ATImage draw = new ATImage(img.getHeight(), img.getWidth(),
-				ImageType.RGB);
-		for (int r = 0; r < img.getHeight(); r++) {
-			for (int c = 0; c < img.getWidth(); c++) {
-				if (tracking.in.contains(new Pixel(r, c))) {
-					draw.R.set(r, c, 255);
-				}
-				if (tracking.out.contains(new Pixel(r, c))) {
-					draw.G.set(r, c, 255);
-				}
-			}
+		try {
+			ATITrackingJFrame video = new ATITrackingJFrame(col, row, height,
+					width, deltaP);
+			video.playVideo();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		img.applyLayer(draw);
-
-		owner.addImage(draw);
-		handleClose();
 	}
 
 	private void handleClose() {
