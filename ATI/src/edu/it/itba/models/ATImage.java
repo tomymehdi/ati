@@ -213,5 +213,40 @@ public class ATImage {
 			}
 		return ret;
 	}
+	
+	public void drawCircle(int x0, int y0, int radius) {
+
+		int error = 1 - radius;
+		int errorY = 1;
+		int errorX = -2 * radius;
+		int x = radius, y = 0;
+
+		R.set(x0, y0 + radius, 255);
+		R.set(x0, y0 - radius, 255);
+		R.set(x0 + radius, y0, 255);
+		R.set(x0 - radius, y0, 255);
+
+		while (y < x) {
+			if (error > 0) // >= 0 produces a slimmer circle. =0 produces the
+							// circle picture at radius 11 above
+			{
+				x--;
+				errorX += 2;
+				error += errorX;
+			}
+			y++;
+			errorY += 2;
+			error += errorY;
+
+			R.set(x0 + x, y0 + y, 255);
+			R.set(x0 - x, y0 + y, 255);
+			R.set(x0 + x, y0 - y, 255);
+			R.set(x0 - x, y0 - y, 255);
+			R.set(x0 + y, y0 + x, 255);
+			R.set(x0 - y, y0 + x, 255);
+			R.set(x0 + y, y0 - x, 255);
+			R.set(x0 - y, y0 - x, 255);
+		}
+	}
 
 }

@@ -202,7 +202,7 @@ public class ATIHoughCirclesDialog extends JDialog implements ActionListener {
 		handleClose();
 	}
 
-	private static void drawCircle(ATImage image, int x0, int y0, int radius) {
+	static void drawCircle(ATImage image, int x0, int y0, int radius) {
 
 		int error = 1 - radius;
 		int errorY = 1;

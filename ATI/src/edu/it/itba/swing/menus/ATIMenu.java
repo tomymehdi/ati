@@ -6,12 +6,15 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import mpi.cbg.fly.Feature;
+import mpi.cbg.fly.SIFT;
 //import mpi.cbg.fly.Feature;
 //import mpi.cbg.fly.SIFT;
 import edu.it.itba.enums.Direction;
@@ -104,6 +107,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem equalize;
 	private JMenuItem isotropicDiffusion;
 	private JMenuItem anisotropicDiffusion;
+	private JMenuItem sift;
 
 	private JMenuItem impulsiveSee;
 	private JMenuItem impulsiveAppLeft;
@@ -244,6 +248,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				operation, true);
 		anisotropicDiffusion = addMenuItemToMenu("Anisotropic Diffusion...",
 				operation, true);
+		sift = addMenuItemToMenu("sift", operation, true);
 
 		// Noises
 		impulsiveSee = addMenuItemToMenu("See", impulsive, true);
@@ -515,6 +520,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleTrackingStatic();
 			else if (source == trackingVideo)
 				handleTrackingVideo();
+			else if (source == sift)
+				handleSIFT();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -1079,11 +1086,19 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// SIFT
 	private void handleSIFT() {
-		// ATImage image = new ATImage(100,100,ImageType.BINARY);
-		// Vector<Feature> features = SIFT.getFeatures(image.getVisual());
-		// for (Feature feature : features) {
-		// // dibujar los descriptores
-		// }
+		ATImage img = new ATImage(
+				parent.getPanels()[Side.LEFT.getValue()].getImage());
+		ATImage resp = new ATImage(img.getHeight(), img.getWidth(),
+				ImageType.GRAYSCALE);
+		Vector<Feature> features = SIFT.getFeatures(img.getVisual());
+		int col, row;
+		for (Feature feature : features) {
+			col = (int) (feature.location[0]);
+			row = (int) (feature.location[1]);
+			resp.drawCircle(row, col, (int) feature.scale);
+		}
+		// resp = img.applyLayer(resp);
+		parent.addImage(img.applyLayer(resp));
 	}
 
 }
