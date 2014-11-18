@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
@@ -31,6 +33,7 @@ import edu.it.itba.functions.OtzuUmbralization;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
+import edu.it.itba.models.Corner;
 import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
 import edu.it.itba.models.windows.Prewitt;
@@ -147,6 +150,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private JMenuItem sobelD;
 	private JMenuItem canny;
 	private JMenuItem susanBorder;
+	private JMenuItem harris;
 
 	private JMenuItem susanCorner;
 
@@ -310,6 +314,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		unNamedMax = addMenuItemToMenu("Max UnNamed", borderDetection, true);
 		canny = addMenuItemToMenu("Canny", borderDetection, true);
 		susanBorder = addMenuItemToMenu("SUSAN", borderDetection, true);
+		harris = addMenuItemToMenu("Harris", borderDetection, true);
 
 		// Corner detection
 		susanCorner = addMenuItemToMenu("SUSAN", cornerDetection, true);
@@ -522,9 +527,100 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleTrackingVideo();
 			else if (source == sift)
 				handleSIFT();
+			else if (source == harris)
+				handleHarris();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	private void handleHarris(){
+		ATImage harried = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
+		
+		double threshold = 1;
+		double k = 1;
+		
+		int w = harried.getWidth(), h = harried.getHeight();
+		
+		double[][] lx2 = new double[w][h];
+		double[][] ly2 = new double[w][h];
+		double[][] lxy = new double[w][h];
+		List<Corner> corners = new ArrayList<Corner>();
+		
+		//calcular derivadas con kirck o algun otro sobre harried
+		
+		double[][] harrismap = computeHarrisResponse(k, lx2, ly2, lxy);
+		for (int x = 1; x < w - 1; x++) {
+			for (int y = 1; y < h - 1; y++) {
+				double v = harrismap[x][y];
+				if (v >= threshold
+						&& isSpatialMaxima(harrismap, (int) x, (int) y))
+					corners.add(new Corner(x, y, v));
+			}
+		}
+		for (Corner p : new ArrayList<Corner>(corners)) {
+			for (Corner n : corners) {
+				if (n != p) {
+					int dist = (int) Math.sqrt((p.x - n.x) * (p.x - n.x)
+							+ (p.y - n.y) * (p.y - n.y));
+					if (dist <= 3 && n.measure < p.measure) {
+						corners.remove(p);
+						break;
+					}
+				}
+			}
+		}
+		for (Corner c : corners) {
+			System.out.println(c.x + " " + c.y);
+		}
+
+		parent.addImage(harried);
+		
+	}
+	
+	private static boolean isSpatialMaxima(double[][] hmap, int x, int y) {
+		int n = 8;
+		int[] dx = new int[] { -1, 0, 1, 1, 1, 0, -1, -1 };
+		int[] dy = new int[] { -1, -1, -1, 0, 1, 1, 1, 0 };
+		double w = hmap[x][y];
+		for (int i = 0; i < n; i++) {
+			double wk = hmap[x + dx[i]][y + dy[i]];
+			if (wk >= w)
+				return false;
+		}
+		return true;
+	}
+
+	private static double[][] computeHarrisResponse(double k, double[][] lx2,
+			double[][] ly2, double[][] lxy) {
+		int width = ly2.length, height = ly2[0].length;
+		double[][] harrisResponse = new double[width][height];
+		double max = 0;
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				harrisResponse[x][y] = harrisResponse(x, y, k, lx2, ly2, lxy);
+				if (harrisResponse[x][y] > max)
+					max = harrisResponse[x][y];
+			}
+		}
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				double r = harrisResponse[x][y];
+				if (r < 0) {
+					r = 0;
+				} else {
+					r = 100 * Math.log(1 + r) / Math.log(1 + max);
+				}
+				harrisResponse[x][y] = r;
+			}
+		}
+		return harrisResponse;
+	}
+
+	private static double harrisResponse(int x, int y, double k,
+			double[][] lx2, double[][] ly2, double[][] lxy) {
+		return lx2[x][y] * ly2[x][y] - lxy[x][y] * lxy[x][y] - k
+				* (lx2[x][y] + ly2[x][y]) * (lx2[x][y] + ly2[x][y]);
 	}
 
 	private void handleTrackingVideo() {

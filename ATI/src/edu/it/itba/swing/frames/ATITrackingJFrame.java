@@ -90,7 +90,7 @@ public class ATITrackingJFrame extends JFrame {
 	}
 
 	public void playVideo() throws IOException {
-		File folder = new File("/home/dinu/Downloads/movie1");
+		File folder = new File("/Users/Tom/Dropbox/ITBA/Ingrnieria Informatica/Electivas/ATI/TP3/Video/movie1");
 		listOfFiles = folder.listFiles();
 
 		ATImage first = new ATImage(ImageUtils.load(listOfFiles[0], null),
@@ -154,7 +154,7 @@ public class ATITrackingJFrame extends JFrame {
 			}
 		};
 
-		timer = new Timer(10, timerTask);
+		timer = new Timer(1, timerTask);
 		timer.start();
 
 	}
