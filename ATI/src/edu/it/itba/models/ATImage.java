@@ -210,6 +210,12 @@ public class ATImage {
 			for (int col = 0; col < getWidth(); col++) {
 				if (img.getBand(Bands.R).getValue(row, col) == 255)
 					ret.getBand(Bands.R).set(row, col, 255);
+
+				if (img.getBand(Bands.G).getValue(row, col) == 255)
+					ret.getBand(Bands.G).set(row, col, 255);
+
+				if (img.getBand(Bands.B).getValue(row, col) == 255)
+					ret.getBand(Bands.B).set(row, col, 255);
 			}
 		return ret;
 	}

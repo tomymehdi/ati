@@ -40,8 +40,7 @@ public class ATITrackingJFrame extends JFrame {
 	public JButton stop;
 	public JButton start;
 
-	private ATImageJPanel imageLeft;
-	private ATImageJPanel imageRight;
+	private ATImageJPanel image;
 	int col, row, height, widht;
 	double delta;
 
@@ -90,12 +89,11 @@ public class ATITrackingJFrame extends JFrame {
 	}
 
 	public void playVideo() throws IOException {
-		File folder = new File("/Users/Tom/Dropbox/ITBA/Ingrnieria Informatica/Electivas/ATI/TP3/Video/movie1");
+		File folder = new File("/home/dinu/Downloads/movie1");
 		listOfFiles = folder.listFiles();
 
 		ATImage first = new ATImage(ImageUtils.load(listOfFiles[0], null),
-				ImageType.GRAYSCALE);
-		addImage(first);
+				ImageType.RGB);
 		tracking = new Tracking(first, row, col, widht, height,
 				new ArrayList<Pixel>(), new ArrayList<Pixel>(), null, delta);
 
@@ -110,9 +108,9 @@ public class ATITrackingJFrame extends JFrame {
 				}
 			}
 		}
-		first.applyLayer(draw);
+		ATImage resp = first.applyLayer(draw);
 
-		addImage(draw);
+		addImage(resp);
 
 		ActionListener timerTask = new ActionListener() {
 			@Override
@@ -121,9 +119,8 @@ public class ATITrackingJFrame extends JFrame {
 				try {
 					current = new ATImage(
 							ImageUtils.load(listOfFiles[i], null),
-							ImageType.GRAYSCALE);
+							ImageType.RGB);
 
-					addImage(current);
 					tracking = new Tracking(current, row, col, widht, height,
 							in, out, fis, delta);
 
@@ -139,9 +136,9 @@ public class ATITrackingJFrame extends JFrame {
 							}
 						}
 					}
-					current.applyLayer(draw);
+					ATImage resp = current.applyLayer(draw);
 
-					addImage(draw);
+					addImage(resp);
 					in = tracking.in;
 					out = tracking.out;
 					fis = tracking.fis;
@@ -160,20 +157,14 @@ public class ATITrackingJFrame extends JFrame {
 	}
 
 	public void addImage(ATImage img) {
-		if (imageLeft == null) {
-			imageLeft = new ATImageJPanel(this, img);
-			mainPanel.add(imageLeft);
-			imageLeft.revalidate();
-			imageLeft.repaint();
-		} else if (imageRight == null) {
-			imageRight = new ATImageJPanel(this, img);
-			mainPanel.add(imageRight);
-			imageRight.revalidate();
-			imageRight.repaint();
+		if (image == null) {
+			image = new ATImageJPanel(this, img);
+			mainPanel.add(image);
+			image.revalidate();
+			image.repaint();
 		} else {
 			mainPanel.removeAll();
-			imageLeft = null;
-			imageRight = null;
+			image = null;
 			addImage(img);
 		}
 	}
@@ -207,7 +198,6 @@ public class ATITrackingJFrame extends JFrame {
 		mainPanel.removeAll();
 		mainPanel.revalidate();
 		mainPanel.repaint();
-		imageLeft = null;
-		imageRight = null;
+		image = null;
 	}
 }
