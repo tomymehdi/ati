@@ -137,8 +137,9 @@ public class ATITrackingJFrame extends JFrame {
 							ImageType.RGB);
 
 					tracking = new Tracking(current, row, col, widht, height,
-							in, out, fis, delta, tracking.avgColor);
-
+							in, out, fis, delta, null);
+					tracking.runAlgorithm();
+					
 					draw = new ATImage(current.getHeight(), current.getWidth(),
 							ImageType.RGB);
 					for (int r = 0; r < current.getHeight(); r++) {
@@ -160,7 +161,6 @@ public class ATITrackingJFrame extends JFrame {
 
 					i++;
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
