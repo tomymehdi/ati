@@ -97,7 +97,7 @@ public class ATITrackingJFrame extends JFrame {
 				ImageType.GRAYSCALE);
 		addImage(first);
 		tracking = new Tracking(first, row, col, widht, height,
-				new ArrayList<Pixel>(), new ArrayList<Pixel>(), null, delta);
+				new ArrayList<Pixel>(), new ArrayList<Pixel>(), null, delta, null);
 
 		draw = new ATImage(first.getHeight(), first.getWidth(), ImageType.RGB);
 		for (int r = 0; r < first.getHeight(); r++) {
@@ -125,8 +125,9 @@ public class ATITrackingJFrame extends JFrame {
 
 					addImage(current);
 					tracking = new Tracking(current, row, col, widht, height,
-							in, out, fis, delta);
-
+							in, out, fis, delta, null);
+					tracking.runAlgorithm();
+					
 					draw = new ATImage(current.getHeight(), current.getWidth(),
 							ImageType.RGB);
 					for (int r = 0; r < current.getHeight(); r++) {
@@ -148,7 +149,6 @@ public class ATITrackingJFrame extends JFrame {
 
 					i++;
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}

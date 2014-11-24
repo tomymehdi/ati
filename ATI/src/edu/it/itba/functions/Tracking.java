@@ -19,7 +19,7 @@ public class Tracking implements Function {
 	double delta;
 
 	public Tracking(ATImage img, int row, int col, int width, int height,
-			List<Pixel> in, List<Pixel> out, int[][] fis, double delta) {
+			List<Pixel> in, List<Pixel> out, int[][] fis, double delta, double[] avg) {
 		this.img = img;
 		this.in = in;
 		this.out = out;
@@ -28,14 +28,14 @@ public class Tracking implements Function {
 		this.height = height;
 		this.col = col;
 		this.width = width;
-		avgColor = ImageUtils.avgEachBand(img.getVisual().getSubimage(col, row,
+		if(avg == null) {
+			avgColor = ImageUtils.avgEachBand(img.getVisual().getSubimage(col, row,
 				width, height));
+		}
 		this.delta = delta;
-		runAlgorithm();
-
 	}
 
-	private void runAlgorithm() {
+	public void runAlgorithm() {
 		if (in.isEmpty() || out.isEmpty()) {
 			initializeSetsAndFis();
 		}
@@ -93,7 +93,7 @@ public class Tracking implements Function {
 	}
 
 	private int func(Pixel key) {
-		if (avgColor[0] - img.R.getValue(key.getRow(), key.getCol()) < delta)
+		if (Math.abs(avgColor[0] - img.R.getValue(key.getRow(), key.getCol())) < delta)
 			return 1;
 		else
 			return -1;
