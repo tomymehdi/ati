@@ -101,7 +101,7 @@ public class ATITrackingStaticDialog extends JDialog implements ActionListener {
 				owner.getPanels()[Side.LEFT.getValue()].getImage());
 
 		Tracking tracking = new Tracking(img, row, col, width, height,
-				new ArrayList<Pixel>(), new ArrayList<Pixel>(), null, deltaP);
+				new ArrayList<Pixel>(), new ArrayList<Pixel>(), null, deltaP, null);
 		System.out.println(tracking.in.size());
 		ATImage draw = new ATImage(img.getHeight(), img.getWidth(),
 				ImageType.RGB);

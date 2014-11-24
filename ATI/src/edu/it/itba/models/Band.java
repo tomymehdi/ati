@@ -6,7 +6,7 @@ import edu.it.itba.interfaces.Function;
 public class Band {
 
 	private Bands band;
-	private double matrix[][];
+	public double matrix[][];
 	private int rows, cols;
 
 	public Band(int rows, int cols, Bands band) {

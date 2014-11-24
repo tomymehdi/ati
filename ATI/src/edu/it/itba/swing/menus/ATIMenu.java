@@ -34,6 +34,7 @@ import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.models.Corner;
+import edu.it.itba.models.windows.GaussianWIndow;
 import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
 import edu.it.itba.models.windows.Prewitt;
@@ -537,8 +538,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleHarris(){
 		ATImage harried = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
 		
-		double threshold = 1;
-		double k = 1;
+		double threshold = 0.001;
+		double k = 0;
 		
 		int w = harried.getWidth(), h = harried.getHeight();
 		
@@ -547,7 +548,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		double[][] lxy = new double[w][h];
 		List<Corner> corners = new ArrayList<Corner>();
 		
-		//calcular derivadas con kirck o algun otro sobre harried
+		computeDerivatives(harried, lx2, ly2, lxy);
 		
 		double[][] harrismap = computeHarrisResponse(k, lx2, ly2, lxy);
 		for (int x = 1; x < w - 1; x++) {
@@ -619,8 +620,41 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private static double harrisResponse(int x, int y, double k,
 			double[][] lx2, double[][] ly2, double[][] lxy) {
-		return lx2[x][y] * ly2[x][y] - lxy[x][y] * lxy[x][y] - k
+		double aux = lx2[x][y] * ly2[x][y] - lxy[x][y] * lxy[x][y] - k
 				* (lx2[x][y] + ly2[x][y]) * (lx2[x][y] + ly2[x][y]);
+		return aux;
+	}
+	
+	private static void computeDerivatives(ATImage image, double[][] lx2, double[][] ly2, double[][] lxy) {
+		int w = image.getWidth(), h = image.getHeight();
+		
+		ATImage imgHor = new ATImage(image);
+		imgHor.applyFunction(new PassAdditiveWindow(imgHor, new Sobel(3,
+				Direction.HORIZONTAL)), 100);
+		ATImage imgVer = new ATImage(image);
+		imgVer.applyFunction(new PassAdditiveWindow(imgVer, new Sobel(3,
+				Direction.VERTICAL)), 100);
+		
+		GaussianWIndow gaussian = new GaussianWIndow(3, 1.4);
+
+		for (int x = 0; x < w; x++) {
+			for (int y = 0; y < h; y++) {
+				for (int dx = 0; dx < 3 ; dx++) {
+					for (int dy = 0; dy < 3; dy++) {
+						int xk = x + dx;
+						int yk = y + dy;
+						if (xk >= 0 && xk < w && yk >= 0 && yk < h) {
+							double f = gaussian.window[dx + dy *3];
+							double gxp = imgHor.R.getValue(xk, yk);
+							double gyp = imgVer.R.getValue(xk, yk);
+							lx2[x][y] += f * gxp * gxp;
+							ly2[x][y] += f * gyp * gyp;
+							lxy[x][y] += f * gxp * gyp;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private void handleTrackingVideo() {

@@ -154,7 +154,7 @@ public class ATITrackingJFrame extends JFrame {
 			}
 		};
 
-		timer = new Timer(1, timerTask);
+		timer = new Timer(0, timerTask);
 		timer.start();
 
 	}

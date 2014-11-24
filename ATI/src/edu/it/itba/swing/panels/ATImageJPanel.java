@@ -9,8 +9,10 @@ import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 
 import edu.it.itba.enums.ImageType;
+import edu.it.itba.listeners.DragAndDrop;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.interfaces.ATIJPanel;
@@ -29,7 +31,12 @@ public class ATImageJPanel extends ATIJPanel {
 		Dimension imageDimension = new Dimension(image.getWidth(),
 				image.getHeight());
 		this.image = new ATImage(image, ImageType.RGB);
-		;
+		
+		DragAndDrop dragAndDrop = new DragAndDrop(this, new JTextField(), new JTextField(),new JTextField(),new JTextField());
+		
+		addMouseListener(dragAndDrop);
+		addMouseMotionListener(dragAndDrop);
+		
 		setMaximumSize(imageDimension);
 		setSize(imageDimension);
 	}
@@ -38,6 +45,12 @@ public class ATImageJPanel extends ATIJPanel {
 		super();
 		this.image = new ATImage(image, ImageType.RGB);
 		Dimension imgDim = new Dimension(image.getWidth(), image.getHeight());
+		
+		DragAndDrop dragAndDrop = new DragAndDrop(this, new JTextField(), new JTextField(),new JTextField(),new JTextField());
+		
+		addMouseListener(dragAndDrop);
+		addMouseMotionListener(dragAndDrop);
+		
 		setMaximumSize(imgDim);
 		setSize(imgDim);
 	}
@@ -46,6 +59,12 @@ public class ATImageJPanel extends ATIJPanel {
 		super();
 		this.image = image;
 		Dimension imgDim = new Dimension(image.getWidth(), image.getHeight());
+		
+		DragAndDrop dragAndDrop = new DragAndDrop(this, new JTextField(), new JTextField(),new JTextField(),new JTextField());
+		
+		addMouseListener(dragAndDrop);
+		addMouseMotionListener(dragAndDrop);
+		
 		setMaximumSize(imgDim);
 		setSize(imgDim);
 	}
