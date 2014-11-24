@@ -15,11 +15,11 @@ public class Tracking implements Function {
 	public int fis[][];
 	public ATImage img;
 	int row, col, width, height;
-	double[] avgColor;
+	public double[] avgColor;
 	double delta;
 
 	public Tracking(ATImage img, int row, int col, int width, int height,
-			List<Pixel> in, List<Pixel> out, int[][] fis, double delta) {
+			List<Pixel> in, List<Pixel> out, int[][] fis, double delta, double[] avg) {
 		this.img = img;
 		this.in = in;
 		this.out = out;
@@ -28,8 +28,13 @@ public class Tracking implements Function {
 		this.height = height;
 		this.col = col;
 		this.width = width;
-		avgColor = ImageUtils.avgEachBand(img.getVisual().getSubimage(col, row,
-				width, height));
+		if (avg == null){
+			avgColor = ImageUtils.avgEachBand(img.getVisual().getSubimage(col, row,
+					width, height));
+		} else {
+			avgColor = avg;
+		}
+		
 		this.delta = delta;
 		runAlgorithm();
 

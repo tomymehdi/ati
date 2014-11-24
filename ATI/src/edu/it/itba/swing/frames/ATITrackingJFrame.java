@@ -7,13 +7,16 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import edu.it.itba.enums.ImageType;
@@ -34,7 +37,7 @@ public class ATITrackingJFrame extends JFrame {
 	List<Pixel> in = new ArrayList<Pixel>();
 	List<Pixel> out = new ArrayList<Pixel>();
 	int[][] fis;
-	File[] listOfFiles;
+	List<File> files;
 	Timer timer;
 	ATImage draw;
 	public JButton stop;
@@ -89,13 +92,25 @@ public class ATITrackingJFrame extends JFrame {
 	}
 
 	public void playVideo() throws IOException {
-		File folder = new File("/home/dinu/Downloads/movie1");
-		listOfFiles = folder.listFiles();
-
-		ATImage first = new ATImage(ImageUtils.load(listOfFiles[0], null),
+		File folder = new File("/home/dinu/Downloads/Movie2");
+		File[] listOfFiles = folder.listFiles();
+		files = new ArrayList<File>();
+		
+		for (File e : listOfFiles){
+			files.add(e);
+		}
+		
+		Collections.sort(files, new Comparator<File>() {
+			@Override
+			public int compare(File arg0, File arg1) {
+				return arg0.getAbsolutePath().compareTo(arg1.getAbsolutePath());
+			}
+		});
+		
+		ATImage first = new ATImage(ImageUtils.load(files.get(0), null),
 				ImageType.RGB);
 		tracking = new Tracking(first, row, col, widht, height,
-				new ArrayList<Pixel>(), new ArrayList<Pixel>(), null, delta);
+				new ArrayList<Pixel>(), new ArrayList<Pixel>(), null, delta, null);
 
 		draw = new ATImage(first.getHeight(), first.getWidth(), ImageType.RGB);
 		for (int r = 0; r < first.getHeight(); r++) {
@@ -118,11 +133,11 @@ public class ATITrackingJFrame extends JFrame {
 				ATImage current;
 				try {
 					current = new ATImage(
-							ImageUtils.load(listOfFiles[i], null),
+							ImageUtils.load(files.get(i), null),
 							ImageType.RGB);
 
 					tracking = new Tracking(current, row, col, widht, height,
-							in, out, fis, delta);
+							in, out, fis, delta, tracking.avgColor);
 
 					draw = new ATImage(current.getHeight(), current.getWidth(),
 							ImageType.RGB);
@@ -151,7 +166,8 @@ public class ATITrackingJFrame extends JFrame {
 			}
 		};
 
-		timer = new Timer(1, timerTask);
+		timer = new Timer(100, timerTask);
+		timer.setRepeats(true);
 		timer.start();
 
 	}
