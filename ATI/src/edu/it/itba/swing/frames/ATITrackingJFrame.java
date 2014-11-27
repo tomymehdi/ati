@@ -143,6 +143,15 @@ public class ATITrackingJFrame extends JFrame {
 
 					draw = new ATImage(current.getHeight(), current.getWidth(),
 							ImageType.RGB);
+					
+					for(Pixel p: tracking.in){
+						draw.R.set(p.getRow(), p.getCol(), 255);
+					}
+					
+					for(Pixel p: tracking.out){
+						draw.G.set(p.getRow(), p.getCol(), 255);
+					}
+					/*
 					for (int r = 0; r < current.getHeight(); r++) {
 						for (int c = 0; c < current.getWidth(); c++) {
 							if (tracking.in.contains(new Pixel(r, c))) {
@@ -152,10 +161,11 @@ public class ATITrackingJFrame extends JFrame {
 								draw.G.set(r, c, 255);
 							}
 						}
-					}
+					}*/
 					ATImage resp = current.applyLayer(draw);
 
 					addImage(resp);
+					//addImage(current);
 					in = tracking.in;
 					out = tracking.out;
 					fis = tracking.fis;
