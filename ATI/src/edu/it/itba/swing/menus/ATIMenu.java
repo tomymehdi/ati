@@ -567,11 +567,18 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				}
 			}
 		}
+		ATImage resp = new ATImage(harried.getHeight(), harried.getWidth(),
+				 ImageType.GRAYSCALE);
+		int col,row;
 		for (Corner c : corners) {
-			System.out.println(c.x + " " + c.y);
+			 col = c.y;
+			 row = c.x;
+			 resp.drawCircle(row, col, (int) c.measure/20);
+			
 		}
-
-		parent.addImage(harried);
+		parent.clear();
+		parent.addImage(harried.applyLayer(resp));
+		
 		
 	}
 	
