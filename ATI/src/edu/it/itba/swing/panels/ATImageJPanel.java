@@ -47,7 +47,7 @@ public class ATImageJPanel extends ATIJPanel {
 		this.image = new ATImage(image, ImageType.RGB);
 		Dimension imgDim = new Dimension(image.getWidth(), image.getHeight());
 
-		DragAndDrop dragAndDrop = new DragAndDrop(this);
+		dragAndDrop = new DragAndDrop(this);
 
 		addMouseListener(dragAndDrop);
 		addMouseMotionListener(dragAndDrop);
@@ -61,7 +61,7 @@ public class ATImageJPanel extends ATIJPanel {
 		this.image = image;
 		Dimension imgDim = new Dimension(image.getWidth(), image.getHeight());
 
-		DragAndDrop dragAndDrop = new DragAndDrop(this);
+		dragAndDrop = new DragAndDrop(this);
 
 		addMouseListener(dragAndDrop);
 		addMouseMotionListener(dragAndDrop);

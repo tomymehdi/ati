@@ -92,7 +92,7 @@ public class ATITrackingJFrame extends JFrame {
 	}
 
 	public void playVideo() throws IOException {
-		File folder = new File("/home/dinu/Downloads/Movie2");
+		File folder = new File("/Users/Tom/Dropbox/ati-2013/TP3/Video/movie1");
 		File[] listOfFiles = folder.listFiles();
 		files = new ArrayList<File>();
 
