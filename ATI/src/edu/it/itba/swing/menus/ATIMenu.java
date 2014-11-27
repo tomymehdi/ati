@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JMenu;
@@ -30,7 +28,7 @@ import edu.it.itba.functions.OtzuUmbralization;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
-import edu.it.itba.models.Corner;
+import edu.it.itba.models.windows.GaussianWIndow;
 import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
 import edu.it.itba.models.windows.Prewitt;
@@ -47,6 +45,7 @@ import edu.it.itba.swing.dialogs.ATIExpImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseDialog;
 import edu.it.itba.swing.dialogs.ATIGaussNoiseImageDialog;
 import edu.it.itba.swing.dialogs.ATIGaussWindowDialog;
+import edu.it.itba.swing.dialogs.ATIGetSquareDialog;
 import edu.it.itba.swing.dialogs.ATIHoughCirclesDialog;
 import edu.it.itba.swing.dialogs.ATIHoughLinesDialog;
 import edu.it.itba.swing.dialogs.ATILaplacianPendantDialog;
@@ -60,7 +59,6 @@ import edu.it.itba.swing.dialogs.ATIRayleighImageDialog;
 import edu.it.itba.swing.dialogs.ATIRaylightDialog;
 import edu.it.itba.swing.dialogs.ATISubImageDialog;
 import edu.it.itba.swing.dialogs.ATITrackingStaticDialog;
-import edu.it.itba.swing.dialogs.ATITrackingVideoDialog;
 import edu.it.itba.swing.dialogs.ATIsotropicDiffusionDialog;
 import edu.it.itba.swing.dialogs.GlobalUmbralDialog;
 import edu.it.itba.swing.dialogs.LaplacianGaussianDialog;
@@ -525,55 +523,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 			else if (source == sift)
 				handleSIFT();
 			else if (source == harris)
-				handleHarris();
+				;
+			// handleHarris();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	private void handleHarris() {
-		ATImage harried = new ATImage(
-				parent.getPanels()[Side.LEFT.getValue()].getImage());
-
-		double threshold = 1;
-		double k = 1;
-
-		int w = harried.getWidth(), h = harried.getHeight();
-
-		double[][] lx2 = new double[w][h];
-		double[][] ly2 = new double[w][h];
-		double[][] lxy = new double[w][h];
-		List<Corner> corners = new ArrayList<Corner>();
-
-		// calcular derivadas con kirck o algun otro sobre harried
-
-		double[][] harrismap = computeHarrisResponse(k, lx2, ly2, lxy);
-		for (int x = 1; x < w - 1; x++) {
-			for (int y = 1; y < h - 1; y++) {
-				double v = harrismap[x][y];
-				if (v >= threshold
-						&& isSpatialMaxima(harrismap, (int) x, (int) y))
-					corners.add(new Corner(x, y, v));
-			}
-		}
-		for (Corner p : new ArrayList<Corner>(corners)) {
-			for (Corner n : corners) {
-				if (n != p) {
-					int dist = (int) Math.sqrt((p.x - n.x) * (p.x - n.x)
-							+ (p.y - n.y) * (p.y - n.y));
-					if (dist <= 3 && n.measure < p.measure) {
-						corners.remove(p);
-						break;
-					}
-				}
-			}
-		}
-		for (Corner c : corners) {
-			System.out.println(c.x + " " + c.y);
-		}
-
-		parent.addImage(harried);
-
 	}
 
 	private static boolean isSpatialMaxima(double[][] hmap, int x, int y) {
@@ -617,12 +571,50 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private static double harrisResponse(int x, int y, double k,
 			double[][] lx2, double[][] ly2, double[][] lxy) {
-		return lx2[x][y] * ly2[x][y] - lxy[x][y] * lxy[x][y] - k
+		double aux = lx2[x][y] * ly2[x][y] - lxy[x][y] * lxy[x][y] - k
 				* (lx2[x][y] + ly2[x][y]) * (lx2[x][y] + ly2[x][y]);
+		return aux;
 	}
 
-	private void handleTrackingVideo() {
-		new ATITrackingVideoDialog(parent);
+	private static void computeDerivatives(ATImage image, double[][] lx2,
+			double[][] ly2, double[][] lxy) {
+		int w = image.getWidth(), h = image.getHeight();
+
+		ATImage imgHor = new ATImage(image);
+		imgHor.applyFunction(new PassAdditiveWindow(imgHor, new Sobel(3,
+				Direction.HORIZONTAL)), 100);
+		ATImage imgVer = new ATImage(image);
+		imgVer.applyFunction(new PassAdditiveWindow(imgVer, new Sobel(3,
+				Direction.VERTICAL)), 100);
+
+		GaussianWIndow gaussian = new GaussianWIndow(3, 1.4);
+
+		for (int x = 0; x < w; x++) {
+			for (int y = 0; y < h; y++) {
+				for (int dx = 0; dx < 3; dx++) {
+					for (int dy = 0; dy < 3; dy++) {
+						int xk = x + dx;
+						int yk = y + dy;
+						if (xk >= 0 && xk < w && yk >= 0 && yk < h) {
+							double f = gaussian.window[dx + dy * 3];
+							double gxp = imgHor.R.getValue(xk, yk);
+							double gyp = imgVer.R.getValue(xk, yk);
+							lx2[x][y] += f * gxp * gxp;
+							ly2[x][y] += f * gyp * gyp;
+							lxy[x][y] += f * gxp * gyp;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void handleTrackingVideo() throws IOException {
+		File file = new File("/home/dinu/Downloads/Movie2/Frame01.jpeg");
+
+		new ATIGetSquareDialog(this.parent, new ATImage(ImageUtils.load(file,
+				null), ImageType.RGB));
+
 	}
 
 	// Tracking

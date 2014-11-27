@@ -31,7 +31,7 @@ public class ATITrackingJFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel mainPanel;
-
+	int[] square;
 	Tracking tracking;
 	private int i = 0;
 	List<Pixel> in = new ArrayList<Pixel>();
@@ -95,22 +95,23 @@ public class ATITrackingJFrame extends JFrame {
 		File folder = new File("/home/dinu/Downloads/Movie2");
 		File[] listOfFiles = folder.listFiles();
 		files = new ArrayList<File>();
-		
-		for (File e : listOfFiles){
+
+		for (File e : listOfFiles) {
 			files.add(e);
 		}
-		
+
 		Collections.sort(files, new Comparator<File>() {
 			@Override
 			public int compare(File arg0, File arg1) {
 				return arg0.getAbsolutePath().compareTo(arg1.getAbsolutePath());
 			}
 		});
-		
+
 		ATImage first = new ATImage(ImageUtils.load(files.get(0), null),
 				ImageType.RGB);
 		tracking = new Tracking(first, row, col, widht, height,
-				new ArrayList<Pixel>(), new ArrayList<Pixel>(), null, delta, null);
+				new ArrayList<Pixel>(), new ArrayList<Pixel>(), null, delta,
+				null);
 
 		draw = new ATImage(first.getHeight(), first.getWidth(), ImageType.RGB);
 		for (int r = 0; r < first.getHeight(); r++) {
@@ -132,12 +133,13 @@ public class ATITrackingJFrame extends JFrame {
 			public void actionPerformed(final ActionEvent e) {
 				ATImage current;
 				try {
-					current = new ATImage(
-							ImageUtils.load(files.get(i), null),
+					current = new ATImage(ImageUtils.load(files.get(i), null),
 							ImageType.RGB);
 
 					tracking = new Tracking(current, row, col, widht, height,
 							in, out, fis, delta, tracking.avgColor);
+
+					tracking.runAlgorithm();
 
 					draw = new ATImage(current.getHeight(), current.getWidth(),
 							ImageType.RGB);
@@ -160,7 +162,6 @@ public class ATITrackingJFrame extends JFrame {
 
 					i++;
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -168,13 +169,14 @@ public class ATITrackingJFrame extends JFrame {
 
 		timer = new Timer(100, timerTask);
 		timer.setRepeats(true);
+
 		timer.start();
 
 	}
 
 	public void addImage(ATImage img) {
 		if (image == null) {
-			image = new ATImageJPanel(this, img);
+			image = new ATImageJPanel(img);
 			mainPanel.add(image);
 			image.revalidate();
 			image.repaint();
@@ -216,4 +218,6 @@ public class ATITrackingJFrame extends JFrame {
 		mainPanel.repaint();
 		image = null;
 	}
+
+
 }

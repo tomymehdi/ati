@@ -9,8 +9,10 @@ import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 
 import edu.it.itba.enums.ImageType;
+import edu.it.itba.listeners.DragAndDrop;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.interfaces.ATIJPanel;
@@ -21,6 +23,7 @@ public class ATImageJPanel extends ATIJPanel {
 	private static final long serialVersionUID = 1L;
 
 	private ATImage image;
+	private DragAndDrop dragAndDrop;
 
 	public ATImageJPanel(File file, Dimension dim) throws IOException {
 		setBorder(BorderFactory.createLineBorder(Color.black));
@@ -29,7 +32,12 @@ public class ATImageJPanel extends ATIJPanel {
 		Dimension imageDimension = new Dimension(image.getWidth(),
 				image.getHeight());
 		this.image = new ATImage(image, ImageType.RGB);
-		;
+
+		dragAndDrop = new DragAndDrop(this);
+
+		addMouseListener(dragAndDrop);
+		addMouseMotionListener(dragAndDrop);
+
 		setMaximumSize(imageDimension);
 		setSize(imageDimension);
 	}
@@ -38,14 +46,26 @@ public class ATImageJPanel extends ATIJPanel {
 		super();
 		this.image = new ATImage(image, ImageType.RGB);
 		Dimension imgDim = new Dimension(image.getWidth(), image.getHeight());
+
+		DragAndDrop dragAndDrop = new DragAndDrop(this);
+
+		addMouseListener(dragAndDrop);
+		addMouseMotionListener(dragAndDrop);
+
 		setMaximumSize(imgDim);
 		setSize(imgDim);
 	}
 
-	public ATImageJPanel(JFrame parent, ATImage image) {
+	public ATImageJPanel(ATImage image) {
 		super();
 		this.image = image;
 		Dimension imgDim = new Dimension(image.getWidth(), image.getHeight());
+
+		DragAndDrop dragAndDrop = new DragAndDrop(this);
+
+		addMouseListener(dragAndDrop);
+		addMouseMotionListener(dragAndDrop);
+
 		setMaximumSize(imgDim);
 		setSize(imgDim);
 	}
@@ -64,6 +84,10 @@ public class ATImageJPanel extends ATIJPanel {
 
 	public void setImage(ATImage img) {
 		this.image = img;
+	}
+
+	public int[] getSquare() {
+		return dragAndDrop.getSquare();
 	}
 
 }

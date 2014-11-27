@@ -62,7 +62,7 @@ public class ATIImageJFrame extends ATIJFrame {
 	@Override
 	public void addImage(ATImage img) {
 		mainPanel.removeAll();
-		image = new ATImageJPanel(parent, img);
+		image = new ATImageJPanel(img);
 		mainPanel.add(image);
 		image.revalidate();
 		image.repaint();

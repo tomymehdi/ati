@@ -57,12 +57,12 @@ public class ATIJFrameImpl extends ATIJFrame {
 	@Override
 	public void addImage(ATImage img) {
 		if (imageLeft == null) {
-			imageLeft = new ATImageJPanel(this, img);
+			imageLeft = new ATImageJPanel(img);
 			mainPanel.add(imageLeft);
 			imageLeft.revalidate();
 			imageLeft.repaint();
 		} else if (imageRight == null) {
-			imageRight = new ATImageJPanel(this, img);
+			imageRight = new ATImageJPanel(img);
 			mainPanel.add(imageRight);
 			imageRight.revalidate();
 			imageRight.repaint();

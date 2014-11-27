@@ -9,6 +9,7 @@ import edu.it.itba.models.ATImage;
 
 @SuppressWarnings("serial")
 public abstract class ATIJFrame extends JFrame {
+	int[] square;
 
 	public abstract ATIJPanel[] getPanels();
 
@@ -19,5 +20,9 @@ public abstract class ATIJFrame extends JFrame {
 	public abstract void loadImage(File file, Dimension dim);
 
 	public abstract void swapImages();
+
+	public void setSquare(int[] square) {
+		this.square = square;
+	}
 
 }

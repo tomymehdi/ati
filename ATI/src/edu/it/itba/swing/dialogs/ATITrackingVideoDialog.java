@@ -25,24 +25,23 @@ import edu.it.itba.swing.interfaces.ATIJFrame;
 public class ATITrackingVideoDialog extends JDialog implements ActionListener {
 
 	private ATIJFrame owner;
-	private JTextField x;
-	private JTextField y;
-	private JTextField width;
-	private JTextField height;
 	private JTextField delta;
 	private JButton getSubImage;
 	private JLabel data;
+	int px, py, qx, qy;
 
-	public ATITrackingVideoDialog(ATIJFrame owner) {
+	public ATITrackingVideoDialog(ATIJFrame owner, int px, int py, int qx,
+			int qy) {
 
 		super(owner, "TRacking Video", true);
+		this.px = px;
+		this.py = py;
+		this.qx = qx;
+		this.qy = qy;
+
 		this.owner = owner;
 		getSubImage = new JButton("Get Sub Image");
 		getSubImage.addActionListener(this);
-		x = new JTextField(4);
-		y = new JTextField(4);
-		width = new JTextField(4);
-		height = new JTextField(4);
 		data = new JLabel();
 		delta = new JTextField(4);
 
@@ -51,21 +50,8 @@ public class ATITrackingVideoDialog extends JDialog implements ActionListener {
 		mainPanel.setLayout(new BorderLayout());
 
 		JPanel p = new JPanel();
-		p.add(new JLabel("x"));
-		p.add(x);
 		p.add(new JLabel("delta"));
 		p.add(delta);
-
-		p.add(new JLabel("y"));
-		p.add(y);
-		centralPanel.add(p);
-
-		p = new JPanel();
-		p.add(new JLabel("widht"));
-		p.add(width);
-
-		p.add(new JLabel("height"));
-		p.add(height);
 		centralPanel.add(p);
 
 		p = new JPanel();
@@ -95,15 +81,11 @@ public class ATITrackingVideoDialog extends JDialog implements ActionListener {
 
 	private void handleSubImage() {
 		handleClose();
-		int col = Integer.parseInt(this.x.getText());
-		int row = Integer.parseInt(this.y.getText());
-		int width = Integer.parseInt(this.width.getText());
-		int height = Integer.parseInt(this.height.getText());
 		double deltaP = Double.parseDouble(this.delta.getText());
 
 		try {
-			ATITrackingJFrame video = new ATITrackingJFrame(col, row, height,
-					width, deltaP);
+			ATITrackingJFrame video = new ATITrackingJFrame(px, py, Math.abs(py
+					- qy), Math.abs(px - qx), deltaP);
 			video.playVideo();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
