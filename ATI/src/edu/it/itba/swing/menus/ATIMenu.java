@@ -8,12 +8,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import mpi.cbg.fly.Feature;
+import mpi.cbg.fly.SIFT;
 //import mpi.cbg.fly.Feature;
 //import mpi.cbg.fly.SIFT;
 import edu.it.itba.enums.Direction;
@@ -1223,19 +1226,19 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	// SIFT
 	private void handleSIFT() {
-		// ATImage img = new ATImage(
-		// parent.getPanels()[Side.LEFT.getValue()].getImage());
-		// ATImage resp = new ATImage(img.getHeight(), img.getWidth(),
-		// ImageType.GRAYSCALE);
-		// Vector<Feature> features = SIFT.getFeatures(img.getVisual());
-		// int col, row;
-		// for (Feature feature : features) {
-		// col = (int) (feature.location[0]);
-		// row = (int) (feature.location[1]);
-		// resp.drawCircle(row, col, (int) feature.scale);
-		// }
-		// // resp = img.applyLayer(resp);
-		// parent.addImage(img.applyLayer(resp));
+		 ATImage img = new ATImage(
+		 parent.getPanels()[Side.LEFT.getValue()].getImage());
+		 ATImage resp = new ATImage(img.getHeight(), img.getWidth(),
+		 ImageType.GRAYSCALE);
+		 Vector<Feature> features = SIFT.getFeatures(img.getVisual());
+		 int col, row;
+		 for (Feature feature : features) {
+		 col = (int) (feature.location[0]);
+		 row = (int) (feature.location[1]);
+		 resp.drawCircle(row, col, (int) feature.scale);
+		 }
+		 // resp = img.applyLayer(resp);
+		 parent.addImage(img.applyLayer(resp));
 	}
 
 }
