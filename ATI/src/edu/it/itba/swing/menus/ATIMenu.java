@@ -3,10 +3,13 @@ package edu.it.itba.swing.menus;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -16,9 +19,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import mpi.cbg.fly.Feature;
+import mpi.cbg.fly.Model;
+import mpi.cbg.fly.PointMatch;
 import mpi.cbg.fly.SIFT;
-//import mpi.cbg.fly.Feature;
-//import mpi.cbg.fly.SIFT;
 import edu.it.itba.enums.Direction;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
@@ -1233,12 +1236,94 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		 Vector<Feature> features = SIFT.getFeatures(img.getVisual());
 		 int col, row;
 		 for (Feature feature : features) {
-		 col = (int) (feature.location[0]);
-		 row = (int) (feature.location[1]);
-		 resp.drawCircle(row, col, (int) feature.scale);
+			 col = (int) (feature.location[0]);
+			 row = (int) (feature.location[1]);
+			 resp.drawCircle(row, col, (int) feature.scale);
 		 }
-		 // resp = img.applyLayer(resp);
+		 
+		 ATImage img2 = new ATImage(
+				 parent.getPanels()[Side.RIGHT.getValue()].getImage());
+				 ATImage resp2 = new ATImage(img2.getHeight(), img2.getWidth(),
+				 ImageType.GRAYSCALE);
+		 Vector<Feature> features2 = SIFT.getFeatures(img2.getVisual());
+		 int col2, row2;
+		 for (Feature feature : features2) {
+			 col2 = (int) (feature.location[0]);
+			 row2 = (int) (feature.location[1]);
+			 resp2.drawCircle(row2, col2, (int) feature.scale);
+		 }
 		 parent.addImage(img.applyLayer(resp));
+		 parent.addImage(img2.applyLayer(resp));
+		 
+		 Model model = new Model() {
+			
+			@Override
+			public String toString() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public void shake(Collection<PointMatch> matches, float scale,
+					float[] center) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void minimize(Collection<PointMatch> matches) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public AffineTransform getAffine() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public boolean fit(PointMatch[] min_matches) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public Model clone() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public void applyInverseInPlace(float[] point) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public float[] applyInverse(float[] point) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public void applyInPlace(float[] point) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public float[] apply(float[] point) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+		
+		Collections.sort(features);
+		Collections.sort(features2);
+		
+		Vector v = SIFT.createMatches(features, features2, 1.5f, null, Float.MAX_VALUE);
+		System.out.println(v.size());
 	}
 
 }
