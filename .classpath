@@ -22,5 +22,25 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="ATI/libs/commons-beanutils-1.9.2.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/ghost4j-1.0.0.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/ij.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/itext-2.1.7.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/jai_imageio.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/javasift.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/jna.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/jul-to-slf4j-1.7.13.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/lept4j-1.0.1.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/logback-classic-1.1.3.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/logback-core-1.1.3.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/rococoa-core-0.5.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/slf4j-api-1.7.13.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/tess4j-3.0.jar"/>
+	<classpathentry kind="lib" path="ATI/libs/xmlgraphics-commons-1.5.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
