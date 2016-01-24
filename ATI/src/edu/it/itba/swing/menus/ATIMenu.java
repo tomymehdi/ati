@@ -178,6 +178,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private JMenuItem clear;
 	private JMenuItem changePositions;
+	
+	private JMenuItem OCRimage;
+	private JMenuItem OCRvideo;
 
 	public ATIMenu(ATIJFrame parent) {
 		super();
@@ -212,6 +215,8 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		JMenu tracking = new JMenu("Tracking");
 
 		JMenu compression = new JMenu("Compressions");
+		
+		JMenu ocr = new JMenu("OCR");
 
 		JMenu options = new JMenu("Options");
 
@@ -337,6 +342,10 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		logCompLeft = addMenuItemToMenu("DC left", compression, true);
 		logCompRight = addMenuItemToMenu("DC right", compression, true);
 
+		// OCR
+		OCRimage = addMenuItemToMenu("OCR image", ocr, true);
+		OCRvideo = addMenuItemToMenu("OCR video", ocr, true);
+		
 		// Options
 		clear = addMenuItemToMenu("Clear", options, true);
 		changePositions = addMenuItemToMenu("Change image positions", options,
@@ -355,6 +364,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		addToMenu(lineDetection);
 		addToMenu(tracking);
 		addToMenu(compression);
+		addToMenu(ocr);
 		addToMenu(options);
 	}
 
@@ -533,10 +543,23 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 				handleSIFT();
 			else if (source == harris)
 				handleHarris();
+			else if(source == OCRimage)
+				handleOCRimage();
+			else if(source == OCRvideo)
+				handleOCRvideo();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
+	
+	private void handleOCRimage() {
+		
+	}
+	
+	private void handleOCRvideo() {
+		
+	}
+	
 	private void handleHarris(){
 		ATImage harried = new ATImage(parent.getPanels()[Side.LEFT.getValue()].getImage());
 		
@@ -667,7 +690,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	}
 
 	private void handleTrackingVideo() throws IOException {
-		File file = new File("/Users/Tom/Dropbox/ati-2013/TP3/Video/movie1/PIC00001.jpg");
+		File file = new File("/Users/tomymehdi/itba/ati/ATI/resources/videos/movie1/PIC00001.jpg");
 
 		new ATIGetSquareDialog(this.parent, new ATImage(ImageUtils.load(file,
 				null), ImageType.RGB));
@@ -1149,7 +1172,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private void handleFractal() {
 		String path = System.getProperty("user.dir")
-				+ "/resources/images/fractal.raw";
+				+ "/ATI/resources/images/fractal.raw";
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
 					200, 200));
@@ -1161,7 +1184,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private void handleBarco() {
 		String path = System.getProperty("user.dir")
-				+ "/resources/images/barco.raw";
+				+ "/ATI/resources/images/barco.raw";
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
 					290, 207));
@@ -1173,7 +1196,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private void handleGirl() {
 		String path = System.getProperty("user.dir")
-				+ "/resources/images/girl2.raw";
+				+ "/ATI/resources/images/girl2.raw";
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
 					256, 256));
@@ -1185,7 +1208,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private void handleLenax() {
 		String path = System.getProperty("user.dir")
-				+ "/resources/images/lenax.raw";
+				+ "/ATI/resources/images/lenax.raw";
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
 					256, 256));
@@ -1197,7 +1220,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 
 	private void handleLena() {
 		String path = System.getProperty("user.dir")
-				+ "/resources/images/lena.raw";
+				+ "/ATI/resources/images/lena.raw";
 		try {
 			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
 					256, 256));

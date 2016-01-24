@@ -80,17 +80,17 @@ public class ATIJFrameImpl extends ATIJFrame {
 
 			BufferedImage image = ImageUtils.load(file, dim);
 
-			ImageType type = ImageType.GRAYSCALE;
+			ImageType type = ImageType.RGB;
 
 			switch (image.getType()) {
 			case BufferedImage.TYPE_INT_RGB:
 				type = ImageType.RGB;
 				break;
 			case 5:
-				type = ImageType.GRAYSCALE;
+				type = ImageType.RGB;
 				break;
 			case BufferedImage.TYPE_BYTE_GRAY:
-				type = ImageType.GRAYSCALE;
+				type = ImageType.RGB;
 				break;
 			}
 
