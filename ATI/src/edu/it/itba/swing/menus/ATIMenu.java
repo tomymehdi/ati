@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
@@ -18,13 +20,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import mpi.cbg.fly.Feature;
-import mpi.cbg.fly.Model;
-import mpi.cbg.fly.PointMatch;
-import mpi.cbg.fly.SIFT;
 import edu.it.itba.enums.Direction;
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.enums.Side;
+import edu.it.itba.functions.BinaryRGBClusterization;
 import edu.it.itba.functions.Crossing;
 import edu.it.itba.functions.Equalize;
 import edu.it.itba.functions.LinearTransform;
@@ -33,10 +32,12 @@ import edu.it.itba.functions.Max;
 import edu.it.itba.functions.MultiplyBy;
 import edu.it.itba.functions.Negative;
 import edu.it.itba.functions.OtzuUmbralization;
+import edu.it.itba.functions.OtzuUmbralizationRGB;
 import edu.it.itba.functions.PassAdditiveWindow;
 import edu.it.itba.functions.SumImage;
 import edu.it.itba.models.ATImage;
 import edu.it.itba.models.Corner;
+import edu.it.itba.models.Pixel;
 import edu.it.itba.models.windows.GaussianWIndow;
 import edu.it.itba.models.windows.Kirsh;
 import edu.it.itba.models.windows.Laplacian;
@@ -77,6 +78,12 @@ import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.panels.ATISaltAndPepperDialog;
 import edu.it.itba.swing.panels.ATIUmbralDialog;
 import edu.it.itba.utils.ImageUtils;
+import mpi.cbg.fly.Feature;
+import mpi.cbg.fly.Model;
+import mpi.cbg.fly.PointMatch;
+import mpi.cbg.fly.SIFT;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
 
 @SuppressWarnings("serial")
 public class ATIMenu extends JMenuBar implements ActionListener {
@@ -551,11 +558,61 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 			ex.printStackTrace();
 		}
 	}
-	
 	private void handleOCRimage() {
+		
+		// OCR without applying algorithm
+		File imageFile = parent.getPanels()[Side.LEFT.getValue()].getImage().getFile();
+		Tesseract instance = Tesseract.getInstance();  // JNA Interface Mapping
+		try {
+		    String result = instance.doOCR(imageFile);
+		    System.out.println(result);
+		} catch (TesseractException e) {
+		    System.err.println(e.getMessage());
+		}
+		
+		// Step 1 - Otzu umbralization RGB
+		ATImage image = parent.getPanels()[Side.LEFT.getValue()].getImage();
+		ATImage colorVideoAlgorithmImage = new ATImage(image);
+
+		OtzuUmbralizationRGB otzuRGB = new OtzuUmbralizationRGB(colorVideoAlgorithmImage);
+		
+		// Step 2.1 - Binary treshholding
+		colorVideoAlgorithmImage.applyFunction(otzuRGB, 100);
+		
+		// Step 2.2 - Clustering pixels into 8 classes
+		BinaryRGBClusterization classes = new BinaryRGBClusterization(colorVideoAlgorithmImage);
+		
+		
+		// Step 3 - Mean per class per band
+		classes.means();
+		
+		// Step 4.1 - Variance per class
+		
+		// Step 4.2 - Variance between classes
+		
+		
+		parent.addImage(colorVideoAlgorithmImage);
+		
+		String dir = System.getProperty("user.dir");
+		dir += "/tests/results/";
+		File leftFile = new File(dir + "ocr.jpg");
+		try {
+			ImageIO.write(colorVideoAlgorithmImage.getVisual(), "jpg",
+					leftFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+		    String result = instance.doOCR(leftFile);
+		    System.out.println(result);
+		} catch (TesseractException e) {
+		    System.err.println(e.getMessage());
+		}
 		
 	}
 	
+	// Video https://www.youtube.com/watch?v=L0MK7qz13bU
 	private void handleOCRvideo() {
 		
 	}
@@ -692,7 +749,7 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleTrackingVideo() throws IOException {
 		File file = new File("/Users/tomymehdi/itba/ati/ATI/resources/videos/movie1/PIC00001.jpg");
 
-		new ATIGetSquareDialog(this.parent, new ATImage(ImageUtils.load(file,
+		new ATIGetSquareDialog(this.parent, new ATImage(file, ImageUtils.load(file,
 				null), ImageType.RGB));
 
 	}
@@ -1173,10 +1230,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleFractal() {
 		String path = System.getProperty("user.dir")
 				+ "/ATI/resources/images/fractal.raw";
+		File file = new File(path);
 		try {
-			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
+			BufferedImage img = ImageUtils.load(file, new Dimension(
 					200, 200));
-			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
+			parent.addImage(new ATImage(file, img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1185,10 +1243,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleBarco() {
 		String path = System.getProperty("user.dir")
 				+ "/ATI/resources/images/barco.raw";
+		File file = new File(path);
 		try {
-			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
+			BufferedImage img = ImageUtils.load(file, new Dimension(
 					290, 207));
-			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
+			parent.addImage(new ATImage(file, img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1197,10 +1256,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleGirl() {
 		String path = System.getProperty("user.dir")
 				+ "/ATI/resources/images/girl2.raw";
+		File file = new File(path);
 		try {
-			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
+			BufferedImage img = ImageUtils.load(file, new Dimension(
 					256, 256));
-			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
+			parent.addImage(new ATImage(file, img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1209,10 +1269,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleLenax() {
 		String path = System.getProperty("user.dir")
 				+ "/ATI/resources/images/lenax.raw";
+		File file = new File(path);
 		try {
-			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
+			BufferedImage img = ImageUtils.load(file, new Dimension(
 					256, 256));
-			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
+			parent.addImage(new ATImage(file, img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1221,10 +1282,11 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	private void handleLena() {
 		String path = System.getProperty("user.dir")
 				+ "/ATI/resources/images/lena.raw";
+		File file = new File(path);
 		try {
-			BufferedImage img = ImageUtils.load(new File(path), new Dimension(
+			BufferedImage img = ImageUtils.load(file, new Dimension(
 					256, 256));
-			parent.addImage(new ATImage(img, ImageType.GRAYSCALE));
+			parent.addImage(new ATImage(file, img, ImageType.GRAYSCALE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1241,9 +1303,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 			dir += "/tests/results/";
 			File left = new File(dir + "L.jpg");
 			File right = new File(dir + "R.jpg");
-			ImageIO.write(parent.getPanels()[0].getImage().getVisual(), "jpg",
+			ImageIO.write(parent.getPanels()[Side.LEFT.getValue()].getImage().getVisual(), "jpg",
 					left);
-			ImageIO.write(parent.getPanels()[1].getImage().getVisual(), "jpg",
+			ImageIO.write(parent.getPanels()[Side.RIGHT.getValue()].getImage().getVisual(), "jpg",
 					right);
 		} catch (Exception ex) {
 

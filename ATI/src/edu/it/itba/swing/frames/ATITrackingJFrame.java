@@ -107,7 +107,7 @@ public class ATITrackingJFrame extends JFrame {
 			}
 		});
 
-		ATImage first = new ATImage(ImageUtils.load(files.get(0), null),
+		ATImage first = new ATImage(null, ImageUtils.load(files.get(0), null),
 				ImageType.RGB);
 		tracking = new Tracking(first, row, col, widht, height,
 				new ArrayList<Pixel>(), new ArrayList<Pixel>(), null, delta,
@@ -133,7 +133,7 @@ public class ATITrackingJFrame extends JFrame {
 			public void actionPerformed(final ActionEvent e) {
 				ATImage current;
 				try {
-					current = new ATImage(ImageUtils.load(files.get(i), null),
+					current = new ATImage(null, ImageUtils.load(files.get(i), null),
 							ImageType.RGB);
 
 					tracking = new Tracking(current, row, col, widht, height,
@@ -216,7 +216,7 @@ public class ATITrackingJFrame extends JFrame {
 				break;
 			}
 
-			addImage(new ATImage(image, type));
+			addImage(new ATImage(file, image, type));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

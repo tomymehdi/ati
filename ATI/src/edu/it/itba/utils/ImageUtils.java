@@ -91,7 +91,7 @@ public class ImageUtils {
 				raster.setSample(col, row, 0, col / 2);
 			}
 		}
-		return new ATImage(image, ImageType.GRAYSCALE);
+		return new ATImage(null, image, ImageType.GRAYSCALE);
 	}
 
 	public static BufferedImage getSubImage(BufferedImage image, int x, int y,
@@ -115,7 +115,7 @@ public class ImageUtils {
 			}
 		}
 
-		return new ATImage(image, ImageType.RGB);
+		return new ATImage(null, image, ImageType.RGB);
 	}
 
 	public static Color hsvToRgb(float hue, float saturation, float value) {
@@ -165,7 +165,7 @@ public class ImageUtils {
 				}
 			}
 		}
-		return new ATImage(image, ImageType.GRAYSCALE);
+		return new ATImage(null, image, ImageType.GRAYSCALE);
 	}
 
 	/*
@@ -209,7 +209,7 @@ public class ImageUtils {
 				radiusError += 2 * (y - x + 1);
 			}
 		}
-		return new ATImage(image, ImageType.GRAYSCALE);
+		return new ATImage(null, image, ImageType.GRAYSCALE);
 	}
 
 	/*

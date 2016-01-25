@@ -94,7 +94,7 @@ public class ATIJFrameImpl extends ATIJFrame {
 				break;
 			}
 
-			addImage(new ATImage(image, type));
+			addImage(new ATImage(file, image, type));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

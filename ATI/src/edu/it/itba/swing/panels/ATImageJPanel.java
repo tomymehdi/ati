@@ -8,8 +8,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JTextField;
 
 import edu.it.itba.enums.ImageType;
 import edu.it.itba.listeners.DragAndDrop;
@@ -31,7 +29,7 @@ public class ATImageJPanel extends ATIJPanel {
 		image = ImageUtils.load(file, dim);
 		Dimension imageDimension = new Dimension(image.getWidth(),
 				image.getHeight());
-		this.image = new ATImage(image, ImageType.RGB);
+		this.image = new ATImage(file, image, ImageType.RGB);
 
 		dragAndDrop = new DragAndDrop(this);
 
@@ -42,9 +40,9 @@ public class ATImageJPanel extends ATIJPanel {
 		setSize(imageDimension);
 	}
 
-	public ATImageJPanel(ATIJFrame parent, BufferedImage image) {
+	public ATImageJPanel(File file, ATIJFrame parent, BufferedImage image) {
 		super();
-		this.image = new ATImage(image, ImageType.RGB);
+		this.image = new ATImage(file, image, ImageType.RGB);
 		Dimension imgDim = new Dimension(image.getWidth(), image.getHeight());
 
 		dragAndDrop = new DragAndDrop(this);

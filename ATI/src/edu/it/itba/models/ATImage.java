@@ -3,6 +3,7 @@ package edu.it.itba.models;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +21,7 @@ public class ATImage {
 	private int rows;
 	private int cols;
 	public ImageType type;
+	private File file;
 
 	public ATImage(int rows, int cols, ImageType type) {
 		this.rows = rows;
@@ -30,7 +32,8 @@ public class ATImage {
 		B = new Band(rows, cols, Bands.B);
 	}
 
-	public ATImage(BufferedImage image, ImageType type) {
+	public ATImage(File file, BufferedImage image, ImageType type) {
+		this.file = file;
 		this.rows = image.getHeight();
 		this.cols = image.getWidth();
 		this.type = type;
@@ -52,6 +55,7 @@ public class ATImage {
 	}
 
 	public ATImage(ATImage image) {
+		this.file = image.file;
 		this.rows = image.getHeight();
 		this.cols = image.getWidth();
 		this.type = image.type;
@@ -204,7 +208,7 @@ public class ATImage {
 			}
 		}
 
-		ATImage ret = new ATImage(image, ImageType.RGB);
+		ATImage ret = new ATImage(null, image, ImageType.RGB);
 
 		for (int row = 0; row < getHeight(); row++)
 			for (int col = 0; col < getWidth(); col++) {
@@ -253,6 +257,10 @@ public class ATImage {
 			R.set(x0 + y, y0 - x, 255);
 			R.set(x0 - y, y0 - x, 255);
 		}
+	}
+	
+	public File getFile() {
+		return file;
 	}
 
 }
