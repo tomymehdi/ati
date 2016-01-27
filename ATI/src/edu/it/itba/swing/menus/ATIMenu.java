@@ -580,15 +580,20 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		colorVideoAlgorithmImage.applyFunction(otzuRGB, 100);
 		
 		// Step 2.2 - Clustering pixels into 8 classes
-		BinaryRGBClusterization classes = new BinaryRGBClusterization(colorVideoAlgorithmImage);
+		BinaryRGBClusterization classes = new BinaryRGBClusterization(colorVideoAlgorithmImage, image);
 		
 		
 		// Step 3 - Mean per class per band
 		classes.means();
 		
 		// Step 4.1 - Variance per class
+		classes.withinVariance();
 		
 		// Step 4.2 - Variance between classes
+		classes.betweenVariance();
+		
+		// Step 5, 6 and 7
+		classes.reclustering();
 		
 		
 		parent.addImage(colorVideoAlgorithmImage);

@@ -117,7 +117,7 @@ public class OtzuUmbralizationRGB implements Function {
 	
 	private int bandUmbralApplication(double value, int bandIndex) {
 		if (value > umbrals.get(bandIndex))
-			return 255;
+			return 1;
 		else
 			return 0;
 	}
