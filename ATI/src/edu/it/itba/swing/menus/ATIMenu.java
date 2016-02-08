@@ -74,6 +74,7 @@ import edu.it.itba.swing.dialogs.GlobalUmbralDialog;
 import edu.it.itba.swing.dialogs.LaplacianGaussianDialog;
 import edu.it.itba.swing.dialogs.SaltAndPepperNoise;
 import edu.it.itba.swing.frames.ATIImageJFrame;
+import edu.it.itba.swing.frames.ATIOcrJFrame;
 import edu.it.itba.swing.interfaces.ATIJFrame;
 import edu.it.itba.swing.panels.ATISaltAndPepperDialog;
 import edu.it.itba.swing.panels.ATIUmbralDialog;
@@ -619,7 +620,14 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 	
 	// Video https://www.youtube.com/watch?v=L0MK7qz13bU
 	private void handleOCRvideo() {
-		
+		ATIOcrJFrame ocrFrame;
+		try {
+			ocrFrame = new ATIOcrJFrame();
+			ocrFrame.playVideo();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void handleHarris(){

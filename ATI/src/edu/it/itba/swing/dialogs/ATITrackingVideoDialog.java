@@ -88,7 +88,6 @@ public class ATITrackingVideoDialog extends JDialog implements ActionListener {
 					- qy), Math.abs(px - qx), deltaP);
 			video.playVideo();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

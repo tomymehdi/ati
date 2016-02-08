@@ -71,9 +71,9 @@ public class BinaryRGBClusterization implements Function {
 			valueR = sumR/e.getValue().size();
 			valueG = sumG/e.getValue().size();
 			valueB = sumB/e.getValue().size();
-			System.out.println("key: " + e.getKey() + " meanR: " + valueR);
-			System.out.println("key: " + e.getKey() + " meanG: " + valueG);
-			System.out.println("key: " + e.getKey() + " meanB: " + valueB);
+//			System.out.println("key: " + e.getKey() + " meanR: " + valueR);
+//			System.out.println("key: " + e.getKey() + " meanG: " + valueG);
+//			System.out.println("key: " + e.getKey() + " meanB: " + valueB);
 			meansR.put(e.getKey(), valueR);
 			meansG.put(e.getKey(), valueG);
 			meansB.put(e.getKey(), valueB);
@@ -91,7 +91,7 @@ public class BinaryRGBClusterization implements Function {
 				);
 			}
 			double value = Math.sqrt(sum)/e.getValue().size();
-			System.out.println("key: " + e.getKey() + " withinVariance: " + value);
+//			System.out.println("key: " + e.getKey() + " withinVariance: " + value);
 			withinVariances.put(e.getKey(), value);
 		}
 		
@@ -100,7 +100,7 @@ public class BinaryRGBClusterization implements Function {
 	public void betweenVariance() {
 		for(Entry<Integer, ArrayList<Pixel>> e1: clusters.entrySet()) {
 			for(Entry<Integer, ArrayList<Pixel>> e2: clusters.entrySet()) {
-				System.out.println(e1.getKey() + " holis " + e2.getKey());
+//				System.out.println(e1.getKey() + " holis " + e2.getKey());
 				if (e1.getKey().equals(e2.getKey()) || 
 						betweenVariances.containsKey(e1.getKey() * 1000 + e2.getKey()) ||
 						betweenVariances.containsKey(e2.getKey() * 1000 + e1.getKey())) {
@@ -111,7 +111,7 @@ public class BinaryRGBClusterization implements Function {
 							Math.pow(meansG.get(e1.getKey()) - meansG.get(e2.getKey()), 2) +
 							Math.pow(meansB.get(e1.getKey()) - meansB.get(e2.getKey()), 2)
 						);
-					System.out.println("key: " + (e1.getKey() * 1000 + e2.getKey()) + " betweenVariance: " + value);
+//					System.out.println("key: " + (e1.getKey() * 1000 + e2.getKey()) + " betweenVariance: " + value);
 					betweenVariances.put(e1.getKey() * 1000 + e2.getKey(), value);
 				}
 			}
@@ -134,7 +134,7 @@ public class BinaryRGBClusterization implements Function {
 						double withinVariance2 = withinVariances.get(e2.getKey());
 						if(withinVariance1 >= betweenVariance || 
 								withinVariance2 >= betweenVariance) {
-							System.out.println("key1: " + e1.getKey() + " key2: " + e2.getKey());
+//							System.out.println("key1: " + e1.getKey() + " key2: " + e2.getKey());
 							if(resultJoin.containsKey(e1.getKey())) {
 								resultJoin.get(e1.getKey()).add(e2.getKey());
 								continue;
@@ -166,9 +166,9 @@ public class BinaryRGBClusterization implements Function {
 			}
 			
 			for(Entry<Integer, HashSet<Integer>> e1: resultJoin.entrySet()) {
-				System.out.println("current set: " + e1.getKey());
+//				System.out.println("current set: " + e1.getKey());
 				for(Integer keyToAdd: e1.getValue()){
-					System.out.println("keytoadd: " + keyToAdd);
+//					System.out.println("keytoadd: " + keyToAdd);
 					clusters.get(e1.getKey()).addAll(clusters.get(keyToAdd));
 					clusters.remove(keyToAdd);
 				}
@@ -177,9 +177,9 @@ public class BinaryRGBClusterization implements Function {
 			if(clustersSize == clusters.size()){
 				clustersCountChanged = false;
 			}
-			System.out.println("Before " + clustersSize);
+//			System.out.println("Before " + clustersSize);
 			clustersSize = clusters.size();
-			System.out.println("After " + clustersSize);
+//			System.out.println("After " + clustersSize);
 			
 			// Step 3 - Mean per class per band
 			meansR.clear();
