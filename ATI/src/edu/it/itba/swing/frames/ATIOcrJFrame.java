@@ -48,7 +48,7 @@ public class ATIOcrJFrame extends JFrame {
 	public JButton start;
 	public JButton next;
 	public JButton previous;
-	private String moviePath = "/Users/tomymehdi/itba/ati/ATI/resources/videos/movie1";
+	private String moviePath = "/Users/tomymehdi/itba/ati/ATI/resources/videos/frozen2";
 
 	private ATImageJPanel image;
 
@@ -191,7 +191,9 @@ public class ATIOcrJFrame extends JFrame {
 			
 			// OCR without applying algorithm
 			File imageFile = first.getFile();
-			Tesseract instance = Tesseract.getInstance();  // JNA Interface Mapping
+//			Tesseract instance = Tesseract.getInstance();  // JNA Interface Mapping
+			Tesseract instance = new Tesseract();  // JNA Direct Mapping
+			instance.setLanguage("eng");
 			try {
 			    String result = instance.doOCR(imageFile);
 			    System.out.println(result);

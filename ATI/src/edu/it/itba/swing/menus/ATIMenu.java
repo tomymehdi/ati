@@ -563,7 +563,9 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		
 		// OCR without applying algorithm
 		File imageFile = parent.getPanels()[Side.LEFT.getValue()].getImage().getFile();
-		Tesseract instance = Tesseract.getInstance();  // JNA Interface Mapping
+//		Tesseract instance = Tesseract.getInstance();  // JNA Interface Mapping
+		Tesseract instance = new Tesseract();  // JNA Direct Mapping
+		instance.setLanguage("eng");
 		try {
 		    String result = instance.doOCR(imageFile);
 		    System.out.println(result);
