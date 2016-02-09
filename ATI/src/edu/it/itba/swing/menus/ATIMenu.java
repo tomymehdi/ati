@@ -625,7 +625,6 @@ public class ATIMenu extends JMenuBar implements ActionListener {
 		ATIOcrJFrame ocrFrame;
 		try {
 			ocrFrame = new ATIOcrJFrame();
-			ocrFrame.playVideo();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

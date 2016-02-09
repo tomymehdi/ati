@@ -67,6 +67,8 @@ public class ATIOcrJFrame extends JFrame {
 		mainPanel.setSize(400, 400);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		add(mainPanel);
+		result = new JTextField();
+		result.setMaximumSize(new Dimension(150, 300));
 		stop = new JButton("Stop");
 		stop.addActionListener(new ActionListener() {
 
@@ -102,14 +104,15 @@ public class ATIOcrJFrame extends JFrame {
 				OCR(i-1);
 			}
 		});
-		add(result);
 		add(stop);
 		add(start);
 		add(next);
 		add(previous);
+//		add(result);
 		// Display the window.
 		setVisible(true);
-
+		
+		playVideo();
 	}
 
 	public void playVideo() throws IOException {
@@ -199,9 +202,11 @@ public class ATIOcrJFrame extends JFrame {
 			Tesseract instance = new Tesseract();  // JNA Direct Mapping
 			instance.setLanguage("eng");
 			try {
-				resultText = "Sin algoritmo:\n";
-				resultText += instance.doOCR(imageFile);
-			    System.out.println(resultText);
+				resultText += "Sin algoritmo:" + '\n';
+				String resultTextOCR = instance.doOCR(imageFile);
+				resultText += resultTextOCR;
+				System.out.println("Sin algoritmo");
+			    System.out.println(resultTextOCR);
 			} catch (TesseractException e) {
 			    System.err.println(e.getMessage());
 			}
@@ -243,9 +248,11 @@ public class ATIOcrJFrame extends JFrame {
 			}
 			
 			try {
-				resultText += "\n\nCon algoritmo:\n";
-				resultText += instance.doOCR(leftFile);
-			    System.out.println(result);
+				resultText += '\n' + "Con algoritmo:" + '\n';
+				String resultTextOCR = instance.doOCR(leftFile);
+				resultText += resultTextOCR;
+				System.out.println("Con algoritmo");
+			    System.out.println(resultTextOCR);
 			} catch (TesseractException e) {
 			    System.err.println(e.getMessage());
 			}
@@ -260,6 +267,7 @@ public class ATIOcrJFrame extends JFrame {
 			} else {
 				i--;
 			}
+//			result.setText(resultText);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
