@@ -16,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import edu.it.itba.enums.ImageType;
@@ -49,6 +50,7 @@ public class ATIOcrJFrame extends JFrame {
 	public JButton next;
 	public JButton previous;
 	private String moviePath = "/Users/tomymehdi/itba/ati/ATI/resources/videos/frozen2";
+	public JTextField result;
 
 	private ATImageJPanel image;
 
@@ -100,6 +102,7 @@ public class ATIOcrJFrame extends JFrame {
 				OCR(i-1);
 			}
 		});
+		add(result);
 		add(stop);
 		add(start);
 		add(next);
@@ -183,6 +186,7 @@ public class ATIOcrJFrame extends JFrame {
 	
 	private void OCR(int imageIndex) {
 		ATImage first;
+		String resultText = "";
 		try {
 			first = new ATImage(files.get(i), ImageUtils.load(files.get(i+1), null),
 					ImageType.RGB);
@@ -195,8 +199,9 @@ public class ATIOcrJFrame extends JFrame {
 			Tesseract instance = new Tesseract();  // JNA Direct Mapping
 			instance.setLanguage("eng");
 			try {
-			    String result = instance.doOCR(imageFile);
-			    System.out.println(result);
+				resultText = "Sin algoritmo:\n";
+				resultText += instance.doOCR(imageFile);
+			    System.out.println(resultText);
 			} catch (TesseractException e) {
 			    System.err.println(e.getMessage());
 			}
@@ -238,7 +243,8 @@ public class ATIOcrJFrame extends JFrame {
 			}
 			
 			try {
-			    String result = instance.doOCR(leftFile);
+				resultText += "\n\nCon algoritmo:\n";
+				resultText += instance.doOCR(leftFile);
 			    System.out.println(result);
 			} catch (TesseractException e) {
 			    System.err.println(e.getMessage());
